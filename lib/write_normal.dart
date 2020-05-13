@@ -1,8 +1,7 @@
-
-
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 
 
 class write_normal extends StatefulWidget {
@@ -14,7 +13,16 @@ class writenormal_State extends State<write_normal> {
   String cate_value ="카테고리를 선택해주세요";
   Color color_cate = Color(0xff888888);
   List<Widget> image_boxes = List<Widget>();
+  List<File> Images = [];
   int first_build =1;
+
+  String test_text="제품 사진 첨부";
+
+  Widget get_Imagebox(File image) {
+    Text Imagebox =Text("test");
+
+    return Imagebox;
+  }
 
   List<Widget> get_allcateitem(){
     List<Widget> items = List<Widget>();
@@ -88,27 +96,73 @@ class writenormal_State extends State<write_normal> {
 
   }
 
+ getGalleryImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if(first_build==1) {
+        first_build = 0;
+        test_text ="test";
+        Images.add(image);
+        image_boxes.clear();
+        image_boxes.add(get_Imagebox(image));
+      }
+      else{
+        Images.add(image);
+        image_boxes.add(get_Imagebox(image));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    Fluttertoast.showToast(msg: first_build.toString());
+    Fluttertoast.showToast(msg: image_boxes.length.toString());
     if(first_build ==1) {
-
-      Container first_imgbox = Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width * 0.2,
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.06,
-        padding: EdgeInsets.only(),
-      );
-
-      image_boxes.add(first_imgbox);
-
+      Fluttertoast.showToast(msg: "test");
+      image_boxes.add(InkWell(
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Color(0xffcccccc)),
+              borderRadius: BorderRadius.circular(MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.015)
+          ),
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: Container(
+                  padding: EdgeInsets.all(MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.06,),
+                  child: Image.network(
+                      "http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
+                ),
+              ),
+              Positioned(
+                bottom: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.005,
+                left: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.065,
+                child: Text(
+                  "("+(Images.length+1).toString()+"/10)",
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width*0.03),
+                ),
+              )
+            ],
+          ),
+        ),
+        onTap: (){
+          getGalleryImage();
+        },
+      ));
     }
-
     return Scaffold(
 
       resizeToAvoidBottomPadding: false,
@@ -118,7 +172,6 @@ class writenormal_State extends State<write_normal> {
         backgroundColor: Colors.white,
         elevation: 0.0,
         leading: InkWell(
-
           child:Padding(
               padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02, bottom: MediaQuery.of(context).size.height*0.02, left: MediaQuery.of(context).size.width*0.05),
               child:Image.network("http://14.48.175.177/theme/basic_app/img/app/hd_back.png")
@@ -126,7 +179,6 @@ class writenormal_State extends State<write_normal> {
           onTap: (){
             Navigator.of(context).pop(true);
           },
-
         ),
       ),
       body: Column(
@@ -142,14 +194,14 @@ class writenormal_State extends State<write_normal> {
                 color: Colors.white,
                 child: Row(
                     children: <Widget>[
-                      Text("제품 사진 첨부", style: TextStyle(fontWeight:FontWeight.bold,fontSize: MediaQuery.of(context).size.width*0.04,),),
+                      Text(test_text, style: TextStyle(fontWeight:FontWeight.bold,fontSize: MediaQuery.of(context).size.width*0.04,),),
                     ],
                   ),
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.06,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
+                  height: MediaQuery.of(context).size.height*0.14,
+                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
                   color: Colors.white,
                   child: GridView(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
