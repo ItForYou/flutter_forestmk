@@ -15,13 +15,27 @@ class writenormal_State extends State<write_normal> {
   List<Widget> image_boxes = List<Widget>();
   List<File> Images = [];
   int first_build =1;
+  double grid_height;
 
-  String test_text="제품 사진 첨부";
 
   Widget get_Imagebox(File image) {
-    Text Imagebox =Text("test");
+    Container imagebox = Container(
 
-    return Imagebox;
+        child: Stack(
+            children: <Widget>[
+              Image.file(image),
+              Positioned(
+                top: 2, right: 5,
+                child: Container(
+                    width: MediaQuery.of(context).size.width*0.05,
+                    height: MediaQuery.of(context).size.height*0.02,
+                    child:Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png")
+                ),
+              )
+            ],
+        ),
+    );
+    return imagebox;
   }
 
   List<Widget> get_allcateitem(){
@@ -96,73 +110,89 @@ class writenormal_State extends State<write_normal> {
 
   }
 
+  Widget get_addbox(){
+    Widget temp  = InkWell(
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(width: 1, color: Color(0xffcccccc)),
+            borderRadius: BorderRadius.circular(MediaQuery
+                .of(context)
+                .size
+                .width * 0.015)
+        ),
+        child: Stack(
+          children: <Widget>[
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.06,),
+                child: Image.network(
+                    "http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
+              ),
+            ),
+            Positioned(
+              bottom: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.005,
+              left: MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.065,
+              child: Text(
+                "("+(Images.length+1).toString()+"/10)",
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width*0.03),
+              ),
+            )
+          ],
+        ),
+      ),
+      onTap: (){
+        getGalleryImage();
+      },
+    );
+
+    return temp;
+  }
+
+
  getGalleryImage() async {
+
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
       if(first_build==1) {
         first_build = 0;
-        test_text ="test";
         Images.add(image);
         image_boxes.clear();
         image_boxes.add(get_Imagebox(image));
       }
       else{
         Images.add(image);
+        image_boxes.removeLast();
         image_boxes.add(get_Imagebox(image));
+        if(image_boxes.length >3 && image_boxes.length <=7){
+          grid_height = MediaQuery.of(context).size.height*0.25;
+        }
+        else if(image_boxes.length >7){
+          grid_height = MediaQuery.of(context).size.height*0.35;
+        }
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Fluttertoast.showToast(msg: first_build.toString());
-    Fluttertoast.showToast(msg: image_boxes.length.toString());
-    if(first_build ==1) {
-      Fluttertoast.showToast(msg: "test");
-      image_boxes.add(InkWell(
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Color(0xffcccccc)),
-              borderRadius: BorderRadius.circular(MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.015)
-          ),
-          child: Stack(
-            children: <Widget>[
-              Center(
-                child: Container(
-                  padding: EdgeInsets.all(MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.06,),
-                  child: Image.network(
-                      "http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                ),
-              ),
-              Positioned(
-                bottom: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.005,
-                left: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.065,
-                child: Text(
-                  "("+(Images.length+1).toString()+"/10)",
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width*0.03),
-                ),
-              )
-            ],
-          ),
-        ),
-        onTap: (){
-          getGalleryImage();
-        },
-      ));
+
+    if(first_build ==1){
+      grid_height = MediaQuery.of(context).size.height*0.14;
     }
+    if(image_boxes.length < 10) {
+      image_boxes.add(get_addbox());
+    }
+
     return Scaffold(
 
       resizeToAvoidBottomPadding: false,
@@ -194,23 +224,27 @@ class writenormal_State extends State<write_normal> {
                 color: Colors.white,
                 child: Row(
                     children: <Widget>[
-                      Text(test_text, style: TextStyle(fontWeight:FontWeight.bold,fontSize: MediaQuery.of(context).size.width*0.04,),),
+                      Text("제품 사진 첨부", style: TextStyle(fontWeight:FontWeight.bold,fontSize: MediaQuery.of(context).size.width*0.04,),),
                     ],
                   ),
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.14,
+                  height: grid_height,
                   padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
                   color: Colors.white,
-                  child: GridView(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 5.0,
-                      mainAxisSpacing: 5.0,
-                    ),
-                    children: image_boxes
-                  ),
+                  child:GridView.builder(
+
+                      itemCount: image_boxes.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        crossAxisSpacing: 5.0,
+                        mainAxisSpacing: 5.0,
+                      ),
+                      itemBuilder: (BuildContext context, int index){
+                          return image_boxes[index];
+                      }
+                  )
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,

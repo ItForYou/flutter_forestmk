@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterforestmk/categorypage.dart';
+import 'package:flutterforestmk/chk_writead.dart';
 import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/loginpage.dart';
 import 'package:flutterforestmk/write_normal.dart';
@@ -170,7 +171,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   onTap: (){
-
+                    Navigator.push(context,MaterialPageRoute(
+                        builder:(context) => chk_writead()
+                    ));
                   },
                 ),
 
