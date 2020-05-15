@@ -9,6 +9,8 @@ import 'package:flutterforestmk/loginpage.dart';
 import 'package:flutterforestmk/write_normal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutterforestmk/viewpage.dart';
+import 'package:flutterforestmk/mypage.dart';
+
 
 
 void main() => runApp(MyApp());
@@ -189,7 +191,12 @@ class _MyHomePageState extends State<MyHomePage> {
       InkWell temp = InkWell(
         child: Container(
           height: 100,
-          decoration: BoxDecoration(color: Colors.white),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(color: Color(0xfff7f7f7), width: 2)
+              )
+          ),
           padding: EdgeInsets.only(left: 10,right: 20,top:10,bottom: 10),
           child: InkWell(
 
@@ -279,10 +286,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-
-
-
-
     if(start_height == 1){
         list_height = MediaQuery.of(context).size.height-MediaQuery.of(context).size.height*0.15;
         scrollbar_height = MediaQuery.of(context).size.height*0.08;
@@ -307,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate01.png"),
                         ),
                         onTap: (){
-
+                            Navigator.popUntil(context, (Route<dynamic> route) => false);
                         },
                       ),
 
@@ -316,7 +319,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: 40,
                           height: scrollbar_height*0.8,
                           padding: EdgeInsets.all(3),
-
                           child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate02.png"),
                         ),
                         onTap: (){
@@ -477,7 +479,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate01.png"),
                           ),
                           onTap: (){
-
                           },
                         ),
 
@@ -531,7 +532,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate05.png"),
                           ),
                           onTap: (){
-
+                            Navigator.push(context,MaterialPageRoute(
+                                builder:(context) => mypage()
+                            ));
                           },
                         ),
 
@@ -605,7 +608,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                     padding: EdgeInsets.only(left: 22, right: 22),
                     height: MediaQuery.of(context).size.height*0.06,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                          top: BorderSide(color: Color(0xfff7f7f7), width: 2),
+                          bottom: BorderSide(color: Color(0xfff7f7f7), width: 2),
+                        )
+
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[

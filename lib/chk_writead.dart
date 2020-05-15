@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutterforestmk/write_normal.dart';
 
 class chk_writead extends StatefulWidget {
   @override
@@ -7,8 +8,8 @@ class chk_writead extends StatefulWidget {
 }
 
 class _chk_writeadState extends State<chk_writead> {
-  int flg_value = 0;
 
+  int flg_value = 0;
 
   Widget get_textbox(msg){
     Widget temp = Text(
@@ -20,6 +21,30 @@ class _chk_writeadState extends State<chk_writead> {
       ),
     );
     return temp;
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.02,
+            child: Text("동의시 글작성이 가능합니다."),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -273,13 +298,226 @@ class _chk_writeadState extends State<chk_writead> {
                     get_textbox("- 다단계 업체의 구인광고를 하는 사례"),
                     SizedBox(height: MediaQuery.of(context).size.height*0.01,),
                     get_textbox("- 해피벌론, 전자담배, 본드(마약류) 를 판매하는 사례"),
-                    SizedBox(height: MediaQuery.of(context).size.height*0.01,),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.06,),
+                    Text(
+                      "광고료의 대한 안내",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize:MediaQuery.of(context).size.width*0.04,
+                        fontWeight: FontWeight.bold,
 
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.02,),
+                    get_textbox("광고료는 유선상 실시간으로 안드로이드, 아이폰 다운로드수를 공지시켜드리며, 숲마켓 회원수당 7일기준/1원으로 광고료가 책정되며 유선상 안내를 드립니다."),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.02,),
+                    Container(
+                      width: MediaQuery.of(context).size.width*0.94,
+                      height: MediaQuery.of(context).size.height*0.08,
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width*0.02,
+                          right: MediaQuery.of(context).size.width*0.02,
+                          top: MediaQuery.of(context).size.height*0.01,
+                          bottom: MediaQuery.of(context).size.height*0.01,
+                      ),
+                      color: Color(0xffcccccc),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text("안드로이드의 다운로드수 1,000명"),
+                          Text("아이폰의 다운로드수 1,000명"),
+                          Text(" 합 2,000 명"),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.02,),
+                    Container(
+                      width: MediaQuery.of(context).size.width*0.94,
+                      height: MediaQuery.of(context).size.height*0.2,
+                      child: Table(
+                        border: TableBorder.all(color: Color(0xffdddddd), width: 2),
+                        children: [
+                          TableRow(
+                              children:[
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "다운로드×1"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xfffbfbfb)
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "7일 기준"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "2,000원"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                          ),
+                          TableRow(
+                              children:[
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "다운로드×2"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xfffbfbfb)
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "14일 기준"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "4,000원"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                          ),
+                          TableRow(
+                              children:[
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "다운로드×3"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xfffbfbfb)
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "21일 기준"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "6,000원"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                          ),
+                          TableRow(
+                              children:[
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "다운로드×4"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xfffbfbfb)
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "28일 기준"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TableCell(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height*0.05,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          "8,000원"
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
           ),
+
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height*0.06,
@@ -329,22 +567,27 @@ class _chk_writeadState extends State<chk_writead> {
             ),
           ),
           SafeArea(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*0.085,
-              color: Colors.grey,
-              child: Center(
-                  child:
-                  InkWell(
-                      child:
-                      Text("확인" ,
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.05, color: Colors.white),),
-                    onTap: (){
-
-                    },
-
-                  )
+            child: InkWell(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height*0.085,
+                color: Colors.grey,
+                child: Center(
+                    child:
+                        Text("확인" ,
+                          style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.05, color: Colors.white),),
+                    )
               ),
+              onTap: (){
+                if(flg_value==1) {
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => write_normal()
+                  ));
+                }
+                else{
+                  _showDialog();
+                }
+              },
             ),
           ),
         ],
