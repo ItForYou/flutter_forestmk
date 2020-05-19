@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/location.dart';
+import 'package:flutterforestmk/modify_info.dart';
 import 'package:flutterforestmk/mysetting.dart';
 
 
@@ -26,6 +27,7 @@ class _mypageState extends State<mypage> {
               child: new Text("확인"),
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.pop(context);
               },
             ),
             new FlatButton(
@@ -43,6 +45,7 @@ class _mypageState extends State<mypage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("홈으로" ,style: TextStyle(color: Colors.black),),
@@ -120,14 +123,21 @@ class _mypageState extends State<mypage> {
                         ],
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.23,
-                      height: MediaQuery.of(context).size.width*0.08,
-                      decoration: BoxDecoration(
-                        color: Color(0xff444444),
-                        borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,)),
+                    InkWell(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*0.23,
+                        height: MediaQuery.of(context).size.width*0.08,
+                        decoration: BoxDecoration(
+                          color: Color(0xff444444),
+                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,)),
+                        ),
+                        child: Center(child: Text("프로필편집", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, color: Colors.white), )),
                       ),
-                      child: Center(child: Text("프로필편집", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, color: Colors.white), )),
+                      onTap: (){
+                        Navigator.push(context,MaterialPageRoute(
+                            builder:(context) => modify_info()
+                        ));
+                      },
                     )
                   ],
                 ),

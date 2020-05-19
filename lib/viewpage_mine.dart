@@ -71,6 +71,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
           title: Text("가격정보" ,style: TextStyle(color: Colors.black),),
           backgroundColor: Colors.white,
@@ -78,7 +79,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
             child:Padding(
                 padding: EdgeInsets.all(13),
-                child:Image.network("http://14.48.175.177/theme/basic_app/img/app/hd_back.png")
+                child:Image.asset("images/hd_back.png")
             ),
             onTap: (){
               Navigator.of(context).pop(true);
@@ -96,11 +97,11 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       body:
       ListView(
         children: <Widget>[
-               Container(
+            Container(
                 height: MediaQuery.of(context).size.height*0.33,
                 width: MediaQuery.of(context).size.width,
                 child:Image.asset(widget.src,fit: BoxFit.fitWidth,) ,
-               ),
+              ),
           Container(
             height: MediaQuery.of(context).size.height*0.13,
             padding: EdgeInsets.all(10),
@@ -138,30 +139,40 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                 Row(
                   children: <Widget>[
                     Container(
-                      width: 60,
-                      height: MediaQuery.of(context).size.height*0.08,
+                      width: MediaQuery.of(context).size.width*0.17,
+                      height: MediaQuery.of(context).size.height*0.055,
                       padding: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(23)),
                           border: Border.all(color: Color(0xffcccccc)),
-                          image: DecorationImage(//이미지 꾸미기
-                              fit:BoxFit.cover,
-                              image:NetworkImage("http://forestmk.itforone.co.kr/data/member/3542386191_O4hMBHJf_d1f767e86e735db50a43847faef0544e41ede2ed.jpg")//이미지 가져오기
-                          )
+                          color: Color(0xff515151)
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Image.asset("images/write_icon01.png",   width: MediaQuery.of(context).size.width*0.08, height: MediaQuery.of(context).size.height*0.027,),
+                          Text("완료하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white),)
+                        ],
                       ),
                     ),
                     SizedBox(width: 3,),
                     Container(
-                      width: 60,
-                      height: MediaQuery.of(context).size.height*0.08,
+                      width: MediaQuery.of(context).size.width*0.17,
+                      height: MediaQuery.of(context).size.height*0.055,
                       padding: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(23)),
                           border: Border.all(color: Color(0xffcccccc)),
-                          image: DecorationImage(//이미지 꾸미기
-                              fit:BoxFit.cover,
-                              image:NetworkImage("http://forestmk.itforone.co.kr/data/member/3542386191_O4hMBHJf_d1f767e86e735db50a43847faef0544e41ede2ed.jpg")//이미지 가져오기
-                          )
+//                              image: DecorationImage(//이미지 꾸미기
+//                                  fit:BoxFit.cover,
+//                                  image:NetworkImage("http://forestmk.itforone.co.kr/data/member/3542386191_O4hMBHJf_d1f767e86e735db50a43847faef0544e41ede2ed.jpg")//이미지 가져오기
+//                              )
+                          color: Color(0xff515151)
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Image.asset("images/fa-siren-on.png",   width: MediaQuery.of(context).size.width*0.08, height: MediaQuery.of(context).size.height*0.027,),
+                          Text("신고하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white))
+                        ],
                       ),
                     ),
                   ],
@@ -257,7 +268,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
                     Container(
                         width:MediaQuery.of(context).size.width*0.05,
-                        child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png")
+                        child: Image.asset("images/fa-heart.png")
                     ),
                     Text("좋아요"),
 
@@ -267,7 +278,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                   children: <Widget>[
                     Container(
                         width:MediaQuery.of(context).size.width*0.05,
-                        child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png")
+                        child: Image.asset("images/fa-comment-alt.png")
                     ),
                     Text("댓글 달기"),
                   ],
@@ -276,7 +287,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                   children: <Widget>[
                     Container(
                         width:MediaQuery.of(context).size.width*0.05,
-                        child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png")
+                        child: Image.asset("images/fa-share.png")
                     ),
                     Text("공유하기"),
                   ],

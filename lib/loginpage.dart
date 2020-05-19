@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutterforestmk/register.dart';
 
 class loginpage extends StatefulWidget {
 
@@ -47,7 +48,7 @@ class _loginpageState extends State<loginpage>{
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height*0.09,
                 padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.018),
-                child:Image.network("http://14.48.175.177/img/logo.png",)
+                child:Image.asset("images/logo.png",)
               ),
 
               Column(
@@ -122,7 +123,7 @@ class _loginpageState extends State<loginpage>{
                               Container(
                                 width: 20,
                                 height: 20,
-                                child: Image.network("http://14.48.175.177/theme/basic_app/img/log_sns_ka.png"),
+                                child: Image.asset("images/log_sns_ka.png"),
                               ),
                             SizedBox(width: MediaQuery.of(context).size.width*0.01,),
                             Text("카카오톡 아이디로 로그인",style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.02),)
@@ -147,7 +148,7 @@ class _loginpageState extends State<loginpage>{
                           Container(
                             width: 20,
                             height: 20,
-                            child: Image.network("http://14.48.175.177/theme/basic_app/img/log_sns_ka.png"),
+                            child: Image.asset("images/log_sns_na.png"),
                           ),
                           SizedBox(width: MediaQuery.of(context).size.width*0.01,),
                           Text("네이버 아이디로 로그인",style: TextStyle(color: Colors.white,fontSize: MediaQuery.of(context).size.height*0.02))
@@ -167,11 +168,17 @@ class _loginpageState extends State<loginpage>{
                         child: Text("아이디/비밀번호 찾기",textAlign: TextAlign.right,style: TextStyle(fontSize:MediaQuery.of(context).size.height*0.018,decoration: TextDecoration.underline,color: Colors.black, fontWeight: FontWeight.bold),),
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.7,
-                      child: InkWell(
-                        child: Text("숲마켓 회원가입", textAlign: TextAlign.right,style: TextStyle(fontSize:MediaQuery.of(context).size.height*0.018,decoration: TextDecoration.underline,color: Colors.black, fontWeight: FontWeight.bold),),
+                    InkWell(
+                      child: Container(
+                        margin: EdgeInsets.only(top:  MediaQuery.of(context).size.height*0.01,),
+                        width: MediaQuery.of(context).size.width*0.7,
+                          child: Text("숲마켓 회원가입", textAlign: TextAlign.right,style: TextStyle(fontSize:MediaQuery.of(context).size.height*0.018,decoration: TextDecoration.underline,color: Colors.black, fontWeight: FontWeight.bold),),
                       ),
+                      onTap: () {
+                        Navigator.push(context,MaterialPageRoute(
+                            builder:(context) => register()
+                        ));
+                      }
                     )
                   ],
                 ),

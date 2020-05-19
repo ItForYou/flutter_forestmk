@@ -19,21 +19,46 @@ class writenormal_State extends State<write_normal> {
 
 
   Widget get_Imagebox(File image) {
-    Container imagebox = Container(
+    int  flg_int = image_boxes.length;
 
-        child: Stack(
-            children: <Widget>[
-              Image.file(image),
-              Positioned(
-                top: 2, right: 5,
-                child: Container(
-                    width: MediaQuery.of(context).size.width*0.05,
-                    height: MediaQuery.of(context).size.height*0.02,
-                    child:Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png")
-                ),
-              )
-            ],
-        ),
+    Container imagebox = Container(
+      child: Stack(
+        children: <Widget>[
+          Image.file(image),
+          Positioned(
+            top: 0, right: 0,
+            child: Container(
+                width: MediaQuery.of(context).size.width*0.05,
+                height: MediaQuery.of(context).size.height*0.02,
+                child:InkWell(
+                  child:Image.asset("images/fa-times-circle.png"),
+                  onTap: (){
+
+                    setState(() {
+                      Images.removeAt(flg_int);
+                      image_boxes.clear();
+                      for(int i=0; i<Images.length; i++){
+                        image_boxes.add(get_Imagebox(Images[i]));
+                      }
+                      image_boxes.add(get_addbox());
+
+
+                      if(Images.length >3 && Images.length <=7){
+                        grid_height = MediaQuery.of(context).size.height*0.25;
+                      }
+                      else if(Images.length >7){
+                        grid_height = MediaQuery.of(context).size.height*0.35;
+                      }
+                      else{
+                        grid_height = MediaQuery.of(context).size.height*0.14;
+                      }
+                    });
+                  },
+                )
+            ),
+          )
+        ],
+      ),
     );
     return imagebox;
   }
@@ -81,7 +106,6 @@ class writenormal_State extends State<write_normal> {
     return items;
   }
 
-
   void show_catemd(){
 
     showDialog(
@@ -107,7 +131,6 @@ class writenormal_State extends State<write_normal> {
         );
       },
     );
-
   }
 
   Widget get_addbox(){
@@ -128,8 +151,8 @@ class writenormal_State extends State<write_normal> {
                     .of(context)
                     .size
                     .width * 0.06,),
-                child: Image.network(
-                    "http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
+                child: Image.asset(
+                    "images/fa-plus.png"),
               ),
             ),
             Positioned(
@@ -161,37 +184,45 @@ class writenormal_State extends State<write_normal> {
 
  getGalleryImage() async {
 
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      if(first_build==1) {
-        first_build = 0;
-        Images.add(image);
-        image_boxes.clear();
-        image_boxes.add(get_Imagebox(image));
-      }
-      else{
-        Images.add(image);
-        image_boxes.removeLast();
-        image_boxes.add(get_Imagebox(image));
-        if(image_boxes.length >3 && image_boxes.length <=7){
-          grid_height = MediaQuery.of(context).size.height*0.25;
-        }
-        else if(image_boxes.length >7){
-          grid_height = MediaQuery.of(context).size.height*0.35;
-        }
-      }
-    });
+   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+   setState(() {
+     if(first_build==1) {
+       first_build = 0;
+       Images.add(image);
+       image_boxes.clear();
+       image_boxes.add(get_Imagebox(image));
+       if(Images.length <10)
+         image_boxes.add(get_addbox());
+     }
+     else{
+       Images.add(image);
+       image_boxes.removeLast();
+       image_boxes.add(get_Imagebox(image));
+
+       if(Images.length <10)
+         image_boxes.add(get_addbox());
+
+       if(Images.length >3 && Images.length <=7){
+         grid_height = MediaQuery.of(context).size.height*0.25;
+       }
+       else if(Images.length >7){
+         grid_height = MediaQuery.of(context).size.height*0.35;
+       }
+     }
+   });
+
   }
 
   @override
   Widget build(BuildContext context) {
 
-    if(first_build ==1){
+    if(first_build ==1 && image_boxes.length <=0){
       grid_height = MediaQuery.of(context).size.height*0.14;
-    }
-    if(image_boxes.length < 10) {
       image_boxes.add(get_addbox());
     }
+    /*if(image_boxes.length < 10) {
+      image_boxes.add(get_addbox());
+    }*/
 
     return Scaffold(
 
@@ -204,7 +235,7 @@ class writenormal_State extends State<write_normal> {
         leading: InkWell(
           child:Padding(
               padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02, bottom: MediaQuery.of(context).size.height*0.02, left: MediaQuery.of(context).size.width*0.05),
-              child:Image.network("http://14.48.175.177/theme/basic_app/img/app/hd_back.png")
+              child:Image.asset("images/hd_back.png")
           ),
           onTap: (){
             Navigator.of(context).pop(true);

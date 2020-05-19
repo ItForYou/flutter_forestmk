@@ -35,23 +35,55 @@ class location_State extends State<location> {
           children: <Widget>[
 
             Container(
-              width: MediaQuery.of(context).size.width*0.8,
-              height: MediaQuery.of(context).size.height*0.06,
-              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.02),
-              decoration: BoxDecoration(
-                  color: Color(0xfff7f7f7),
-                  border: Border.all(width: 1,color: Color(0xffdddddd))
-              ),
-                child: TextField(
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height*0.02,
-                    textBaseline: TextBaseline.alphabetic,
-                  ),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height*0.07,
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05),
+              child: TextFormField(
+                  keyboardType: TextInputType.text,
+
+                  maxLines: 1,
                   decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only( left: 20),
-                  ),
+                    contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                    filled: true,
+                    fillColor: Color(0xfff5f5f5),
+                    border: null,
+                    enabledBorder:OutlineInputBorder(
+                      borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                    ),
+                  )
               ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right:  MediaQuery.of(context).size.width*0.05,),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(width: 1,color: Color(0xffefefef))
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(width: 1,color: Color(0xffefefef))
+                    ),
+                  prefixIcon: Icon(Icons.search),
+                  hintText: "내 동네 이름(동,읍,면)으로 검색"
+
+                ),
+              ),
+              ),
+            Container(
+              width: MediaQuery.of(context).size.width*0.9,
+              height: MediaQuery.of(context).size.height*0.05,
+              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.015,),
+              decoration: BoxDecoration(
+                  color: Colors.forestmk,
+                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.07))
+              ),
+              child: Center(child: Text("현재위치로 찾기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,color: Colors.white))),
+
             )
           ],
         ),

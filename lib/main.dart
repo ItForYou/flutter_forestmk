@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       children: <Widget>[
 
-                        Image.network("http://14.48.175.177/theme/basic_app/img/app/write_icon01.png"),
+                        Image.asset("images/write_icon01.png"),
                         SizedBox(width: MediaQuery.of(context).size.width*0.02,),
                         Text("중고거래 글쓰기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
                       ],
@@ -166,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
                     child: Row(
                       children: <Widget>[
-                        Image.network("http://14.48.175.177/theme/basic_app/img/app/write_icon02.png"),
+                        Image.asset("images/write_icon02.png"),
                         SizedBox(width: MediaQuery.of(context).size.width*0.02,),
                         Text("광고문의 글쓰기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
                       ],
@@ -208,8 +208,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 Hero(
                   tag: id,
                   child: Container(
-                    width: 90,
-                    height: 80,
+                    width: MediaQuery.of(context).size.width*0.27,
+                    height: MediaQuery.of(context).size.height*0.2,
                     child:Image.asset("images/"+cnt+".jpg", ),
                   ),
                 ),
@@ -220,21 +220,57 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(height: 5,),
-                    Text("테스트제목", style: TextStyle(fontSize: 12),),
+                    Text("테스트제목", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                     SizedBox(height: 5,),
-                    Text("무료나눔", style: TextStyle(fontSize: 12),),
+                    Text("무료나눔", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                     SizedBox(height: 8,),
                     Row(
                       children: <Widget>[
-                        Text("경기도 수원시 팔달구 구천동",style: TextStyle(fontSize: 10)),
-                        SizedBox(width: 2,),
-                        Text("2일전 ",style: TextStyle(fontSize: 10)),
+                        Text("경기도 수원시 팔달구 구천동",style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                        SizedBox(width: MediaQuery.of(context).size.width*0.005,),
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.01,
+                          height: MediaQuery.of(context).size.width*0.01,
+                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                            color: Colors.forestmk
+                          ),
+                        ),
+                        Text("2일전 ",style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
 
                       ],
 
                     ),
-                    SizedBox(height: 8,),
-                    Text("건강/의료용품", style: TextStyle(fontSize: 8)),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.006,),
+                    Row(
+                      children: <Widget>[
+                        Text("건강/의료용품", style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                        Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.01,
+                          height: MediaQuery.of(context).size.width*0.01,
+                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                              color: Colors.forestmk
+                          ),
+                        ),
+                        Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
+                        Text("1", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.01,
+                          height: MediaQuery.of(context).size.width*0.01,
+                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                              color: Colors.forestmk
+                          ),
+                        ),
+                        Image.asset("images/fa-comment.png",height: MediaQuery.of(context).size.height*0.018,),
+                        Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
+                      ],
+                    ),
                   ],
                 ),]
                 ),
@@ -307,10 +343,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: 40,
                           height: scrollbar_height*0.8,
                           padding: EdgeInsets.all(3),
-                          child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate01.png"),
+                          child: Image.asset("images/hd_cate01.png"),
                         ),
                         onTap: (){
-                            Navigator.popUntil(context, (Route<dynamic> route) => false);
+
                         },
                       ),
 
@@ -319,7 +355,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: 40,
                           height: scrollbar_height*0.8,
                           padding: EdgeInsets.all(3),
-                          child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate02.png"),
+                          child: Image.asset("images/hd_cate02.png"),
                         ),
                         onTap: (){
                         },
@@ -331,7 +367,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: scrollbar_height*0.8,
                           padding: EdgeInsets.all(3),
 
-                          child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate03.png"),
+                          child: Image.asset("images/hd_cate03.png"),
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
@@ -346,26 +382,26 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: scrollbar_height*0.8,
                           padding: EdgeInsets.all(3),
 
-                          child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate04.png"),
+                          child: Image.asset("images/hd_cate04.png"),
                         ),
                         onTap: (){
 
                         },
                       ),
-
                       InkWell(
                         child: Container(
                           width: 40,
                           height: scrollbar_height*0.8,
                           padding: EdgeInsets.all(3),
 
-                          child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate05.png"),
+                          child: Image.asset("images/hd_cate05.png"),
                         ),
                         onTap: (){
-
+                          Navigator.push(context,MaterialPageRoute(
+                              builder:(context) => mypage()
+                          ));
                         },
                       ),
-
                     ],
                   ),
                 ),
@@ -388,7 +424,6 @@ class _MyHomePageState extends State<MyHomePage> {
 //      ),
         body:Column(
         children: <Widget>[
-
           Container(
             height: list_height,
             decoration: BoxDecoration(color: Colors.white),
@@ -404,7 +439,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: <Widget>[
                   Container(
                     padding:EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top:MediaQuery.of(context).size.height*0.01,bottom: MediaQuery.of(context).size.height*0.01),
-                    child:Image.network("http://forestmk.itforone.co.kr/img/logo_name.png",fit: BoxFit.fill,),
+                    child:Image.asset("images/logo_name.png",fit: BoxFit.fill,),
                   ),
                   Row(
                     children: <Widget>[
@@ -417,7 +452,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               borderRadius: BorderRadius.all(Radius.circular(50)),
                               border: Border.all(color: Color(0xffcccccc))
                           ),
-                          child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_icon01.png"),
+                          child: Image.asset("images/hd_icon01.png"),
                         ),
                         onTap: (){
 
@@ -434,7 +469,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               borderRadius: BorderRadius.all(Radius.circular(50)),
                               border: Border.all(color: Color(0xffcccccc))
                           ),
-                          child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_icon02.png"),
+                          child: Image.asset("images/hd_icon02.png"),
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
@@ -452,7 +487,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               borderRadius: BorderRadius.all(Radius.circular(50)),
                               border: Border.all(color: Color(0xffcccccc))
                           ),
-                          child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_icon03.png"),
+                          child: Image.asset("images/hd_icon03.png"),
                         ),
                         onTap: (){
 
@@ -476,7 +511,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             width: 40,
                             height: 40,
                             padding: EdgeInsets.all(3),
-                            child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate01.png"),
+                            child: Image.asset("images/hd_cate01.png"),
                           ),
                           onTap: (){
                           },
@@ -488,7 +523,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 40,
                             padding: EdgeInsets.all(3),
 
-                            child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate02.png"),
+                            child: Image.asset("images/hd_cate02.png"),
                           ),
                           onTap: (){
 
@@ -501,7 +536,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 40,
                             padding: EdgeInsets.all(3),
 
-                            child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate03.png"),
+                            child: Image.asset("images/hd_cate03.png"),
                           ),
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(
@@ -516,7 +551,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 40,
                             padding: EdgeInsets.all(3),
 
-                            child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate04.png"),
+                            child: Image.asset("images/hd_cate04.png"),
                           ),
                           onTap: (){
 
@@ -529,7 +564,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             height: 40,
                             padding: EdgeInsets.all(3),
 
-                            child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/hd_cate05.png"),
+                            child: Image.asset("images/hd_cate05.png"),
                           ),
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(
@@ -560,7 +595,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     borderRadius: BorderRadius.all(Radius.circular(50)),
                                     border: Border.all(color: Color(0xffcccccc))
                                 ),
-                                child: Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/wing_mb_noimg2.png"),
+                                child: Image.asset("images/wing_mb_noimg2.png"),
                               ),
                               onTap: (){
 
@@ -592,7 +627,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: <Widget>[
                                 Padding(
                                   padding: EdgeInsets.all(3),
-                                  child:Image.network("http://forestmk.itforone.co.kr/theme/basic_app/img/app/mb_write_btn.png"),
+                                  child:Image.asset("images/mb_write_btn.png"),
                                 ),
                                 Text("글쓰기",style: TextStyle(color: Colors.white),)
                               ],
@@ -630,7 +665,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
                         Row(
                           children: <Widget>[
-
                             Container(
                               width: 20,
                               child: Checkbox(
@@ -651,7 +685,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             Text("업체안보기"),
                           ],
                         ),
-
                       ],
                     )
 
@@ -674,7 +707,7 @@ class _MyHomePageState extends State<MyHomePage> {
             decoration: BoxDecoration(
                 image: DecorationImage(//이미지 꾸미기
                     fit:BoxFit.cover,
-                    image:NetworkImage("http://forestmk.itforone.co.kr/theme/basic_app/img/ft_bn.jpg")//이미지 가져오기
+                    image:AssetImage("images/ft_bn.jpg")//이미지 가져오기
                 )
             ),
           ),

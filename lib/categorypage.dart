@@ -27,7 +27,7 @@ class _categorypageState extends State<categorypage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.network("http://14.48.175.177/theme/basic_app/img/app/category"+path_img+".png"),
+            Image.asset("images/category"+path_img+".png"),
             Text(menu_names[id])
           ],
         ),
@@ -51,7 +51,7 @@ class _categorypageState extends State<categorypage> {
 
             child:Padding(
                 padding: EdgeInsets.all(13),
-                child:Image.network("http://14.48.175.177/theme/basic_app/img/app/hd_back.png")
+                child:Image.asset("images/hd_back.png")
             ),
             onTap: (){
               Navigator.of(context).pop(true);

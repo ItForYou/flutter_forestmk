@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutterforestmk/write_ad.dart';
 import 'package:flutterforestmk/write_normal.dart';
 
 class chk_writead extends StatefulWidget {
@@ -19,6 +20,20 @@ class _chk_writeadState extends State<chk_writead> {
         fontSize:MediaQuery.of(context).size.width*0.032,
 
       ),
+    );
+    return temp;
+  }
+
+  Widget get_number(num){
+    Widget temp = Container(
+        width: MediaQuery.of(context).size.width*0.05,
+        height: MediaQuery.of(context).size.width*0.05,
+        margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.01,bottom: MediaQuery.of(context).size.height*0.003),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.06)),
+            color: Color(0xff00b5af)
+        ),
+        child: Center(child: Text(num, style: TextStyle(color: Color(0xffffffff)),))
     );
     return temp;
   }
@@ -106,11 +121,7 @@ class _chk_writeadState extends State<chk_writead> {
                     SizedBox(height: MediaQuery.of(context).size.height*0.02,),
                     Row(
                       children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.06,
-                          height: MediaQuery.of(context).size.width*0.06,
-                          child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                        ),
+                       get_number("1"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
@@ -122,11 +133,7 @@ class _chk_writeadState extends State<chk_writead> {
                     get_textbox("리고 있습니다."),
                     Row(
                       children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.06,
-                          height: MediaQuery.of(context).size.width*0.06,
-                          child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                        ),
+                        get_number("2"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
@@ -137,11 +144,7 @@ class _chk_writeadState extends State<chk_writead> {
                     ),
                     Row(
                       children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.06,
-                          height: MediaQuery.of(context).size.width*0.06,
-                          child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                        ),
+                        get_number("3"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
@@ -153,11 +156,7 @@ class _chk_writeadState extends State<chk_writead> {
                     get_textbox("21일, 28일 게재하고 있습니다.  (계약날이 지나면 게시물은 자동삭제 됩니다)"),
                     Row(
                       children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.06,
-                          height: MediaQuery.of(context).size.width*0.06,
-                          child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                        ),
+                        get_number("4"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
@@ -169,11 +168,7 @@ class _chk_writeadState extends State<chk_writead> {
                     get_textbox("로 업체 표기번호로 유선상으로 협의후 게재합니다."),
                     Row(
                       children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.06,
-                          height: MediaQuery.of(context).size.width*0.06,
-                          child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                        ),
+                        get_number("5"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
@@ -184,11 +179,7 @@ class _chk_writeadState extends State<chk_writead> {
                     ),
                     Row(
                       children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.06,
-                          height: MediaQuery.of(context).size.width*0.06,
-                          child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                        ),
+                        get_number("6"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
@@ -199,11 +190,7 @@ class _chk_writeadState extends State<chk_writead> {
                     ),
                     Row(
                       children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.06,
-                          height: MediaQuery.of(context).size.width*0.06,
-                          child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                        ),
+                        get_number("7"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
@@ -226,11 +213,7 @@ class _chk_writeadState extends State<chk_writead> {
                     SizedBox(height: MediaQuery.of(context).size.height*0.02,),
                     Row(
                       children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.06,
-                          height: MediaQuery.of(context).size.width*0.06,
-                          child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                        ),
+                        get_number("1"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
@@ -243,11 +226,7 @@ class _chk_writeadState extends State<chk_writead> {
 
                     Row(
                       children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.06,
-                          height: MediaQuery.of(context).size.width*0.06,
-                          child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                        ),
+                        get_number("2"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
@@ -259,11 +238,7 @@ class _chk_writeadState extends State<chk_writead> {
                     get_textbox("으로써 회사가 민.형사적 책임을 부담할 가능성이 있는경우"),
                     Row(
                       children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.06,
-                          height: MediaQuery.of(context).size.width*0.06,
-                          child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
-                        ),
+                        get_number("3"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child: get_textbox("광고가 관련 법령을 위반하는 회원의 영업행위 들에 연계됨으"),
@@ -313,7 +288,7 @@ class _chk_writeadState extends State<chk_writead> {
                     SizedBox(height: MediaQuery.of(context).size.height*0.02,),
                     Container(
                       width: MediaQuery.of(context).size.width*0.94,
-                      height: MediaQuery.of(context).size.height*0.08,
+                      height: MediaQuery.of(context).size.height*0.085,
                       padding: EdgeInsets.only(
                           left: MediaQuery.of(context).size.width*0.02,
                           right: MediaQuery.of(context).size.width*0.02,
@@ -324,9 +299,9 @@ class _chk_writeadState extends State<chk_writead> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("안드로이드의 다운로드수 1,000명"),
-                          Text("아이폰의 다운로드수 1,000명"),
-                          Text(" 합 2,000 명"),
+                          Text("안드로이드의 다운로드수 1,000명",style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.017),),
+                          Text("아이폰의 다운로드수 1,000명",style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.017)),
+                          Text(" 합 2,000 명",style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.017)),
                         ],
                       ),
                     ),
@@ -581,7 +556,7 @@ class _chk_writeadState extends State<chk_writead> {
               onTap: (){
                 if(flg_value==1) {
                   Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => write_normal()
+                      builder: (context) => write_ad()
                   ));
                 }
                 else{
