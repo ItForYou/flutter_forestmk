@@ -34,7 +34,6 @@ class _registerState extends State<register> {
   }
 
   void updatesearch(String text){
-
   }
 
   void _showDialog() {
@@ -122,9 +121,6 @@ class _registerState extends State<register> {
   @override
   Widget build(BuildContext context){
 
-
-
-
     Widget service_content = Container(
       width: MediaQuery.of(context).size.width*0.8,
       height: MediaQuery.of(context).size.height*0.2,
@@ -170,8 +166,7 @@ class _registerState extends State<register> {
             "\n(시행일) 이 약관은 2013년 12월 1일부터 시행한다.",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03,))
       )
     );
-
-
+    
     Widget privacy_content = Container(
         width: MediaQuery.of(context).size.width*0.8,
         height: MediaQuery.of(context).size.height*0.2,

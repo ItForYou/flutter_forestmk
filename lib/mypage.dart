@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/modify_info.dart';
+import 'package:flutterforestmk/my_items.dart';
 import 'package:flutterforestmk/mysetting.dart';
 
 
@@ -167,6 +168,11 @@ class _mypageState extends State<mypage> {
                           Text("판매내역")
                         ],
                       ),
+                      onTap: (){
+                        Navigator.push(context,MaterialPageRoute(
+                            builder:(context) => my_items()
+                        ));
+                      },
                     ),
                     SizedBox(width: MediaQuery.of(context).size.width*0.1,),
                     InkWell(
