@@ -80,6 +80,7 @@ class _loginpageState extends State<loginpage>{
                       ),
                       child:TextField(
                         cursorColor: Colors.green,
+                        obscureText: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.only( left: 20),

@@ -292,6 +292,7 @@ class _registerState extends State<register> {
               child: TextFormField(
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.visiblePassword,
+                  obscureText: true,
                   maxLines: 1,
                   decoration: InputDecoration(
                     contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
@@ -316,6 +317,7 @@ class _registerState extends State<register> {
               child: TextFormField(
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.visiblePassword,
+                  obscureText: true,
                   maxLines: 1,
                   decoration: InputDecoration(
                     contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),

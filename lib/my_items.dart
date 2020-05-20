@@ -4,24 +4,33 @@ import 'package:flutterforestmk/categorypage.dart';
 import 'package:flutterforestmk/chk_writead.dart';
 import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/loginpage.dart';
+import 'package:flutterforestmk/main.dart';
 import 'package:flutterforestmk/mypage.dart';
 import 'package:flutterforestmk/viewpage.dart';
 import 'package:flutterforestmk/write_normal.dart';
 
+
 class my_items extends StatefulWidget {
+
+  final String title;
+
+  my_items({Key key, this.title,}) : super(key: key);
+
   @override
   _my_itemsState createState() => _my_itemsState();
 }
 
 class _my_itemsState extends State<my_items> {
 
-  bool checkbox_soldout = false;
-  bool checkbox_adv = false;
+
+
   static double scrollbar_height=1;
   double list_height;
   int start_height=1;
   ScrollController change_appbar = ScrollController();
   PreferredSize appbar;
+  List <bool> checkbox_values = List<bool>();
+  bool flg_allcheck = false;
   PreferredSize intro_appbar = PreferredSize(
     // Here we take the value from the MyHomePage object that was created by
     // the App.build method, and use it to set our appbar title.
@@ -66,10 +75,10 @@ class _my_itemsState extends State<my_items> {
     }
   }
 
-  void soldout_changed(bool value) => setState(() => checkbox_soldout = value);
-  void adv_changed(bool value) => setState(() => checkbox_adv = value);
+  Widget get_content(id,cnt,chk_id){
 
-  Widget get_content(id,cnt){
+    if(start_height == 1)
+    checkbox_values.add(false);
 
     InkWell temp = InkWell(
       child: Container(
@@ -88,13 +97,17 @@ class _my_itemsState extends State<my_items> {
             children: <Widget>[
               Row(
                   children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.05),
-                      child: Checkbox(
-                        value: checkbox_soldout,
-                        activeColor: Colors.black12,
-                        onChanged: soldout_changed,
-                      ),
+                    Checkbox(
+                      value: checkbox_values[chk_id],
+                      activeColor: Colors.black12,
+                      onChanged: (bool value){
+                        print(chk_id.toString());
+
+                        setState(() {
+                          checkbox_values[chk_id] = value;
+                          print(checkbox_values[chk_id].toString());
+                        });
+                      },
                     ),
                     Hero(
                       tag: id,
@@ -266,6 +279,8 @@ class _my_itemsState extends State<my_items> {
     super.initState();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -294,7 +309,9 @@ class _my_itemsState extends State<my_items> {
                         child: Image.asset("images/hd_cate01.png"),
                       ),
                       onTap: (){
-
+                        Navigator.push(context,MaterialPageRoute(
+                            builder:(context) => MyApp()
+                        ));
                       },
                     ),
 
@@ -502,7 +519,9 @@ class _my_itemsState extends State<my_items> {
                             child: Image.asset("images/hd_cate04.png"),
                           ),
                           onTap: (){
-
+                            Navigator.push(context,MaterialPageRoute(
+                                builder:(context) => my_items(title: "최근 본 글",)
+                            ));
                           },
                         ),
 
@@ -602,16 +621,36 @@ class _my_itemsState extends State<my_items> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                            Text("판매중인 물건" ,style: TextStyle(fontWeight: FontWeight.bold, fontSize:MediaQuery.of(context).size.width*0.045)),
+                            Text(widget.title ,style: TextStyle(fontWeight: FontWeight.bold, fontSize:MediaQuery.of(context).size.width*0.045)),
                         Row(
                           children: <Widget>[
 
                             InkWell(
-                                child: Text("모두선택",style: TextStyle(color: Colors.forestmk),)
+                                child: Text("모두선택",style: TextStyle(color: Colors.forestmk),),
+                                onTap: (){
+                                  setState(() {
+                                    bool all_value;
+                                    if(flg_allcheck==false) {
+                                            flg_allcheck=true;
+                                            all_value = true;
+                                      }
+                                    else{
+                                      flg_allcheck=false;
+                                      all_value = false;
+                                    }
+
+                                      for (int i = 0; i < checkbox_values.length; i++) {
+                                        checkbox_values[i] = all_value;
+                                    }
+                                  });
+                                },
                             ),
                             SizedBox(width:  MediaQuery.of(context).size.width*0.03,),
                             InkWell(
-                                child: Text("지우기",style: TextStyle(color: Colors.forestmk),)
+                                child: Text("지우기",style: TextStyle(color: Colors.forestmk),),
+                                onTap: (){
+
+                                },
                             ),
                           ],
                         ),
@@ -619,16 +658,15 @@ class _my_itemsState extends State<my_items> {
                     )
 
                 ),
-                get_content("hero01", "01"),
-                get_content("hero02", "02"),
-                get_content("hero03", "03"),
-                get_content("hero04", "04"),
-                get_content("hero05", "05"),
-                get_content("hero06", "06"),
-                get_content("hero07", "07"),
-                get_content("hero08", "08"),
-                get_content("hero09", "09"),
-
+                get_content("hero01", "01",0),
+                get_content("hero02", "02",1),
+                get_content("hero03", "03",2),
+                get_content("hero04", "04",3),
+                get_content("hero05", "05",4),
+                get_content("hero06", "06",5),
+                get_content("hero07", "07",6),
+                get_content("hero08", "08",7),
+                get_content("hero09", "09",8),
               ],
             ),
           ),

@@ -260,6 +260,9 @@ class _ViewpagemineState extends State<Viewpage_mine>{
           Container(
             padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
             height: MediaQuery.of(context).size.height*0.07,
+            decoration: BoxDecoration(
+                border: Border(top: BorderSide(width: 1,color: Color(0xffefefef)), bottom: BorderSide(width: 1,color: Color(0xffefefef)),)
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -297,7 +300,10 @@ class _ViewpagemineState extends State<Viewpage_mine>{
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height*0.35,
+            height: MediaQuery.of(context).size.height*0.355,
+            decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(width: 1,color: Color(0xffefefef)))
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

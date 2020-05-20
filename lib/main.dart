@@ -6,12 +6,11 @@ import 'package:flutterforestmk/categorypage.dart';
 import 'package:flutterforestmk/chk_writead.dart';
 import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/loginpage.dart';
+import 'package:flutterforestmk/my_items.dart';
 import 'package:flutterforestmk/write_normal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutterforestmk/viewpage.dart';
 import 'package:flutterforestmk/mypage.dart';
-
-
 
 void main() => runApp(MyApp());
 
@@ -140,14 +139,12 @@ class _MyHomePageState extends State<MyHomePage> {
             height: MediaQuery.of(context).size.height*0.2,
             child: Column(
               children: <Widget>[
-
                 InkWell(
                   child: Container(
                     height: MediaQuery.of(context).size.height*0.1,
                     padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
                     child: Row(
                       children: <Widget>[
-
                         Image.asset("images/write_icon01.png"),
                         SizedBox(width: MediaQuery.of(context).size.width*0.02,),
                         Text("중고거래 글쓰기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
@@ -178,7 +175,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     ));
                   },
                 ),
-
               ],
             ),
           );
@@ -199,7 +195,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           padding: EdgeInsets.only(left: 10,right: 20,top:10,bottom: 10),
           child: InkWell(
-
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -385,7 +380,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Image.asset("images/hd_cate04.png"),
                         ),
                         onTap: (){
-
+                          Navigator.push(context,MaterialPageRoute(
+                              builder:(context) => my_items()
+                          ));
                         },
                       ),
                       InkWell(
@@ -393,7 +390,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: 40,
                           height: scrollbar_height*0.8,
                           padding: EdgeInsets.all(3),
-
                           child: Image.asset("images/hd_cate05.png"),
                         ),
                         onTap: (){
@@ -514,6 +510,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Image.asset("images/hd_cate01.png"),
                           ),
                           onTap: (){
+
                           },
                         ),
 
@@ -554,7 +551,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Image.asset("images/hd_cate04.png"),
                           ),
                           onTap: (){
-
+                            Navigator.push(context,MaterialPageRoute(
+                                builder:(context) => my_items(title: "최근 본 글",)
+                            ));
                           },
                         ),
 

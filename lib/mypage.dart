@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutterforestmk/basicboard.dart';
 import 'package:flutterforestmk/location.dart';
+import 'package:flutterforestmk/main.dart';
 import 'package:flutterforestmk/modify_info.dart';
 import 'package:flutterforestmk/my_items.dart';
 import 'package:flutterforestmk/mysetting.dart';
@@ -163,14 +165,14 @@ class _mypageState extends State<mypage> {
                                 color: Color(0xffeeeeee),
                                 borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,),),
                                 ),
-                              child: Padding(padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01), child:Image.network("http://14.48.175.177/theme/basic_app/img/app/my_icon01.png",)),
+                              child: Padding(padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01), child:Image.asset("images/my_icon01.png",)),
                               ),
                           Text("판매내역")
                         ],
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => my_items()
+                            builder:(context) => my_items(title: "판매중인 물건",)
                         ));
                       },
                     ),
@@ -186,11 +188,16 @@ class _mypageState extends State<mypage> {
                               color: Color(0xffeeeeee),
                               borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,),),
                             ),
-                            child: Padding(padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01), child:Image.network("http://14.48.175.177/theme/basic_app/img/app/my_icon02.png",)),
+                            child: Padding(padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01), child:Image.asset("images/my_icon02.png",)),
                           ),
                           Text("나의광고")
                         ],
                       ),
+                      onTap: (){
+                        Navigator.push(context,MaterialPageRoute(
+                            builder:(context) => MyApp()
+                        ));
+                      },
                     ),
                   ],
                 ),
@@ -208,7 +215,7 @@ class _mypageState extends State<mypage> {
                       Container(
                         width: MediaQuery.of(context).size.width*0.1,
                         height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon01.png"),
+                        child: Image.asset("images/myul_icon01.png"),
                       ),
                       SizedBox(width: MediaQuery.of(context).size.width*0.01,),
                       Text("나의 위치 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
@@ -235,7 +242,7 @@ class _mypageState extends State<mypage> {
                       Container(
                         width: MediaQuery.of(context).size.width*0.1,
                         height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon02.png"),
+                        child: Image.asset("images/myul_icon02.png"),
                       ),
                       SizedBox(width: MediaQuery.of(context).size.width*0.01,),
                       Text("숲마켓 공유",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
@@ -257,15 +264,19 @@ class _mypageState extends State<mypage> {
                       Container(
                         width: MediaQuery.of(context).size.width*0.1,
                         height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon03.png"),
+                        child: Image.asset("images/myul_icon03.png"),
                       ),
                       SizedBox(width: MediaQuery.of(context).size.width*0.01,),
                       Text("공지사항",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
 
                     ],
                   ),
-
                 ),
+                onTap: (){
+                  Navigator.push(context,MaterialPageRoute(
+                      builder:(context) => basicboard(title: "공지사항",)
+                  ));
+              },
               ),
               InkWell(
                 child: Container(
@@ -280,14 +291,19 @@ class _mypageState extends State<mypage> {
                       Container(
                         width: MediaQuery.of(context).size.width*0.1,
                         height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon04.png"),
+                        child: Image.asset("images/myul_icon04.png"),
                       ),
                       SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                      Text("숲마켓 공유",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                      Text("고객 문의",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
 
                     ],
                   ),
                 ),
+                onTap: (){
+                  Navigator.push(context,MaterialPageRoute(
+                      builder:(context) => basicboard(title: "고객문의")
+                  ));
+                },
               ),
               InkWell(
                 child: Container(
@@ -302,7 +318,7 @@ class _mypageState extends State<mypage> {
                       Container(
                         width: MediaQuery.of(context).size.width*0.1,
                         height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon05.png"),
+                        child: Image.asset("images/myul_icon05.png"),
                       ),
                       SizedBox(width: MediaQuery.of(context).size.width*0.01,),
                       Text("앱 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
@@ -329,7 +345,7 @@ class _mypageState extends State<mypage> {
                       Container(
                         width: MediaQuery.of(context).size.width*0.1,
                         height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.network("http://14.48.175.177/theme/basic_app/img/app/myul_icon06.png"),
+                        child: Image.asset("images/myul_icon06.png"),
                       ),
                       SizedBox(width: MediaQuery.of(context).size.width*0.01,),
                       Text("로그 아웃",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)

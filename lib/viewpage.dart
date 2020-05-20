@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterforestmk/viewpage_mine.dart';
 
 class Viewpage extends StatefulWidget {
-  String tag,src;
+  final String tag,src;
   Viewpage({Key key, this.title, this.tag, this.src}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -261,6 +261,9 @@ class _ViewpageState extends State<Viewpage>{
               Container(
                 padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
                 height: MediaQuery.of(context).size.height*0.07,
+                decoration: BoxDecoration(
+                    border: Border(top: BorderSide(width: 1,color: Color(0xffefefef)), bottom: BorderSide(width: 1,color: Color(0xffefefef)),)
+                ),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -298,7 +301,10 @@ class _ViewpageState extends State<Viewpage>{
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height*0.35,
+                height: MediaQuery.of(context).size.height*0.355,
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(width: 1,color: Color(0xffefefef)))
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
