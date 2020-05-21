@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/register.dart';
+import 'package:flutterforestmk/search_info.dart';
 
 class loginpage extends StatefulWidget {
 
@@ -167,6 +168,11 @@ class _loginpageState extends State<loginpage>{
                       width: MediaQuery.of(context).size.width*0.7,
                       child: InkWell(
                         child: Text("아이디/비밀번호 찾기",textAlign: TextAlign.right,style: TextStyle(fontSize:MediaQuery.of(context).size.height*0.018,decoration: TextDecoration.underline,color: Colors.black, fontWeight: FontWeight.bold),),
+                        onTap: (){
+                          Navigator.push(context,MaterialPageRoute(
+                              builder:(context) => search_info()
+                          ));
+                        },
                       ),
                     ),
                     InkWell(

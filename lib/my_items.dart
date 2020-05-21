@@ -27,10 +27,13 @@ class _my_itemsState extends State<my_items> {
   static double scrollbar_height=1;
   double list_height;
   int start_height=1;
-  ScrollController change_appbar = ScrollController();
   PreferredSize appbar;
   List <bool> checkbox_values = List<bool>();
   bool flg_allcheck = false;
+  bool flg_search = false;
+  Widget head_first;
+  ScrollController change_appbar = ScrollController();
+  TextEditingController search_text = new TextEditingController();
   PreferredSize intro_appbar = PreferredSize(
     // Here we take the value from the MyHomePage object that was created by
     // the App.build method, and use it to set our appbar title.
@@ -97,17 +100,21 @@ class _my_itemsState extends State<my_items> {
             children: <Widget>[
               Row(
                   children: <Widget>[
-                    Checkbox(
-                      value: checkbox_values[chk_id],
-                      activeColor: Colors.black12,
-                      onChanged: (bool value){
-                        print(chk_id.toString());
+                    Container(
+                      width: MediaQuery.of(context).size.width*0.04,
+                      margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.03),
+                      child: Checkbox(
+                        value: checkbox_values[chk_id],
+                        activeColor: Colors.black12,
+                        onChanged: (bool value){
+                          print(chk_id.toString());
 
-                        setState(() {
-                          checkbox_values[chk_id] = value;
-                          print(checkbox_values[chk_id].toString());
-                        });
-                      },
+                          setState(() {
+                            checkbox_values[chk_id] = value;
+                            print(checkbox_values[chk_id].toString());
+                          });
+                        },
+                      ),
                     ),
                     Hero(
                       tag: id,
@@ -280,9 +287,181 @@ class _my_itemsState extends State<my_items> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
+
+    if(flg_search == false) {
+      head_first = Container(
+          height: MediaQuery
+              .of(context)
+              .size
+              .height * 0.075,
+          decoration: new BoxDecoration(color: Colors.white),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(left: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.05, top: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.01, bottom: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.01),
+                  child: Image.asset("images/logo_name.png", fit: BoxFit.fill,),
+                ),
+                Row(
+                  children: <Widget>[
+                    InkWell(
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            border: Border.all(color: Color(0xffcccccc))
+                        ),
+                        child: Image.asset("images/hd_icon01.png"),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          if(flg_search==false)
+                            flg_search = true;
+                          else
+                            flg_search = false;
+                        });
+                      },
+                    ),
+
+                    SizedBox(width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.02,),
+                    InkWell(
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            border: Border.all(color: Color(0xffcccccc))
+                        ),
+                        child: Image.asset("images/hd_icon02.png"),
+                      ),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => location()
+                        ));
+                      },
+                    ),
+                    SizedBox(width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.02,),
+                    InkWell(
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            border: Border.all(color: Color(0xffcccccc))
+                        ),
+                        child: Image.asset("images/hd_icon03.png"),
+                      ),
+                      onTap: () {
+
+                      },
+                    ),
+                    SizedBox(width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.02,),
+                  ],
+                )
+              ]
+          )
+      );
+    }
+    else{
+      head_first = Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.075,
+          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.04,right: MediaQuery.of(context).size.width*0.04,top:  MediaQuery.of(context).size.height * 0.001,bottom:  MediaQuery.of(context).size.height * 0.001,),
+          decoration: new BoxDecoration(
+              color: Colors.white
+          ),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width*0.8,
+                height: MediaQuery.of(context).size.height * 0.075,
+                child:TextFormField(
+                  controller: search_text,
+                  maxLines: 1,
+                  maxLength: null,
+                  textAlign: TextAlign.start,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Color(0xfff9f9f9),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 1,color: Color(0xffefefef))
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 1,color: Color(0xffefefef))
+                    ),
+                    suffixIcon:
+                    InkWell(
+                      child: Icon(Icons.search),
+                      onTap: (){
+                        print(search_text.text);
+                      },
+                    ),
+                    hintText: "원하시는 키워드를 입력하세요",
+                  ),
+                ),
+              ),
+              SizedBox(width: MediaQuery.of(context).size.width*0.02,),
+              InkWell(
+                child:
+                Icon(
+                  Icons.clear,
+                  color: Colors.forestmk,
+                  size: MediaQuery.of(context).size.width*0.08,),
+                onTap: (){
+                  setState(() {
+                    if(flg_search==false)
+                      flg_search = true;
+                    else
+                      flg_search = false;
+                  });
+                },
+              ),
+            ],
+          )
+      );
+    }
 
     if(start_height == 1){
       list_height = MediaQuery.of(context).size.height-MediaQuery.of(context).size.height*0.049;
@@ -350,7 +529,9 @@ class _my_itemsState extends State<my_items> {
                         child: Image.asset("images/hd_cate04.png"),
                       ),
                       onTap: (){
-
+                        setState(() {
+                          print("Test");
+                        });
                       },
                     ),
                     InkWell(
@@ -396,73 +577,7 @@ class _my_itemsState extends State<my_items> {
               controller: change_appbar,
               children: <Widget>[
                 SizedBox(height: 5,),
-                Container(
-                    height: MediaQuery.of(context).size.height*0.075,
-                    decoration: new BoxDecoration(color: Colors.white),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            padding:EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top:MediaQuery.of(context).size.height*0.01,bottom: MediaQuery.of(context).size.height*0.01),
-                            child:Image.asset("images/logo_name.png",fit: BoxFit.fill,),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              InkWell(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*0.09,
-                                  height: MediaQuery.of(context).size.width*0.09,
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                                      border: Border.all(color: Color(0xffcccccc))
-                                  ),
-                                  child: Image.asset("images/hd_icon01.png"),
-                                ),
-                                onTap: (){
-
-                                },
-                              ),
-
-                              SizedBox(width: MediaQuery.of(context).size.width*0.02,),
-                              InkWell(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*0.09,
-                                  height: MediaQuery.of(context).size.width*0.09,
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                                      border: Border.all(color: Color(0xffcccccc))
-                                  ),
-                                  child: Image.asset("images/hd_icon02.png"),
-                                ),
-                                onTap: (){
-                                  Navigator.push(context,MaterialPageRoute(
-                                      builder:(context) => location()
-                                  ));
-                                },
-                              ),
-                              SizedBox(width: MediaQuery.of(context).size.width*0.02,),
-                              InkWell(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*0.09,
-                                  height: MediaQuery.of(context).size.width*0.09,
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                                      border: Border.all(color: Color(0xffcccccc))
-                                  ),
-                                  child: Image.asset("images/hd_icon03.png"),
-                                ),
-                                onTap: (){
-
-                                },
-                              ),
-                              SizedBox(width: MediaQuery.of(context).size.width*0.02,),
-                            ],
-                          )
-                        ]
-                    )),
+                head_first,
                 Container(
                     padding: EdgeInsets.only(left: 22, right: 22),
                     height: MediaQuery.of(context).size.height*0.075,
@@ -519,9 +634,11 @@ class _my_itemsState extends State<my_items> {
                             child: Image.asset("images/hd_cate04.png"),
                           ),
                           onTap: (){
-                            Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => my_items(title: "최근 본 글",)
-                            ));
+                              setState(() {
+                                setState(() {
+                                  print("Test");
+                                });
+                              });
                           },
                         ),
 

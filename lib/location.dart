@@ -19,12 +19,11 @@ class location_State extends State<location> {
 
           child:Padding(
               padding: EdgeInsets.all(13),
-              child:Image.network("http://14.48.175.177/theme/basic_app/img/app/hd_back.png")
+              child:Image.asset("images/hd_back.png")
           ),
           onTap: (){
             Navigator.of(context).pop(true);
           },
-
         ),
       ),
       body: Container(
@@ -33,14 +32,12 @@ class location_State extends State<location> {
         color: Colors.white,
         child: Column(
           children: <Widget>[
-
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.07,
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05),
               child: TextFormField(
                   keyboardType: TextInputType.text,
-
                   maxLines: 1,
                   decoration: InputDecoration(
                     contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
@@ -83,7 +80,6 @@ class location_State extends State<location> {
                   borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.07))
               ),
               child: Center(child: Text("현재위치로 찾기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,color: Colors.white))),
-
             )
           ],
         ),

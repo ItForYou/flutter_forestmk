@@ -1,3 +1,5 @@
+
+
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:flutterforestmk/write_normal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutterforestmk/viewpage.dart';
 import 'package:flutterforestmk/mypage.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -64,10 +67,15 @@ class _MyHomePageState extends State<MyHomePage> {
   bool checkbox_soldout = false;
   bool checkbox_adv = false;
   ScrollController change_appbar = ScrollController();
+  TextEditingController search_text = new TextEditingController();
   int start_height=1;
    double list_height;
   static double scrollbar_height=1;
   PreferredSize appbar;
+  Widget head_first;
+  bool flg_search = false;
+  String sort_value = "최근순";
+
   PreferredSize intro_appbar = PreferredSize(
     // Here we take the value from the MyHomePage object that was created by
     // the App.build method, and use it to set our appbar title.
@@ -306,6 +314,129 @@ class _MyHomePageState extends State<MyHomePage> {
       return temp;
   }
 
+  void _searchdialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.03))
+            
+          ),
+          content: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height*0.26,
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height*0.05,
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("최근순"),
+                      Radio(
+                        value: "최근순",
+                        groupValue: sort_value,
+                        onChanged: (T){
+                          setState(() {
+                            sort_value = T;
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height*0.07,
+                  decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("조회수순"),
+                      Radio(
+                        value: "조회수순",
+                        groupValue: sort_value,
+                        onChanged: (T){
+                          setState(() {
+                            sort_value = T;
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height*0.07,
+                  decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("낮은가격순"),
+                      Radio(
+                        value: "낮은가격순",
+                        groupValue: sort_value,
+                        onChanged: (T){
+                          setState(() {
+                            sort_value = T;
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height*0.07,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("거리순"),
+                      Radio(
+                        value: "거리순",
+                        groupValue: sort_value,
+                        onChanged: (T){
+                          setState(() {
+                            sort_value = T;
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+          actions: null
+        );
+      },
+    );
+  }
+
+ void get_data() async{
+
+
+
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -368,6 +499,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Navigator.push(context,MaterialPageRoute(
                               builder:(context) => categorypage()
                           ));
+
                         },
                       ),
 
@@ -405,6 +537,178 @@ class _MyHomePageState extends State<MyHomePage> {
             )
         );
     }
+    if(flg_search == false) {
+      head_first = Container(
+          height: MediaQuery
+              .of(context)
+              .size
+              .height * 0.075,
+          decoration: new BoxDecoration(color: Colors.white),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(left: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.05, top: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.01, bottom: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.01),
+                  child: Image.asset("images/logo_name.png", fit: BoxFit.fill,),
+                ),
+                Row(
+                  children: <Widget>[
+                    InkWell(
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            border: Border.all(color: Color(0xffcccccc))
+                        ),
+                        child: Image.asset("images/hd_icon01.png"),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          if(flg_search==false)
+                            flg_search = true;
+                          else
+                            flg_search = false;
+                        });
+                      },
+                    ),
+
+                    SizedBox(width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.02,),
+                    InkWell(
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            border: Border.all(color: Color(0xffcccccc))
+                        ),
+                        child: Image.asset("images/hd_icon02.png"),
+                      ),
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => location()
+                        ));
+                      },
+                    ),
+                    SizedBox(width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.02,),
+                    InkWell(
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.09,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            border: Border.all(color: Color(0xffcccccc))
+                        ),
+                        child: Image.asset("images/hd_icon03.png"),
+                      ),
+                      onTap: () {
+
+                      },
+                    ),
+                    SizedBox(width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.02,),
+                  ],
+                )
+              ]
+          )
+      );
+    }
+    else{
+      head_first = Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.075,
+            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.04,right: MediaQuery.of(context).size.width*0.04,top:  MediaQuery.of(context).size.height * 0.001,bottom:  MediaQuery.of(context).size.height * 0.001,),
+            decoration: new BoxDecoration(
+                color: Colors.white
+            ),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width*0.8,
+                  height: MediaQuery.of(context).size.height * 0.075,
+                  child:TextFormField(
+                    controller: search_text,
+                    maxLines: 1,
+                    maxLength: null,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Color(0xfff9f9f9),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1,color: Color(0xffefefef))
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1,color: Color(0xffefefef))
+                        ),
+                        suffixIcon:
+                        InkWell(
+                            child: Icon(Icons.search),
+                            onTap: (){
+                              print(search_text.text);
+                            },
+                        ),
+                        hintText: "원하시는 키워드를 입력하세요",
+                    ),
+                  ),
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width*0.02,),
+                InkWell(
+                    child:
+                    Icon(
+                      Icons.clear,
+                      color: Colors.forestmk,
+                      size: MediaQuery.of(context).size.width*0.08,),
+                    onTap: (){
+                      setState(() {
+                        if(flg_search==false)
+                          flg_search = true;
+                        else
+                          flg_search = false;
+                      });
+                    },
+                ),
+              ],
+            )
+      );
+    }
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -427,73 +731,7 @@ class _MyHomePageState extends State<MyHomePage> {
               controller: change_appbar,
               children: <Widget>[
                 SizedBox(height: 5,),
-                Container(
-                height: MediaQuery.of(context).size.height*0.075,
-                decoration: new BoxDecoration(color: Colors.white),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                  Container(
-                    padding:EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top:MediaQuery.of(context).size.height*0.01,bottom: MediaQuery.of(context).size.height*0.01),
-                    child:Image.asset("images/logo_name.png",fit: BoxFit.fill,),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      InkWell(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width*0.09,
-                          height: MediaQuery.of(context).size.width*0.09,
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(50)),
-                              border: Border.all(color: Color(0xffcccccc))
-                          ),
-                          child: Image.asset("images/hd_icon01.png"),
-                        ),
-                        onTap: (){
-
-                        },
-                      ),
-
-                      SizedBox(width: MediaQuery.of(context).size.width*0.02,),
-                      InkWell(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width*0.09,
-                          height: MediaQuery.of(context).size.width*0.09,
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(50)),
-                              border: Border.all(color: Color(0xffcccccc))
-                          ),
-                          child: Image.asset("images/hd_icon02.png"),
-                        ),
-                        onTap: (){
-                          Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => location()
-                          ));
-                        },
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width*0.02,),
-                      InkWell(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width*0.09,
-                          height: MediaQuery.of(context).size.width*0.09,
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(50)),
-                              border: Border.all(color: Color(0xffcccccc))
-                          ),
-                          child: Image.asset("images/hd_icon03.png"),
-                        ),
-                        onTap: (){
-
-                        },
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width*0.02,),
-                    ],
-                  )
-                  ]
-                )),
+                head_first,
                 Container(
                     padding: EdgeInsets.only(left: 22, right: 22),
                     height: MediaQuery.of(context).size.height*0.075,
@@ -654,14 +892,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
 
-                        Row(
-                          children: <Widget>[
-                            Text("최근순"),
-                            Image.asset("images/arrow_filter.png"),
-                          ],
+                        InkWell(
+                          child: Row(
+                            children: <Widget>[
+                              Text(sort_value),
+                              Image.asset("images/arrow_filter.png"),
+                            ],
+                          ),
+                          onTap: (){
+                            _searchdialog();
+                          },
                         ),
-
-
                         Row(
                           children: <Widget>[
                             Container(

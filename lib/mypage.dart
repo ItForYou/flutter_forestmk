@@ -57,13 +57,13 @@ class _mypageState extends State<mypage> {
         leading: InkWell(
           child:Padding(
               padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02, bottom: MediaQuery.of(context).size.height*0.02, left: MediaQuery.of(context).size.width*0.05),
-              child:Image.network("http://14.48.175.177/theme/basic_app/img/app/hd_back.png")
+              child:Image.asset("images/hd_back.png")
           ),
           onTap: (){
             Navigator.of(context).pop(true);
           },
         ),
-      ),
+    ),
       body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
