@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutterforestmk/viewpage_mine.dart';
 
 class Viewpage_mine extends StatefulWidget {
-  String tag,src;
-  Viewpage_mine({Key key, this.title, this.tag, this.src}) : super(key: key);
+  String tag,wr_id;
+  Viewpage_mine({Key key, this.title, this.tag, this.wr_id}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -60,9 +60,9 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       ),
 
       onTap: (){
-        Navigator.push(context,MaterialPageRoute(
+        /*Navigator.push(context,MaterialPageRoute(
             builder:(context) => Viewpage_mine(src:"images/"+cnt+".jpg")
-        ));
+        ));*/
       },
     );
     return temp;
@@ -100,7 +100,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
             Container(
                 height: MediaQuery.of(context).size.height*0.33,
                 width: MediaQuery.of(context).size.width,
-                child:Image.asset(widget.src,fit: BoxFit.fitWidth,) ,
+                child:Image.asset(widget.wr_id,fit: BoxFit.fitWidth,) ,
               ),
           Container(
             height: MediaQuery.of(context).size.height*0.13,

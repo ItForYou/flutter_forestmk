@@ -29,12 +29,20 @@ class Viewpage extends StatefulWidget {
 
 class _ViewpageState extends State<Viewpage>{
   String price,real_mbid;
-  view_item itemdata;
+  var itemdata;
   List <dynamic> path =[];
   List <Widget> list_subitem = [Container()];
   List <Widget> list_extraitem = [Container()];
   Widget  hero_content= Container();
-  Widget get_content2(id,cnt){
+
+  Widget get_content2(id,flg){
+    var temp_data;
+    if(flg==1)
+      temp_data = view_item.fromJson(itemdata['data'][id]);
+    else
+      temp_data = view_item.fromJson(itemdata['data2'][id]);
+
+    print(temp_data);
 
     InkWell temp = InkWell(
       child: Container(
@@ -50,15 +58,15 @@ class _ViewpageState extends State<Viewpage>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                      Container(
-                        width: MediaQuery.of(context).size.width*0.4,
-                        height:  MediaQuery.of(context).size.height*0.15,
-                        child:Image.asset("images/"+cnt+".jpg", fit: BoxFit.fill,),
+                        width: temp_data.file==''?null:MediaQuery.of(context).size.width*0.4,
+                        height: temp_data.file==''?null:MediaQuery.of(context).size.height*0.15,
+                        child:temp_data.file==''?null:Image.network(temp_data.file, fit: BoxFit.fill,),
                       ),
 
                         SizedBox(height: 5,),
-                        Text("테스트제목", style: TextStyle(fontSize: 12),),
+                        Text(temp_data.wr_subject, style: TextStyle(fontSize: 12),),
                         SizedBox(height: 5,),
-                        Text("무료나눔", style: TextStyle(fontSize: 15),),
+                        Text(temp_data.wr_1, style: TextStyle(fontSize: 15),),
                     ]
               ),
             ],
@@ -68,7 +76,7 @@ class _ViewpageState extends State<Viewpage>{
       ),
       onTap: (){
         Navigator.push(context,MaterialPageRoute(
-            builder:(context) => Viewpage_mine(src:"images/"+cnt+".jpg")
+            builder:(context) => Viewpage_mine(wr_id:temp_data.wr_id)
         ));
       },
     );
@@ -139,10 +147,32 @@ class _ViewpageState extends State<Viewpage>{
         headers: {'Accept' : 'application/json'}
     );
     setState(() {
+      print("test");
       itemdata = jsonDecode(response.body);
       set_items();
     });
 
+  }
+
+  void set_items(){
+  print(itemdata['data'][0]);
+    if(itemdata['data'].length > 0) {
+      list_subitem.clear();
+      setState((){
+        for (var i = 0; i < itemdata['data'].length; i++) {
+          list_subitem.add(get_content2(i,1));
+        }
+      });
+    }
+
+    if(itemdata['data'].length > 0) {
+      list_extraitem.clear();
+      setState((){
+        for (var i = 0; i < itemdata['data2'].length; i++) {
+          list_extraitem.add(get_content2(i,2));
+        }
+      });
+    }
   }
 
 @override
