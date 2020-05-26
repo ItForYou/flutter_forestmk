@@ -138,6 +138,7 @@ class _ViewpageState extends State<Viewpage>{
     );
    // print(response.body);
     setState(() {
+      //set_herocontent(path);
     });
   }
 
@@ -147,14 +148,12 @@ class _ViewpageState extends State<Viewpage>{
     get_data();
     load_myinfo();
     path= widget.info.file;
-
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    //set_herocontent(path);
+    set_herocontent(path);
     if(widget.info.ca_name =='업체'){
       price=widget.info.wr_subject;
     }
