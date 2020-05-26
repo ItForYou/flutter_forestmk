@@ -31,6 +31,8 @@ class _ViewpageState extends State<Viewpage>{
   String price,real_mbid;
   view_item itemdata;
   List <dynamic> path =[];
+  List <Widget> list_subitem = [Container()];
+  List <Widget> list_extraitem = [Container()];
   Widget  hero_content= Container();
   Widget get_content2(id,cnt){
 
@@ -85,7 +87,7 @@ class _ViewpageState extends State<Viewpage>{
   }
 
   void set_herocontent(List <dynamic> path){
-    if(path.length > 0){
+    if(path.length-1 > 0){
 
         hero_content = Container(
           height: MediaQuery
@@ -97,12 +99,12 @@ class _ViewpageState extends State<Viewpage>{
               .size
               .width,
           child: Swiper(
-            itemCount: path.length,
+            itemCount: path.length-1,
             itemBuilder: (BuildContext context, int index){
-              return Image.network(path[index]);
+              return Image.network(path[index+1]);
             },
-            pagination: path.length>1?SwiperPagination():null,
-            loop: path.length>1? true:false,
+            pagination: (path.length-1)>1?SwiperPagination():null,
+            loop: (path.length-1)>1? true:false,
           ),
         );
 
@@ -130,29 +132,31 @@ class _ViewpageState extends State<Viewpage>{
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/get_view.php'),
         body: {
-          "wr_id" :widget.info.wr_id,
+          //"wr_id" :widget.info.wr_id,
           "mb_id":widget.info.mb_id,
           "ca_name":widget.info.ca_name,
         },
         headers: {'Accept' : 'application/json'}
     );
-   // print(response.body);
     setState(() {
-      //set_herocontent(path);
+      itemdata = jsonDecode(response.body);
+      set_items();
     });
+
   }
 
 @override
   void initState() {
     // TODO: implement initState
-    get_data();
     load_myinfo();
+    get_data();
     path= widget.info.file;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     set_herocontent(path);
     if(widget.info.ca_name =='업체'){
       price=widget.info.wr_subject;
@@ -414,10 +418,7 @@ class _ViewpageState extends State<Viewpage>{
                       child:
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                get_content2("another_mine1", "01"),
-                                get_content2("another_mine2", "02"),
-                              ],
+                              children: list_subitem
                             ),
                     ),
 
@@ -441,10 +442,7 @@ class _ViewpageState extends State<Viewpage>{
                       child:
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          get_content2("another_mine1", "01"),
-                          get_content2("another_mine2", "02"),
-                        ],
+                        children: list_extraitem
                       ),
                     ),
                   ],

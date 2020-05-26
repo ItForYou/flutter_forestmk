@@ -215,7 +215,7 @@ packages:
       name: flutter_plugin_android_lifecycle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.7"
+    version: "1.0.8"
   flutter_swiper:
     dependency: "direct main"
     description:
@@ -302,7 +302,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.6+1"
+    version: "0.6.6+4"
   image_picker_platform_interface:
     dependency: transitive
     description:
@@ -685,7 +685,7 @@ packages:
       name: webview_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.21"
+    version: "0.3.22+1"
   xml:
     dependency: transitive
     description:

@@ -530,6 +530,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("build");
     if(mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
