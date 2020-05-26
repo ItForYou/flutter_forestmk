@@ -5,9 +5,14 @@ import 'package:flutterforestmk/main.dart';
 import 'package:flutterforestmk/modify_info.dart';
 import 'package:flutterforestmk/my_items.dart';
 import 'package:flutterforestmk/mysetting.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class mypage extends StatefulWidget {
+
+  String mb_name,mb_1,mb_2;
+  mypage({Key key, this.mb_name, this.mb_1, this.mb_2}) : super(key: key);
+
   @override
   _mypageState createState() => _mypageState();
 }
@@ -28,9 +33,13 @@ class _mypageState extends State<mypage> {
           actions: <Widget>[
             new FlatButton(
               child: new Text("확인"),
-              onPressed: () {
+              onPressed: ()async {
                 Navigator.pop(context);
-                Navigator.pop(context);
+                SharedPreferences sp = await SharedPreferences.getInstance();
+                sp.clear();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => MyApp()),
+                        (Route<dynamic> route) => false);
               },
             ),
             new FlatButton(
@@ -104,10 +113,11 @@ class _mypageState extends State<mypage> {
                             width: MediaQuery.of(context).size.width*0.15,
                             height: MediaQuery.of(context).size.width*0.15,
                             decoration: BoxDecoration(
+                                color: Color(0xfff3f3f3),
                                 borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,)),
                                 image: DecorationImage(//이미지 꾸미기
                                     fit:BoxFit.cover,
-                                    image:NetworkImage("http://14.48.175.177/data/member/3076986471_Ij38ZOJV_78013042bb23282d414ec7602b46292f0d8bc89a.jpg")//이미지 가져오기
+                                    image:widget.mb_1!='test'?NetworkImage(widget.mb_1):AssetImage("images/wing_mb_noimg2.png")//이미지 가져오기
                             ),
                           )
                           ),
@@ -117,9 +127,9 @@ class _mypageState extends State<mypage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("테스트1",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),),
+                                Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),),
                                 SizedBox(height: MediaQuery.of(context).size.height*0.005,),
-                                Text("부산광역시 수영구 광안동 ", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03,),),
+                                Text(widget.mb_2, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03,),),
                               ],
                             ),
                           )
@@ -138,7 +148,7 @@ class _mypageState extends State<mypage> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => modify_info()
+                            builder:(context) => modify_info(mb_name: widget.mb_name,mb_1: widget.mb_1,mb_2: widget.mb_2,)
                         ));
                       },
                     )

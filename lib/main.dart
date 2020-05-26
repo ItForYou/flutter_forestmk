@@ -1,19 +1,25 @@
 
 
+import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterforestmk/categorypage.dart';
 import 'package:flutterforestmk/chk_writead.dart';
 import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/loginpage.dart';
+import 'package:flutterforestmk/main_item.dart';
 import 'package:flutterforestmk/my_items.dart';
+import 'package:flutterforestmk/register.dart';
 import 'package:flutterforestmk/write_normal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutterforestmk/viewpage.dart';
 import 'package:flutterforestmk/mypage.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 void main() => runApp(MyApp());
 
@@ -68,14 +74,16 @@ class _MyHomePageState extends State<MyHomePage> {
   bool checkbox_adv = false;
   ScrollController change_appbar = ScrollController();
   TextEditingController search_text = new TextEditingController();
+  main_item item;
   int start_height=1;
    double list_height;
   static double scrollbar_height=1;
   PreferredSize appbar;
-  Widget head_first;
+  Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black));
   bool flg_search = false;
-  String sort_value = "최근순";
-
+  String sort_value = "최근순", mb_id,mb_pwd,mb_2="test",mb_1="test",mb_name="test";
+  var itemdata;
+  List <Widget> items_content=[];
   PreferredSize intro_appbar = PreferredSize(
     // Here we take the value from the MyHomePage object that was created by
     // the App.build method, and use it to set our appbar title.
@@ -123,7 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     else {
       setState(() {
-
         if(appbar == scroll_appbar) {
           appbar = intro_appbar;
           start_height =0;
@@ -190,11 +197,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget get_content(id,cnt){
+  Widget get_content(id){
 
+    var temp_data = main_item.fromJson(itemdata['data'][id]);
+    //print(temp_data.file[0]);
+    if(temp_data.wr_1!='무료나눔' && temp_data.ca_name !='업체'){
+
+    }
       InkWell temp = InkWell(
         child: Container(
-          height: 100,
+          height: 110,
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
@@ -209,27 +221,35 @@ class _MyHomePageState extends State<MyHomePage> {
                 Row(
                   children: <Widget>[
                 Hero(
-                  tag: id,
+                  tag: "hero"+id.toString(),
                   child: Container(
                     width: MediaQuery.of(context).size.width*0.27,
                     height: MediaQuery.of(context).size.height*0.2,
-                    child:Image.asset("images/"+cnt+".jpg", ),
+
+                    decoration: BoxDecoration(
+                      border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
+                      borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
+                      image: DecorationImage(//이미지 꾸미기
+                            fit:BoxFit.fitWidth,
+                            image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                        )
+                    ),
                   ),
                 ),
                 SizedBox(width: 10,),
                 Column(
 
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: temp_data.ca_name!='업체'? MainAxisAlignment.start: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(height: 5,),
-                    Text("테스트제목", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                    Text(temp_data.wr_subject, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                     SizedBox(height: 5,),
-                    Text("무료나눔", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
-                    SizedBox(height: 8,),
+                    temp_data.ca_name!='업체'? Text(temp_data.wr_1, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),): Container(),
+                    temp_data.ca_name!='업체'? SizedBox(height: 8,): Container(),
                     Row(
                       children: <Widget>[
-                        Text("경기도 수원시 팔달구 구천동",style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                        Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                         SizedBox(width: MediaQuery.of(context).size.width*0.005,),
                         Container(
                           width: MediaQuery.of(context).size.width*0.01,
@@ -240,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Colors.forestmk
                           ),
                         ),
-                        Text("2일전 ",style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                        Text(temp_data.timegap,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
 
                       ],
 
@@ -248,9 +268,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     SizedBox(height: MediaQuery.of(context).size.height*0.006,),
                     Row(
                       children: <Widget>[
-                        Text("건강/의료용품", style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
-                        Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
-                        Container(
+                        temp_data.ca_name!='업체'? Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)):Container(),
+                        temp_data.ca_name!='업체'? Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,):Container(),
+                        temp_data.ca_name!='업체'?Container(
                           width: MediaQuery.of(context).size.width*0.01,
                           height: MediaQuery.of(context).size.width*0.01,
                           margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
@@ -258,9 +278,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
                               color: Colors.forestmk
                           ),
-                        ),
+                        ):Container(),
                         Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
-                        Text("1", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
+                        Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
                         Container(
                           width: MediaQuery.of(context).size.width*0.01,
                           height: MediaQuery.of(context).size.width*0.01,
@@ -286,15 +306,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       padding: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(50)),
-                          border: Border.all(color: Color(0xffcccccc)),
+                          //border: Border.all(color: Color(0xffcccccc)),
+                          color: Color(0xfff3f3f3),
                           image: DecorationImage(//이미지 꾸미기
                               fit:BoxFit.cover,
-                              image:NetworkImage("http://forestmk.itforone.co.kr/data/member/3542386191_O4hMBHJf_d1f767e86e735db50a43847faef0544e41ede2ed.jpg")//이미지 가져오기
+                              image:temp_data.profile_img!=''? NetworkImage(temp_data.profile_img): AssetImage("images/wing_mb_noimg2.png")//이미지 가져오기
                           )
                       ),
                     ),
                     SizedBox(height: 6,),
-                    Text("테스트",style: TextStyle(fontSize: 12),)
+                    Text(temp_data.mb_name,style: TextStyle(fontSize: 12),)
                   ],
                 ),
               ],
@@ -305,7 +326,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         onTap: (){
           Navigator.push(context,MaterialPageRoute(
-              builder:(context) => Viewpage(tag:id, src:"images/"+cnt+".jpg")
+              builder:(context) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,)
           ));
         },
       );
@@ -314,6 +335,45 @@ class _MyHomePageState extends State<MyHomePage> {
       return temp;
   }
 
+  void request_logindialog(){
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.03))
+
+              ),
+              content: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height*0.03,
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text("로그인이 필요합니다.", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04),)
+                  ],
+                ),
+              ),
+              actions:  <Widget>[
+                new FlatButton(
+                  child: new Text("확인"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,MaterialPageRoute(
+                        builder:(context) => loginpage()
+                    ));
+                  },
+                ),
+              ]
+          );
+        },
+      );
+
+  }
   void _searchdialog() {
     showDialog(
       context: context,
@@ -431,10 +491,30 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
- void get_data() async{
+ Future<dynamic> get_data() async{
+   final response = await http.post(
+       Uri.encodeFull('http://14.48.175.177/get_write.php'),
+       body: {
+       },
+       headers: {'Accept' : 'application/json'}
+   );
+   setState(() {
+     itemdata = jsonDecode(response.body);
+     _getWidget();
+   });
+  }
 
-
-
+  void load_myinfo()async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    setState(() {
+      if(sp.getString('id')!=null) {
+        mb_id = sp.getString('id');
+        mb_pwd = sp.getString('pwd');
+        mb_name = sp.getString('mb_name');
+        mb_2 = sp.getString('mb_2');
+        mb_1 = sp.getString('mb_1');
+      }
+    });
   }
 
   @override
@@ -442,12 +522,24 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
+    get_data();
+    //print(itemdata['data'][0]);
     super.initState();
+    load_myinfo();
   }
 
   @override
   Widget build(BuildContext context) {
-
+    if(mb_id !=null) {
+      mb_infowidget  = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(height: MediaQuery.of(context).size.height*0.015,),
+          Text(mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.05),),
+          Text(mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03)),
+        ],
+      );
+    }
     if(start_height == 1){
         list_height = MediaQuery.of(context).size.height-MediaQuery.of(context).size.height*0.15;
         scrollbar_height = MediaQuery.of(context).size.height*0.08;
@@ -512,9 +604,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Image.asset("images/hd_cate04.png"),
                         ),
                         onTap: (){
-                          Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => my_items()
-                          ));
+                          if(mb_id!=null) {
+                            Navigator.push(context,MaterialPageRoute(
+                                builder:(context) => my_items()
+                            ));
+                          }
+                          else{
+                            request_logindialog();
+                          }
                         },
                       ),
                       InkWell(
@@ -525,9 +622,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Image.asset("images/hd_cate05.png"),
                         ),
                         onTap: (){
-                          Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => mypage()
-                          ));
+                          if(mb_id!=null) {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => mypage(mb_1: mb_1,mb_2: mb_2,mb_name: mb_name,)
+                            ));
+                          }
+                          else{
+                            request_logindialog();
+                          }
                         },
                       ),
                     ],
@@ -611,9 +713,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Image.asset("images/hd_icon02.png"),
                       ),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => location()
-                        ));
+                        if(mb_id!=null) {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => location()
+                          ));
+                        }
+                        else{
+                          request_logindialog();
+                        }
                       },
                     ),
                     SizedBox(width: MediaQuery
@@ -638,6 +745,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Image.asset("images/hd_icon03.png"),
                       ),
                       onTap: () {
+                        if(mb_id!=null) {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => location()
+                          ));
+                        }
+                        else{
+                          request_logindialog();
+                        }
 
                       },
                     ),
@@ -789,9 +904,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Image.asset("images/hd_cate04.png"),
                           ),
                           onTap: (){
-                            Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => my_items(title: "최근 본 글",)
-                            ));
+                            if(mb_id!=null) {
+                              Navigator.push(context,MaterialPageRoute(
+                                  builder:(context) => my_items()
+                              ));
+                            }
+                            else{
+                              request_logindialog();
+                            }
                           },
                         ),
 
@@ -804,9 +924,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Image.asset("images/hd_cate05.png"),
                           ),
                           onTap: (){
-                            Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => mypage()
-                            ));
+                            if(mb_id!=null) {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => mypage(mb_1: mb_1,mb_2: mb_2,mb_name: mb_name,)
+                              ));
+                            }
+                            else{
+                              request_logindialog();
+                            }
                           },
                         ),
 
@@ -817,6 +942,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     height: MediaQuery.of(context).size.height*0.08,
                     decoration: BoxDecoration(color: Colors.white),
                     padding:EdgeInsets.only(left: 22,right: 22),
+                    margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -824,15 +950,21 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: <Widget>[
                             InkWell(
                               child: Container(
-                                width: 45,
-                                height: 45,
+                                width: MediaQuery.of(context).size.width*0.15,
+                                height: MediaQuery.of(context).size.width*0.15,
                                 padding: EdgeInsets.all(3),
                                 decoration: BoxDecoration(
                                     color: Color(0xfff3f3f3),
                                     borderRadius: BorderRadius.all(Radius.circular(50)),
-                                    border: Border.all(color: Color(0xffcccccc))
+                                    border: Border.all(color: Color(0xffcccccc)),
+                                    image: DecorationImage(//이미지 꾸미기
+                                        fit:BoxFit.cover,
+                                        //image:  AssetImage("images/wing_mb_noimg2.png"),
+                                        image:mb_1=='test'?
+                                        AssetImage("images/wing_mb_noimg2.png"):
+                                        NetworkImage( mb_1,),
+                                    )
                                 ),
-                                child: Image.asset("images/wing_mb_noimg2.png"),
                               ),
                               onTap: (){
 
@@ -840,11 +972,27 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             SizedBox(width: 10,),
                             InkWell(
-                              child: Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black),),
-                              onTap: (){
-                                Navigator.push(context,MaterialPageRoute(
-                                    builder:(context) => loginpage()
-                                ));
+                              child:
+                              Container(
+                                  height: MediaQuery.of(context).size.height*0.08,
+                                  child: Center(child: mb_infowidget)
+                              ),
+                              onTap: () async{
+                                if(mb_id==null) {
+                                  var result=await Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => loginpage()
+                                  ));
+                                  if(result!=null){
+                                    setState(() {
+
+                                    });
+                                  }
+                                }
+                                else{
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => mypage(mb_1: mb_1,mb_2: mb_2,mb_name: mb_name,)
+                                  ));
+                                }
                               },
                             ),
                           ],
@@ -927,18 +1075,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ],
                     )
-
                 ),
-                get_content("hero01", "01"),
-                get_content("hero02", "02"),
-                get_content("hero03", "03"),
-                get_content("hero04", "04"),
-                get_content("hero05", "05"),
-                get_content("hero06", "06"),
-                get_content("hero07", "07"),
-                get_content("hero08", "08"),
-                get_content("hero09", "09"),
-
+               Column(
+                 children: items_content
+               )
               ],
             ),
           ),
@@ -955,5 +1095,20 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
  // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+  _getWidget(){
+    if(itemdata.length<0){
+      setState(() {
+        items_content.add(Container());
+      });
+    }
+    else {
+      setState((){
+        items_content.clear();
+        for (var i = 0; i < itemdata['data'].length; i++) {
+          items_content.add(get_content(i));
+        }
+      });
+    }
   }
 }

@@ -1,12 +1,17 @@
-
-
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutterforestmk/main_item.dart';
+import 'package:flutterforestmk/view_item.dart';
 import 'package:flutterforestmk/viewpage_mine.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 class Viewpage extends StatefulWidget {
   final String tag,src;
-  Viewpage({Key key, this.title, this.tag, this.src}) : super(key: key);
+  final main_item info;
+  Viewpage({Key key, this.title, this.tag, this.src, this.info}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -23,7 +28,10 @@ class Viewpage extends StatefulWidget {
 }
 
 class _ViewpageState extends State<Viewpage>{
-
+  String price,real_mbid;
+  view_item itemdata;
+  List <dynamic> path =[];
+  Widget  hero_content= Container();
   Widget get_content2(id,cnt){
 
     InkWell temp = InkWell(
@@ -56,7 +64,6 @@ class _ViewpageState extends State<Viewpage>{
           ,
         ),
       ),
-
       onTap: (){
         Navigator.push(context,MaterialPageRoute(
             builder:(context) => Viewpage_mine(src:"images/"+cnt+".jpg")
@@ -66,12 +73,102 @@ class _ViewpageState extends State<Viewpage>{
     return temp;
   }
 
+  void load_myinfo()async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    setState(() {
+      if(sp.getString('id')!=null) {
+        real_mbid = sp.getString('id');
+      }
+      else
+        real_mbid='';
+    });
+  }
+
+  void set_herocontent(List <dynamic> path){
+    if(path.length > 0){
+
+        hero_content = Container(
+          height: MediaQuery
+              .of(context)
+              .size
+              .height * 0.33,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          child: Swiper(
+            itemCount: path.length,
+            itemBuilder: (BuildContext context, int index){
+              return Image.network(path[index]);
+            },
+            pagination: path.length>1?SwiperPagination():null,
+            loop: path.length>1? true:false,
+          ),
+        );
+
+    /*  hero_content = Container(
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.33,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        child: Swiper(
+          itemCount: path.length,
+          itemBuilder: (BuildContext context, int index){
+            Image.network('http://14.48.175.177/data/file/deal/'+path[index]);
+          },
+          pagination: SwiperPagination(),
+        ),
+      );*/
+    }
+  }
+
+  Future<dynamic> get_data() async{
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_view.php'),
+        body: {
+          "wr_id" :widget.info.wr_id,
+          "mb_id":widget.info.mb_id,
+          "ca_name":widget.info.ca_name,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+   // print(response.body);
+    setState(() {
+    });
+  }
+
+@override
+  void initState() {
+    // TODO: implement initState
+    get_data();
+    load_myinfo();
+    path= widget.info.file;
+
+    super.initState();
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    //set_herocontent(path);
+    if(widget.info.ca_name =='업체'){
+      price=widget.info.wr_subject;
+    }
+    else if(widget.info.wr_1 =='무료나눔'){
+      price=widget.info.wr_1;
+    }
+    else{
+      price='금액 '+widget.info.wr_1+'원';
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-            title: Text("가격정보" ,style: TextStyle(color: Colors.black),),
+            title: Text( price,style: TextStyle(color: Colors.black),),
             backgroundColor: Colors.white,
             leading: InkWell(
               
@@ -95,13 +192,10 @@ class _ViewpageState extends State<Viewpage>{
       body:
           ListView(
             children: <Widget>[
+
               Hero(
                     tag: widget.tag,
-                    child:  Container(
-                                  height: MediaQuery.of(context).size.height*0.33,
-                                  width: MediaQuery.of(context).size.width,
-                                  child:Image.asset(widget.src,fit: BoxFit.fitWidth,) ,
-                    )
+                    child:hero_content
           ),
               Container(
                 height: MediaQuery.of(context).size.height*0.13,
@@ -117,10 +211,10 @@ class _ViewpageState extends State<Viewpage>{
                           padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(50)),
-                              border: Border.all(color: Color(0xffcccccc)),
+                              color: Color(0xfff3f3f3),
                               image: DecorationImage(//이미지 꾸미기
                                   fit:BoxFit.cover,
-                                  image:NetworkImage("http://forestmk.itforone.co.kr/data/member/3542386191_O4hMBHJf_d1f767e86e735db50a43847faef0544e41ede2ed.jpg")//이미지 가져오기
+                                  image:widget.info.profile_img!=''?NetworkImage(widget.info.profile_img):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
                               )
                           ),
                         ),
@@ -129,9 +223,9 @@ class _ViewpageState extends State<Viewpage>{
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text("테스트사용자",style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
+                            Text(widget.info.mb_name,style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
                             SizedBox(height: 8,),
-                            Text("부산광역시 수영구 광안동",style: TextStyle(fontSize: 12)),
+                            Text(widget.info.mb_2,style: TextStyle(fontSize: 12)),
                           ],
                         ),
                       ],
@@ -139,7 +233,7 @@ class _ViewpageState extends State<Viewpage>{
 
                     Row(
                       children: <Widget>[
-                        Container(
+                        widget.info.mb_id==real_mbid?Container(
                           width: MediaQuery.of(context).size.width*0.17,
                           height: MediaQuery.of(context).size.height*0.055,
                           padding: EdgeInsets.all(3),
@@ -154,7 +248,7 @@ class _ViewpageState extends State<Viewpage>{
                               Text("완료하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white),)
                             ],
                           ),
-                        ),
+                        ):Container(),
                         SizedBox(width: 3,),
                         Container(
                           width: MediaQuery.of(context).size.width*0.17,
@@ -191,13 +285,13 @@ class _ViewpageState extends State<Viewpage>{
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("테스트제목",style: TextStyle(fontSize: 20),),
+                        Text(widget.info.wr_subject,style: TextStyle(fontSize: 20),),
                         SizedBox(height: 10,),
                         Row(
                           children:<Widget>[
-                            Text("글쓴날짜",style: TextStyle(fontSize: 10),),
+                            Text(widget.info.timegap,style: TextStyle(fontSize: 10),),
                             SizedBox(width: 2,),
-                            Text("카테고리",style: TextStyle(fontSize: 10),),
+                            Text(widget.info.ca_name,style: TextStyle(fontSize: 10),),
                           ]
                         )
 
@@ -237,7 +331,8 @@ class _ViewpageState extends State<Viewpage>{
               ),
               Container(
                 height: MediaQuery.of(context).size.height*0.2,
-                child: Text("testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"),
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.032),
+                child: Text(widget.info.wr_content),
 
               ),
               Container(
@@ -247,14 +342,14 @@ class _ViewpageState extends State<Viewpage>{
                   children: <Widget>[
                     Text("좋아요",style: TextStyle(fontSize: 11),),
                     SizedBox(width: 3,),
-                    Text("1",),
+                    Text(widget.info.like,),
                     SizedBox(width: 3,),
                     Text("댓글",style: TextStyle(fontSize: 11),),
                     Text("2"),
                     SizedBox(width: 3,),
                     Text("조회수",style: TextStyle(fontSize: 11),),
                     SizedBox(width: 3,),
-                    Text("33"),
+                    Text(widget.info.wr_hit),
                   ],
                 ),
               ),
@@ -311,7 +406,7 @@ class _ViewpageState extends State<Viewpage>{
                     Container(
                       height: MediaQuery.of(context).size.height*0.1,
                       padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                      child: Text("테스트님의 판매상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                      child: Text(widget.info.mb_name+"님의 판매상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width,

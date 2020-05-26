@@ -225,8 +225,6 @@ class writenormal_State extends State<write_normal> {
     }*/
 
     return Scaffold(
-
-      resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("중고거래 글쓰기" ,style: TextStyle(color: Colors.black),),

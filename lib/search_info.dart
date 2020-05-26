@@ -134,6 +134,17 @@ class _search_infoState extends State<search_info> {
                   ),
                   idContainer,
                   SizedBox(height: MediaQuery.of(context).size.height*0.02,),
+                  Center(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.32,
+                      height:MediaQuery.of(context).size.height*0.08,
+                      decoration: BoxDecoration(
+                          color: Color(0xff555555),
+                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.02))
+                      ),
+                      child: Center(child: Text("찾기", style: TextStyle(color: Colors.white,fontSize: MediaQuery.of(context).size.width*0.05,),)),
+                    ),
+                  )
 
                 ],
               ),

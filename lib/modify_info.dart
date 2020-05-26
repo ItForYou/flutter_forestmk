@@ -1,8 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterforestmk/main.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class modify_info extends StatefulWidget {
+
+  String mb_name,mb_1,mb_2;
+  modify_info({Key key, this.mb_name, this.mb_1, this.mb_2}) : super(key: key);
+
   @override
   _modify_infoState createState() => _modify_infoState();
 }
@@ -10,8 +16,14 @@ class modify_info extends StatefulWidget {
 class _modify_infoState extends State<modify_info> {
   String input_val ="";
   List <Widget> results_search = [];
+  TextEditingController modify_id = new TextEditingController();
+  TextEditingController modify_pwd = new TextEditingController();
+  TextEditingController modify_name = new TextEditingController();
+  TextEditingController modify_ph = new TextEditingController();
+  TextEditingController modify_address = new TextEditingController();
+
   var profile_img;
-  ImageProvider profile_widget = NetworkImage("http://14.48.175.177/theme/basic_app/img/app/wing_mb_noimg2.png");
+  ImageProvider profile_widget=AssetImage("images/wing_mb_noimg2.png");
 
   getGalleryImage() async {
 
@@ -104,8 +116,18 @@ class _modify_infoState extends State<modify_info> {
     );
   }
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    modify_name.text = widget.mb_name;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if(widget.mb_1!=null)
+    profile_widget = widget.mb_1!='test'? NetworkImage(widget.mb_1):AssetImage("images/wing_mb_noimg2.png");
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -225,6 +247,7 @@ class _modify_infoState extends State<modify_info> {
               margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: TextFormField(
+                  controller: modify_name,
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
@@ -317,15 +340,24 @@ class _modify_infoState extends State<modify_info> {
                     ),
                     child: Center(child: Text("정보수정",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),)),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width*0.3,
-                    height:MediaQuery.of(context).size.height*0.08,
-                    margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02,),
-                    decoration: BoxDecoration(
-                        color: Color(0xff777777),
-                        borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.025,))
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.3,
+                      height:MediaQuery.of(context).size.height*0.08,
+                      margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02,),
+                      decoration: BoxDecoration(
+                          color: Color(0xff777777),
+                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.025,))
+                      ),
+                      child: Center(child: Text("로그아웃",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),)),
                     ),
-                    child: Center(child: Text("로그아웃",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),)),
+                    onTap: ()async{
+                      SharedPreferences sp = await SharedPreferences.getInstance();
+                      sp.clear();
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => MyApp()),
+                              (Route<dynamic> route) => false);
+                    },
                   ),
                 ],
               ),
