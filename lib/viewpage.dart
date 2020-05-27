@@ -34,15 +34,28 @@ class _ViewpageState extends State<Viewpage>{
   List <Widget> list_subitem = [Container()];
   List <Widget> list_extraitem = [Container()];
   Widget  hero_content= Container();
+  double itmes_height=0,itmes_height2=0;
 
   Widget get_content2(id,flg){
     var temp_data;
+    String temp_price;
     if(flg==1)
       temp_data = view_item.fromJson(itemdata['data'][id]);
     else
       temp_data = view_item.fromJson(itemdata['data2'][id]);
 
-    print(temp_data);
+
+    if(temp_data.ca_name =='업체'){
+      temp_price=temp_data.wr_subject;
+    }
+    else if(temp_data.wr_1 =='무료나눔'){
+      temp_price=temp_data.wr_1;
+    }
+    else{
+      temp_price='금액 '+temp_data.wr_1+'원';
+    }
+
+    //print(temp_data);
 
     InkWell temp = InkWell(
       child: Container(
@@ -58,15 +71,15 @@ class _ViewpageState extends State<Viewpage>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                      Container(
-                        width: temp_data.file==''?null:MediaQuery.of(context).size.width*0.4,
-                        height: temp_data.file==''?null:MediaQuery.of(context).size.height*0.15,
-                        child:temp_data.file==''?null:Image.network(temp_data.file, fit: BoxFit.fill,),
+                        width: MediaQuery.of(context).size.width*0.4,
+                        height: MediaQuery.of(context).size.height*0.15,
+                        child:temp_data.file==''?Image.asset("images/noimg.jpg"):Image.network(temp_data.file, fit: BoxFit.fitWidth,),
                       ),
 
                         SizedBox(height: 5,),
                         Text(temp_data.wr_subject, style: TextStyle(fontSize: 12),),
                         SizedBox(height: 5,),
-                        Text(temp_data.wr_1, style: TextStyle(fontSize: 15),),
+                        Text(temp_price, style: TextStyle(fontSize: 15),),
                     ]
               ),
             ],
@@ -140,14 +153,14 @@ class _ViewpageState extends State<Viewpage>{
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/get_view.php'),
         body: {
-          //"wr_id" :widget.info.wr_id,
+          "wr_id" :widget.info.wr_id,
           "mb_id":widget.info.mb_id,
           "ca_name":widget.info.ca_name,
         },
         headers: {'Accept' : 'application/json'}
     );
     setState(() {
-      print("test");
+      //print("test");
       itemdata = jsonDecode(response.body);
       set_items();
     });
@@ -155,23 +168,21 @@ class _ViewpageState extends State<Viewpage>{
   }
 
   void set_items(){
-  print(itemdata['data'][0]);
+  //print(itemdata['data'][0]);
     if(itemdata['data'].length > 0) {
+      itmes_height = MediaQuery.of(context).size.height*0.355;
       list_subitem.clear();
-      setState((){
         for (var i = 0; i < itemdata['data'].length; i++) {
           list_subitem.add(get_content2(i,1));
         }
-      });
     }
 
-    if(itemdata['data'].length > 0) {
+    if(itemdata['data2'].length > 0) {
+      itmes_height2 = MediaQuery.of(context).size.height*0.35;
       list_extraitem.clear();
-      setState((){
         for (var i = 0; i < itemdata['data2'].length; i++) {
           list_extraitem.add(get_content2(i,2));
         }
-      });
     }
   }
 
@@ -179,6 +190,7 @@ class _ViewpageState extends State<Viewpage>{
   void initState() {
     // TODO: implement initState
     load_myinfo();
+
     get_data();
     path= widget.info.file;
     super.initState();
@@ -225,7 +237,6 @@ class _ViewpageState extends State<Viewpage>{
       body:
           ListView(
             children: <Widget>[
-
               Hero(
                     tag: widget.tag,
                     child:hero_content
@@ -331,7 +342,7 @@ class _ViewpageState extends State<Viewpage>{
 
                       ],
                     ),
-
+                    real_mbid==widget.info.mb_id?
                     Row(
                       children: <Widget>[
                         InkWell(
@@ -358,7 +369,7 @@ class _ViewpageState extends State<Viewpage>{
                           ),
                         ),
                       ],
-                    )
+                    ):Container(),
                   ],
                 ),
               ),
@@ -428,8 +439,10 @@ class _ViewpageState extends State<Viewpage>{
                     ],
                 ),
               ),
+
               Container(
-                height: MediaQuery.of(context).size.height*0.355,
+                  //MediaQuery.of(context).size.height*0.355,
+                height:itmes_height,
                 decoration: BoxDecoration(
                   border: Border(bottom: BorderSide(width: 1,color: Color(0xffefefef)))
                 ),
@@ -455,8 +468,10 @@ class _ViewpageState extends State<Viewpage>{
                   ],
                 ),
               ),
+
               Container(
-                height: MediaQuery.of(context).size.height*0.35,
+                //MediaQuery.of(context).size.height*0.35
+                height: itmes_height2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -477,7 +492,7 @@ class _ViewpageState extends State<Viewpage>{
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
     );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterforestmk/loginpage.dart';
 
 class search_info extends StatefulWidget {
+
   @override
   _search_infoState createState() => _search_infoState();
 }

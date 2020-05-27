@@ -3,11 +3,23 @@ import 'package:flutter/material.dart';
 
 
 class location  extends StatefulWidget {
+  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id;
+  location({Key key, this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id}) : super(key: key);
+
   @override
   location_State createState() => location_State();
 }
 
 class location_State extends State<location> {
+  TextEditingController now_mylocation = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    now_mylocation.text = widget.mb_2;
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +49,8 @@ class location_State extends State<location> {
               height: MediaQuery.of(context).size.height*0.07,
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05),
               child: TextFormField(
+                  readOnly: true,
+                  controller: now_mylocation,
                   keyboardType: TextInputType.text,
                   maxLines: 1,
                   decoration: InputDecoration(

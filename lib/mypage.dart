@@ -5,13 +5,15 @@ import 'package:flutterforestmk/main.dart';
 import 'package:flutterforestmk/modify_info.dart';
 import 'package:flutterforestmk/my_items.dart';
 import 'package:flutterforestmk/mysetting.dart';
+import 'package:flutterforestmk/search_info.dart';
+import 'package:flutterforestmk/search_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 class mypage extends StatefulWidget {
 
-  String mb_name,mb_1,mb_2;
-  mypage({Key key, this.mb_name, this.mb_1, this.mb_2}) : super(key: key);
+  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id;
+  mypage({Key key, this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id}) : super(key: key);
 
   @override
   _mypageState createState() => _mypageState();
@@ -148,7 +150,7 @@ class _mypageState extends State<mypage> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => modify_info(mb_name: widget.mb_name,mb_1: widget.mb_1,mb_2: widget.mb_2,)
+                            builder:(context) => modify_info(mb_name: widget.mb_name,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_hp: widget.mb_hp,mb_5: widget.mb_5,mb_6: widget.mb_6,mb_id:widget.mb_id,)
                         ));
                       },
                     )
@@ -182,7 +184,7 @@ class _mypageState extends State<mypage> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => my_items(title: "판매중인 물건",)
+                            builder:(context) => my_items(title:"판매중인 물건", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                         ));
                       },
                     ),
@@ -205,7 +207,7 @@ class _mypageState extends State<mypage> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => MyApp()
+                            builder:(context) => search_main(title:"나의광고",sch_flgmyadv: "1", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                         ));
                       },
                     ),
@@ -235,7 +237,7 @@ class _mypageState extends State<mypage> {
                 ),
                 onTap: (){
                   Navigator.push(context,MaterialPageRoute(
-                      builder:(context) => location()
+                      builder:(context) => location(mb_2: widget.mb_2,)
                   ));
                 },
               ),

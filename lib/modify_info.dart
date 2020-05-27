@@ -6,8 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class modify_info extends StatefulWidget {
 
-  String mb_name,mb_1,mb_2;
-  modify_info({Key key, this.mb_name, this.mb_1, this.mb_2}) : super(key: key);
+  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id;
+  modify_info({Key key, this.mb_name, this.mb_1, this.mb_2, this.mb_hp,this.mb_3,this.mb_4,this.mb_5,this.mb_6,this.mb_id}) : super(key: key);
 
   @override
   _modify_infoState createState() => _modify_infoState();
@@ -122,6 +122,8 @@ class _modify_infoState extends State<modify_info> {
     // TODO: implement initState
     super.initState();
     modify_name.text = widget.mb_name;
+    modify_ph.text = widget.mb_hp;
+    modify_id.text = widget.mb_id;
   }
 
   @override
@@ -175,6 +177,8 @@ class _modify_infoState extends State<modify_info> {
               margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: TextFormField(
+                  controller:  modify_id,
+                  readOnly: true,
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
@@ -277,8 +281,10 @@ class _modify_infoState extends State<modify_info> {
                     width: MediaQuery.of(context).size.width*0.8,
                     height: MediaQuery.of(context).size.height*0.05,
                     child: TextFormField(
+                        controller: modify_ph,
+                        readOnly: true,
                         cursorColor: Colors.forestmk,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.number,
                         maxLines: 1,
                         decoration: InputDecoration(
                             contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
@@ -312,12 +318,12 @@ class _modify_infoState extends State<modify_info> {
                 width: MediaQuery.of(context).size.width*0.8,
                 height: MediaQuery.of(context).size.height*0.05,
                 margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
-                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.6),
+                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.35),
                 decoration: BoxDecoration(
                   border: Border.all(width: 1, color: Color(0xffefefef)),
                   borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
                 ),
-                child: Center(child: Text("동네선택",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04, color: Color(0xff777777)),)),
+                child: Center(child: Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.038, color: Color(0xff777777)),)),
               ),
               onTap: (){
                 _showDialog();

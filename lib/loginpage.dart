@@ -85,7 +85,13 @@ class _loginpageState extends State<loginpage>{
         sharedPreferences.setString('id', id);
         sharedPreferences.setString('pwd', pwd);
         sharedPreferences.setString('mb_name', result_login['mb_name']);
+        sharedPreferences.setString('mb_hp', result_login['mb_hp']);
         sharedPreferences.setString('mb_2', result_login['mb_2']);
+        sharedPreferences.setString('mb_3', result_login['mb_3']);
+        sharedPreferences.setString('mb_4', result_login['mb_4']);
+        sharedPreferences.setString('mb_5', result_login['mb_5']);
+        sharedPreferences.setString('mb_6', result_login['mb_6']);
+        //sharedPreferences.setString('mb_3', result_login['mb_3']);
         //print("test"+result_login['mb_1'].toString());
        sharedPreferences.setString('mb_1', result_login['mb_1']);
 

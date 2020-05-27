@@ -8,6 +8,7 @@ import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/loginpage.dart';
 import 'package:flutterforestmk/main.dart';
 import 'package:flutterforestmk/main_item.dart';
+import 'package:flutterforestmk/my_items.dart';
 import 'package:flutterforestmk/mypage.dart';
 import 'package:flutterforestmk/viewpage.dart';
 import 'package:flutterforestmk/write_normal.dart';
@@ -15,26 +16,31 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-class my_items extends StatefulWidget {
+class search_main extends StatefulWidget {
 
-  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id,title;
-  my_items({Key key, this.title,this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id}) : super(key: key);
+  String mb_name,mb_hp,mb_id,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,title,sch_text,sch_order,sch_cate,sch_flgsold,sch_flghide,sch_flgadv,sch_flgmyadv;
+  search_main({Key key, this.title,this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,
+               this.mb_3,this.mb_hp,this.mb_id,this.sch_flghide,this.sch_flgsold,
+               this.sch_flgadv,this.sch_order,this.sch_text, this.sch_flgmyadv, this.sch_cate}) : super(key: key);
 
 
   @override
-  _my_itemsState createState() => _my_itemsState();
+  _search_mainState createState() => _search_mainState();
 }
 
-class _my_itemsState extends State<my_items> {
+class _search_mainState extends State<search_main> {
 
   static double scrollbar_height=1;
   double list_height;
   int start_height=1;
   PreferredSize appbar;
   List <bool> checkbox_values;
+  bool checkbox_soldout = false;
+  bool checkbox_adv = false;
   bool flg_allcheck = false;
   bool flg_search = false;
   List <Widget> items_content=[];
+  String sort_value = "최근순",mb_id,mb_pwd,mb_2="test",mb_name="test",mb_hp,mb_3,mb_4,mb_5,mb_6;
   Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black));
   var itemdata;
   ScrollController change_appbar = ScrollController();
@@ -52,6 +58,134 @@ class _my_itemsState extends State<my_items> {
       )
   );
   PreferredSize scroll_appbar;
+
+  void soldout_changed(bool value) => setState(() => checkbox_soldout = value);
+  void adv_changed(bool value) => setState(() => checkbox_adv = value);
+
+  void _searchdialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.03))
+
+            ),
+            content: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height*0.26,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.05,
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("최근순"),
+                        Radio(
+                          value: "최근순",
+                          groupValue: sort_value,
+                          onChanged: (T){
+                            setState(() {
+                              sort_value = T;
+                              widget.sch_order = T;
+                              get_data();
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.07,
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("조회수순"),
+                        Radio(
+                          value: "조회수순",
+                          groupValue: sort_value,
+                          onChanged: (T){
+                            setState(() {
+                              sort_value = T;
+                              widget.sch_order = T;
+                              get_data();
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.07,
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("낮은가격순"),
+                        Radio(
+                          value: "낮은가격순",
+                          groupValue: sort_value,
+                          onChanged: (T){
+                            setState(() {
+                              sort_value = T;
+                              widget.sch_order = T;
+                              get_data();
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.07,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("거리순"),
+                        Radio(
+                          value: "거리순",
+                          groupValue: sort_value,
+                          onChanged: (T){
+                            setState(() {
+                              sort_value = T;
+                              widget.sch_order = T;
+                              get_data();
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+            actions: null
+        );
+      },
+    );
+  }
 
   void request_logindialog(){
 
@@ -127,17 +261,9 @@ class _my_itemsState extends State<my_items> {
 
     var temp_data = main_item.fromJson(itemdata['data'][id]);
     //print(temp_data.file[0]);
-    String temp_price;
-    if(temp_data.ca_name =='업체'){
-      temp_price=temp_data.wr_subject;
-    }
-    else if(temp_data.wr_1 =='무료나눔'){
-      temp_price=temp_data.wr_1;
-    }
-    else{
-      temp_price='금액 '+temp_data.wr_1+'원';
-    }
+    if(temp_data.wr_1!='무료나눔' && temp_data.ca_name !='업체'){
 
+    }
 
     InkWell temp = InkWell(
       child: Container(
@@ -156,21 +282,6 @@ class _my_itemsState extends State<my_items> {
             children: <Widget>[
               Row(
                   children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.04,
-                      margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.03),
-                      child: Checkbox(
-                        value: checkbox_values[id],
-                        activeColor: Colors.black12,
-                        onChanged: (bool value){
-                          setState(() {
-                            checkbox_values[id] = value;
-                            _getWidget();
-
-                          });
-                        },
-                      ),
-                    ),
                     Hero(
                       tag: "hero"+id.toString(),
                       child: Container(
@@ -193,13 +304,13 @@ class _my_itemsState extends State<my_items> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(height: 5,),
-                        Text(temp_data.wr_subject, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                        Text("테스트제목", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                         SizedBox(height: 5,),
-                        Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                        Text("무료나눔", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                         SizedBox(height: 8,),
                         Row(
                           children: <Widget>[
-                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                            Text("경기도 수원시 팔달구 구천동",style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                             SizedBox(width: MediaQuery.of(context).size.width*0.005,),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
@@ -210,7 +321,7 @@ class _my_itemsState extends State<my_items> {
                                   color: Colors.forestmk
                               ),
                             ),
-                            Text(temp_data.timegap,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                            Text("2일전 ",style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
 
                           ],
 
@@ -218,7 +329,7 @@ class _my_itemsState extends State<my_items> {
                         SizedBox(height: MediaQuery.of(context).size.height*0.006,),
                         Row(
                           children: <Widget>[
-                            Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                            Text("건강/의료용품", style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                             Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
@@ -230,7 +341,7 @@ class _my_itemsState extends State<my_items> {
                               ),
                             ),
                             Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
-                            Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
+                            Text("1", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
                               height: MediaQuery.of(context).size.width*0.01,
@@ -257,15 +368,14 @@ class _my_itemsState extends State<my_items> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(50)),
                         border: Border.all(color: Color(0xffcccccc)),
-                        color: Color(0xfff3f3f3),
                         image: DecorationImage(//이미지 꾸미기
                             fit:BoxFit.cover,
-                            image:temp_data.profile_img==''?AssetImage("images/wing_mb_noimg2.png"):NetworkImage(temp_data.profile_img)//이미지 가져오기
+                            image:NetworkImage("http://forestmk.itforone.co.kr/data/member/3542386191_O4hMBHJf_d1f767e86e735db50a43847faef0544e41ede2ed.jpg")//이미지 가져오기
                         )
                     ),
                   ),
                   SizedBox(height: 6,),
-                  Text(temp_data.mb_name,style: TextStyle(fontSize: 12),)
+                  Text("테스트",style: TextStyle(fontSize: 12),)
                 ],
               ),
             ],
@@ -280,7 +390,6 @@ class _my_itemsState extends State<my_items> {
         ));
       },
     );
-
 
     return temp;
   }
@@ -372,27 +481,36 @@ class _my_itemsState extends State<my_items> {
   }
 
   Future<dynamic> get_data() async{
-    String url ="";
-    if(widget.title=="최근 본 글"){
-       url="http://14.48.175.177/get_myrecent.php";
-    }
-    else{
-       url="http://14.48.175.177/get_mywrite.php";
-    }
+    print(widget.sch_cate);
     final response = await http.post(
-        Uri.encodeFull(url),
+        Uri.encodeFull("http://14.48.175.177/get_searchwr.php"),
         body: {
-          'mb_id':widget.mb_id
+          'mb_id':widget.mb_id,
+          'sch_text':widget.sch_text!=null?widget.sch_text:"",
+          'sch_order':widget.sch_order!=null?widget.sch_order:"",
+          'sch_flgsold':widget.sch_flgsold!=null?widget.sch_flgsold:"",
+          'sch_flghide':widget.sch_flghide!=null?widget.sch_flghide:"",
+          'sch_flgadv':widget.sch_flgadv!=null?widget.sch_flgadv:"",
+          'sch_flgmyadv' : widget.sch_flgmyadv!=null?widget.sch_flgmyadv:"",
+          'sch_cate' : widget.sch_cate!=null?widget.sch_cate:"",
         },
         headers: {'Accept' : 'application/json'}
     );
 
-      itemdata = jsonDecode(response.body);
-      checkbox_values = List<bool>(itemdata['data'].length);
-      for(int i=0; i< itemdata['data'].length; i++){
-        checkbox_values[i] = false;
-      }
+    print(response.body);
+    itemdata = jsonDecode(response.body);
+    if(itemdata['data'].length<=0){
+      setState(() {
+        items_content.add(
+            Container(
+                margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02),
+                child: Text("등록된 게시물이 없습니다."))
+        );
+      });
+    }
+    else {
       _getWidget();
+    }
   }
 
   _getWidget(){
@@ -417,6 +535,13 @@ class _my_itemsState extends State<my_items> {
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
     get_data();
+    if(widget.mb_1==null){
+      widget.mb_1 = 'test';
+    }
+    if(widget.sch_order!=null){
+      sort_value  = widget.sch_order;
+    }
+
     super.initState();
   }
 
@@ -897,6 +1022,7 @@ class _my_itemsState extends State<my_items> {
                       ],
                     )
                 ),
+                widget.title!='나의광고'?
                 Container(
                     padding: EdgeInsets.only(left: 22, right: 22),
                     height: MediaQuery.of(context).size.height*0.06,
@@ -911,44 +1037,43 @@ class _my_itemsState extends State<my_items> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                            Text(widget.title ,style: TextStyle(fontWeight: FontWeight.bold, fontSize:MediaQuery.of(context).size.width*0.045)),
+
+                        InkWell(
+                          child: Row(
+                            children: <Widget>[
+                              Text(sort_value),
+                              Image.asset("images/arrow_filter.png"),
+                            ],
+                          ),
+                          onTap: (){
+                            _searchdialog();
+                          },
+                        ),
                         Row(
                           children: <Widget>[
-
-                            InkWell(
-                                child: Text("모두선택",style: TextStyle(color: Colors.forestmk),),
-                                onTap: (){
-                                  setState(() {
-                                    bool all_value;
-                                    if(flg_allcheck==false) {
-                                            flg_allcheck=true;
-                                            all_value = true;
-                                      }
-                                    else{
-                                      flg_allcheck=false;
-                                      all_value = false;
-                                    }
-
-                                      for (int i = 0; i < checkbox_values.length; i++) {
-                                        checkbox_values[i] = all_value;
-                                    }
-                                      _getWidget();
-                                  });
-                                },
+                            Container(
+                              width: 20,
+                              child: Checkbox(
+                                value: checkbox_soldout,
+                                activeColor: Colors.black12,
+                                onChanged: soldout_changed,
+                              ),
                             ),
-                            SizedBox(width:  MediaQuery.of(context).size.width*0.03,),
-                            InkWell(
-                                child: Text("지우기",style: TextStyle(color: Colors.forestmk),),
-                                onTap: (){
-
-                                },
+                            Text("거래완료"),
+                            Container(
+                              width: 20,
+                              child: Checkbox(
+                                value: checkbox_adv,
+                                activeColor: Colors.black12,
+                                onChanged: adv_changed,
+                              ),
                             ),
+                            Text("업체안보기"),
                           ],
                         ),
                       ],
                     )
-
-                ),
+                ):Container(),
                 Column(
                     children: items_content
                 )

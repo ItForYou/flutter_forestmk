@@ -13,6 +13,7 @@ import 'package:flutterforestmk/loginpage.dart';
 import 'package:flutterforestmk/main_item.dart';
 import 'package:flutterforestmk/my_items.dart';
 import 'package:flutterforestmk/register.dart';
+import 'package:flutterforestmk/search_main.dart';
 import 'package:flutterforestmk/write_normal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutterforestmk/viewpage.dart';
@@ -81,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
   PreferredSize appbar;
   Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black));
   bool flg_search = false;
-  String sort_value = "최근순", mb_id,mb_pwd,mb_2="test",mb_1="test",mb_name="test";
+  String sort_value = "최근순", mb_id,mb_pwd,mb_2="test",mb_1="test",mb_name="test",mb_hp,mb_3,mb_4,mb_5,mb_6;
   var itemdata;
   List <Widget> items_content=[];
   PreferredSize intro_appbar = PreferredSize(
@@ -167,6 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   onTap: (){
+
                     Navigator.push(context,MaterialPageRoute(
                         builder:(context) => write_normal()
                     ));
@@ -511,8 +513,13 @@ class _MyHomePageState extends State<MyHomePage> {
         mb_id = sp.getString('id');
         mb_pwd = sp.getString('pwd');
         mb_name = sp.getString('mb_name');
-        mb_2 = sp.getString('mb_2');
+        mb_hp = sp.getString('mb_hp');
         mb_1 = sp.getString('mb_1');
+        mb_2 = sp.getString('mb_2');
+        mb_3 = sp.getString('mb_3');
+        mb_4 = sp.getString('mb_4');
+        mb_5 = sp.getString('mb_5');
+        mb_6 = sp.getString('mb_6');
       }
     });
   }
@@ -530,7 +537,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print("build");
     if(mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -577,6 +583,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Image.asset("images/hd_cate02.png"),
                         ),
                         onTap: (){
+                          Navigator.push(context,MaterialPageRoute(
+                              builder:(context) => search_main(sch_flgadv: "1",)
+                          ));
                         },
                       ),
 
@@ -607,7 +616,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: (){
                           if(mb_id!=null) {
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => my_items()
+                                builder:(context) => my_items(title: "최근 본 글",mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
                           }
                           else{
@@ -625,7 +634,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: (){
                           if(mb_id!=null) {
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => mypage(mb_1: mb_1,mb_2: mb_2,mb_name: mb_name,)
+                                builder: (context) => mypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
                           }
                           else{
@@ -716,7 +725,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onTap: () {
                         if(mb_id!=null) {
                           Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => location()
+                              builder: (context) => location(mb_2:mb_2)
                           ));
                         }
                         else{
@@ -877,7 +886,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Image.asset("images/hd_cate02.png"),
                           ),
                           onTap: (){
-
+                            //print(mb_3);
+                            Navigator.push(context,MaterialPageRoute(
+                                builder:(context) => search_main(sch_flgadv: "1", mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                            ));
                           },
                         ),
 
@@ -907,7 +919,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: (){
                             if(mb_id!=null) {
                               Navigator.push(context,MaterialPageRoute(
-                                  builder:(context) => my_items()
+                                  builder:(context) => my_items(title: "최근 본 글",mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                               ));
                             }
                             else{
@@ -927,7 +939,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: (){
                             if(mb_id!=null) {
                               Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => mypage(mb_1: mb_1,mb_2: mb_2,mb_name: mb_name,)
+                                  builder: (context) =>  mypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                               ));
                             }
                             else{
@@ -978,20 +990,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                   height: MediaQuery.of(context).size.height*0.08,
                                   child: Center(child: mb_infowidget)
                               ),
-                              onTap: () async{
+                              onTap: () {
                                 if(mb_id==null) {
-                                  var result=await Navigator.push(context, MaterialPageRoute(
+                                      Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => loginpage()
                                   ));
-                                  if(result!=null){
+                                  /*if(result!=null){
                                     setState(() {
 
                                     });
-                                  }
+                                  }*/
                                 }
                                 else{
                                   Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) => mypage(mb_1: mb_1,mb_2: mb_2,mb_name: mb_name,)
+                                      builder: (context) => mypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                                   ));
                                 }
                               },
@@ -1020,7 +1032,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           onTap: (){
-                            _showcontent();
+                            if(mb_id!=null) {
+                              _showcontent();
+                            }
+                            else{
+                              request_logindialog();
+                            }
                           },
                         ),
                       ],
