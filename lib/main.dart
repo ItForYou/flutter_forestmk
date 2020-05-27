@@ -584,7 +584,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => search_main(sch_flgadv: "1",)
+                              builder:(context) => search_main(sch_flgadv: "1", mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                           ));
                         },
                       ),
@@ -888,7 +888,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: (){
                             //print(mb_3);
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => search_main(sch_flgadv: "1", mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                                builder:(context) => search_main(sch_flgadv: "1", mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
                           },
                         ),

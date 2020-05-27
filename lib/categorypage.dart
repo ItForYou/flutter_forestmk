@@ -46,7 +46,7 @@ class _categorypageState extends State<categorypage> {
             ));
           else {
             Navigator.push(context, MaterialPageRoute(
-                builder: (context) => search_main(sch_cate: menu_names[id],)
+                builder: (context) => search_main(sch_cate: menu_names[id] , mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
             ));
           }
       },

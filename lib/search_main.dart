@@ -40,7 +40,7 @@ class _search_mainState extends State<search_main> {
   bool flg_allcheck = false;
   bool flg_search = false;
   List <Widget> items_content=[];
-  String sort_value = "최근순",mb_id,mb_pwd,mb_2="test",mb_name="test",mb_hp,mb_3,mb_4,mb_5,mb_6;
+  String sort_value = "최근순";
   Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black));
   var itemdata;
   ScrollController change_appbar = ScrollController();
@@ -481,11 +481,10 @@ class _search_mainState extends State<search_main> {
   }
 
   Future<dynamic> get_data() async{
-    print(widget.sch_cate);
     final response = await http.post(
         Uri.encodeFull("http://14.48.175.177/get_searchwr.php"),
         body: {
-          'mb_id':widget.mb_id,
+          'mb_id':widget.mb_id!=null?widget.mb_id:"",
           'sch_text':widget.sch_text!=null?widget.sch_text:"",
           'sch_order':widget.sch_order!=null?widget.sch_order:"",
           'sch_flgsold':widget.sch_flgsold!=null?widget.sch_flgsold:"",
@@ -496,7 +495,6 @@ class _search_mainState extends State<search_main> {
         },
         headers: {'Accept' : 'application/json'}
     );
-
     print(response.body);
     itemdata = jsonDecode(response.body);
     if(itemdata['data'].length<=0){
@@ -535,13 +533,13 @@ class _search_mainState extends State<search_main> {
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
     get_data();
+
     if(widget.mb_1==null){
       widget.mb_1 = 'test';
     }
     if(widget.sch_order!=null){
       sort_value  = widget.sch_order;
     }
-
     super.initState();
   }
 
