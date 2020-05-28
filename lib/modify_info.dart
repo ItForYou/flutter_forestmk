@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class modify_info extends StatefulWidget {
 
@@ -22,7 +26,7 @@ class _modify_infoState extends State<modify_info> {
   TextEditingController modify_ph = new TextEditingController();
   TextEditingController modify_address = new TextEditingController();
 
-  var profile_img;
+  File profile_img;
   ImageProvider profile_widget=AssetImage("images/wing_mb_noimg2.png");
 
   getGalleryImage() async {
@@ -32,6 +36,30 @@ class _modify_infoState extends State<modify_info> {
       profile_widget = FileImage(profile_img);
     });
 
+  }
+
+  void show_Alert(text) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.02,
+            child: Text(text),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: (){
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showDialog() {
@@ -116,6 +144,42 @@ class _modify_infoState extends State<modify_info> {
     );
   }
 
+  Future<String> uploadImage() async {
+    try {
+
+    if(modify_name.text==null || modify_name.text=='')
+          show_Alert("닉네임이 올바르지 않습니다.");
+    else if(widget.mb_2==null || widget.mb_2=='')
+         show_Alert("주소가 올바르지 않습니다.");
+    else if(modify_pwd.text!=null && modify_pwd.text!='' && modify_pwd.text.length <4)
+        show_Alert("비밀번호는 4자리 이상 입력되어야 합니다.");
+
+      var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/update_mbinfo.php"));
+      request.fields['mb_id'] = modify_id.text;
+      request.fields['mb_password'] = modify_pwd.text;
+      request.fields['mb_name'] = modify_name.text;
+      request.fields['mb_hp'] = modify_ph.text;
+      request.fields['mb_2'] = widget.mb_2;
+
+      if (profile_img != null) {
+        request.files.add(
+            await http.MultipartFile.fromPath('pfofile', profile_img.path));
+      }
+
+      var res = await request.send();
+      if (res.statusCode == 200) {
+        SharedPreferences sp = await SharedPreferences.getInstance();
+        sp.setString('mb_name', modify_name.text);
+        sp.setString('mb_2', widget.mb_2);
+        Navigator.of(context).pop(true);
+        //return res.stream.bytesToString();
+      }
+    }catch(e){
+      print(e.toString());
+    }
+
+  }
+
 
   @override
   void initState() {
@@ -128,7 +192,7 @@ class _modify_infoState extends State<modify_info> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.mb_1!=null)
+    if(widget.mb_1!=null && profile_img ==null)
     profile_widget = widget.mb_1!='test'? NetworkImage(widget.mb_1):AssetImage("images/wing_mb_noimg2.png");
     return Scaffold(
       backgroundColor: Colors.white,
@@ -336,15 +400,20 @@ class _modify_infoState extends State<modify_info> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width*0.3,
-                    height:MediaQuery.of(context).size.height*0.08,
-                    margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02,),
-                    decoration: BoxDecoration(
-                        color: Color(0xff777777),
-                        borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.025,))
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.3,
+                      height:MediaQuery.of(context).size.height*0.08,
+                      margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02,),
+                      decoration: BoxDecoration(
+                          color: Color(0xff777777),
+                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.025,))
+                      ),
+                      child: Center(child: Text("정보수정",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),)),
                     ),
-                    child: Center(child: Text("정보수정",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),)),
+                    onTap:(){
+                      uploadImage();
+                    },
                   ),
                   InkWell(
                     child: Container(

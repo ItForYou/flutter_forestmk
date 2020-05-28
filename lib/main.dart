@@ -97,9 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
       )
   );
   PreferredSize scroll_appbar;
-  void soldout_changed(bool value) => setState(() => checkbox_soldout = value);
-  void adv_changed(bool value) => setState(() => checkbox_adv = value);
-
 
   void _incrementCounter() {
     setState(() {
@@ -203,8 +200,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var temp_data = main_item.fromJson(itemdata['data'][id]);
     //print(temp_data.file[0]);
-    if(temp_data.wr_1!='무료나눔' && temp_data.ca_name !='업체'){
-
+    String temp_price;
+    if(temp_data.ca_name =='업체'){
+      temp_price=temp_data.wr_subject;
+    }
+    else if(temp_data.wr_1 =='무료나눔'){
+      temp_price=temp_data.wr_1;
+    }
+    else{
+      temp_price=temp_data.wr_1+'원';
     }
       InkWell temp = InkWell(
         child: Container(
@@ -247,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     SizedBox(height: 5,),
                     Text(temp_data.wr_subject, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                     SizedBox(height: 5,),
-                    temp_data.ca_name!='업체'? Text(temp_data.wr_1, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),): Container(),
+                    temp_data.ca_name!='업체'? Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),): Container(),
                     temp_data.ca_name!='업체'? SizedBox(height: 8,): Container(),
                     Row(
                       children: <Widget>[
@@ -410,6 +414,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onChanged: (T){
                           setState(() {
                             sort_value = T;
+                            get_data();
                           });
                           Navigator.pop(context);
                         },
@@ -433,6 +438,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onChanged: (T){
                           setState(() {
                             sort_value = T;
+                            get_data();
                           });
                           Navigator.pop(context);
                         },
@@ -456,6 +462,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onChanged: (T){
                           setState(() {
                             sort_value = T;
+                            get_data();
                           });
                           Navigator.pop(context);
                         },
@@ -476,6 +483,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onChanged: (T){
                           setState(() {
                             sort_value = T;
+                            get_data();
                           });
                           Navigator.pop(context);
                         },
@@ -494,13 +502,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
  Future<dynamic> get_data() async{
+
    final response = await http.post(
        Uri.encodeFull('http://14.48.175.177/get_write.php'),
        body: {
+         "mb_id":mb_id==null?'':mb_id,
+         "sch_order":sort_value,
+         "sch_flghide":checkbox_adv==true?'1':'',
+         "sch_flgsold":checkbox_soldout==true?'1':'',
        },
        headers: {'Accept' : 'application/json'}
    );
-   setState(() {
+  // print(response.body);
+    setState(() {
      itemdata = jsonDecode(response.body);
      _getWidget();
    });
@@ -509,6 +523,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void load_myinfo()async{
     SharedPreferences sp = await SharedPreferences.getInstance();
     setState(() {
+
       if(sp.getString('id')!=null) {
         mb_id = sp.getString('id');
         mb_pwd = sp.getString('pwd');
@@ -521,7 +536,9 @@ class _MyHomePageState extends State<MyHomePage> {
         mb_5 = sp.getString('mb_5');
         mb_6 = sp.getString('mb_6');
       }
+
     });
+
   }
 
   @override
@@ -529,14 +546,14 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
-    get_data();
-    //print(itemdata['data'][0]);
-    super.initState();
     load_myinfo();
+    get_data();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    load_myinfo();
     if(mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -571,7 +588,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Image.asset("images/hd_cate01.png"),
                         ),
                         onTap: (){
-
+                          get_data();
                         },
                       ),
 
@@ -584,7 +601,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => search_main(sch_flgadv: "1", mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                              builder:(context) => search_main(title:'광고',sch_flgadv: "1", mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                           ));
                         },
                       ),
@@ -873,7 +890,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Image.asset("images/hd_cate01.png"),
                           ),
                           onTap: (){
-
+                            get_data();
                           },
                         ),
 
@@ -888,7 +905,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: (){
                             //print(mb_3);
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => search_main(sch_flgadv: "1", mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                                builder:(context) => search_main(title:'광고' ,sch_flgadv: "1", mb_id :mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
                           },
                         ),
@@ -1076,7 +1093,14 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: Checkbox(
                                 value: checkbox_soldout,
                                 activeColor: Colors.black12,
-                                onChanged: soldout_changed,
+                                onChanged :(bool value){
+                                  setState(() {
+                                    checkbox_soldout = value;
+                                    get_data();
+                                  });
+
+                              }
+
                               ),
                             ),
                             Text("거래완료"),
@@ -1085,7 +1109,12 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: Checkbox(
                                 value: checkbox_adv,
                                 activeColor: Colors.black12,
-                                onChanged: adv_changed,
+                                onChanged: (bool value){
+                                  setState(() {
+                                    checkbox_adv = value;
+                                    get_data();
+                                  });
+                                },
                               ),
                             ),
                             Text("업체안보기"),

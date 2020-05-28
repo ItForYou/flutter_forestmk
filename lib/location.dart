@@ -23,6 +23,7 @@ class location_State extends State<location> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("나의 메뉴" ,style: TextStyle(color: Colors.black),),
         backgroundColor: Colors.white,

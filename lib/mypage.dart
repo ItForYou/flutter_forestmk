@@ -286,7 +286,7 @@ class _mypageState extends State<mypage> {
                 ),
                 onTap: (){
                   Navigator.push(context,MaterialPageRoute(
-                      builder:(context) => basicboard(title: "공지사항",)
+                      builder:(context) => basicboard(title: "공지사항",bo_table: 'notice',mb_id: widget.mb_id,)
                   ));
               },
               ),
@@ -313,7 +313,7 @@ class _mypageState extends State<mypage> {
                 ),
                 onTap: (){
                   Navigator.push(context,MaterialPageRoute(
-                      builder:(context) => basicboard(title: "고객문의")
+                      builder:(context) => basicboard(title: "고객문의",bo_table: 'qna',mb_id: widget.mb_id,)
                   ));
                 },
               ),

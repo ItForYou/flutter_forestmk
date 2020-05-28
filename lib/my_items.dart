@@ -8,6 +8,7 @@ import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/loginpage.dart';
 import 'package:flutterforestmk/main.dart';
 import 'package:flutterforestmk/main_item.dart';
+import 'package:flutterforestmk/search_main.dart';
 import 'package:flutterforestmk/mypage.dart';
 import 'package:flutterforestmk/viewpage.dart';
 import 'package:flutterforestmk/write_normal.dart';
@@ -52,6 +53,26 @@ class _my_itemsState extends State<my_items> {
       )
   );
   PreferredSize scroll_appbar;
+
+  void load_myinfo()async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    setState(() {
+
+      if(sp.getString('id')!=null) {
+        widget.mb_id = sp.getString('id');
+        widget.mb_name = sp.getString('mb_name');
+        widget.mb_hp = sp.getString('mb_hp');
+        widget.mb_1 = sp.getString('mb_1');
+        widget.mb_2 = sp.getString('mb_2');
+        widget.mb_3 = sp.getString('mb_3');
+        widget.mb_4 = sp.getString('mb_4');
+        widget.mb_5 = sp.getString('mb_5');
+        widget.mb_6 = sp.getString('mb_6');
+      }
+
+    });
+
+  }
 
   void request_logindialog(){
 
@@ -423,6 +444,7 @@ class _my_itemsState extends State<my_items> {
 
   @override
   Widget build(BuildContext context) {
+    load_myinfo();
     if(widget.mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -646,6 +668,9 @@ class _my_itemsState extends State<my_items> {
                         child: Image.asset("images/hd_cate02.png"),
                       ),
                       onTap: (){
+                        Navigator.push(context,MaterialPageRoute(
+                            builder:(context) => search_main(title:'광고',sch_flgadv: "1", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                        ));
                       },
                     ),
 
@@ -673,9 +698,9 @@ class _my_itemsState extends State<my_items> {
                         child: Image.asset("images/hd_cate04.png"),
                       ),
                       onTap: (){
-                        setState(() {
-                          print("Test");
-                        });
+                        Navigator.push(context,MaterialPageRoute(
+                            builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                        ));
                       },
                     ),
                     InkWell(
@@ -753,7 +778,9 @@ class _my_itemsState extends State<my_items> {
                             child: Image.asset("images/hd_cate02.png"),
                           ),
                           onTap: (){
-
+                            Navigator.push(context,MaterialPageRoute(
+                                builder:(context) => search_main(title:'광고',sch_flgadv: "1", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                            ));
                           },
                         ),
 
@@ -815,8 +842,7 @@ class _my_itemsState extends State<my_items> {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            InkWell(
-                              child: Container(
+                               Container(
                                 width: MediaQuery.of(context).size.width*0.15,
                                 height: MediaQuery.of(context).size.width*0.15,
                                 padding: EdgeInsets.all(3),
@@ -833,8 +859,10 @@ class _my_itemsState extends State<my_items> {
                                     )
 
                                 ),
-
-                              ),
+                            ),
+                            SizedBox(width: 10,),
+                            InkWell(
+                              child: mb_infowidget,
                               onTap: (){
                                 if(widget.mb_id==null) {
                                   Navigator.push(context, MaterialPageRoute(
@@ -851,15 +879,6 @@ class _my_itemsState extends State<my_items> {
                                       builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                                   ));
                                 }
-                              },
-                            ),
-                            SizedBox(width: 10,),
-                            InkWell(
-                              child: mb_infowidget,
-                              onTap: (){
-                                Navigator.push(context,MaterialPageRoute(
-                                    builder:(context) => loginpage()
-                                ));
                               },
                             ),
                           ],

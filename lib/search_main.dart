@@ -261,8 +261,15 @@ class _search_mainState extends State<search_main> {
 
     var temp_data = main_item.fromJson(itemdata['data'][id]);
     //print(temp_data.file[0]);
-    if(temp_data.wr_1!='무료나눔' && temp_data.ca_name !='업체'){
-
+    String temp_price;
+    if(temp_data.ca_name =='업체'){
+      temp_price=temp_data.wr_subject;
+    }
+    else if(temp_data.wr_1 =='무료나눔'){
+      temp_price=temp_data.wr_1;
+    }
+    else{
+      temp_price=temp_data.wr_1+'원';
     }
 
     InkWell temp = InkWell(
@@ -304,13 +311,13 @@ class _search_mainState extends State<search_main> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(height: 5,),
-                        Text("테스트제목", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                        Text(temp_data.wr_subject, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                         SizedBox(height: 5,),
-                        Text("무료나눔", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                        Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                         SizedBox(height: 8,),
                         Row(
                           children: <Widget>[
-                            Text("경기도 수원시 팔달구 구천동",style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                             SizedBox(width: MediaQuery.of(context).size.width*0.005,),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
@@ -321,7 +328,7 @@ class _search_mainState extends State<search_main> {
                                   color: Colors.forestmk
                               ),
                             ),
-                            Text("2일전 ",style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                            Text(temp_data.timegap,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
 
                           ],
 
@@ -329,7 +336,7 @@ class _search_mainState extends State<search_main> {
                         SizedBox(height: MediaQuery.of(context).size.height*0.006,),
                         Row(
                           children: <Widget>[
-                            Text("건강/의료용품", style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                            Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                             Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
@@ -341,7 +348,7 @@ class _search_mainState extends State<search_main> {
                               ),
                             ),
                             Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
-                            Text("1", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
+                            Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
                               height: MediaQuery.of(context).size.width*0.01,
@@ -370,12 +377,12 @@ class _search_mainState extends State<search_main> {
                         border: Border.all(color: Color(0xffcccccc)),
                         image: DecorationImage(//이미지 꾸미기
                             fit:BoxFit.cover,
-                            image:NetworkImage("http://forestmk.itforone.co.kr/data/member/3542386191_O4hMBHJf_d1f767e86e735db50a43847faef0544e41ede2ed.jpg")//이미지 가져오기
+                            image:temp_data.profile_img!=''? NetworkImage(temp_data.profile_img): AssetImage("images/wing_mb_noimg2.png")//이미지 가져오기
                         )
                     ),
                   ),
                   SizedBox(height: 6,),
-                  Text("테스트",style: TextStyle(fontSize: 12),)
+                  Text(temp_data.mb_name,style: TextStyle(fontSize: 12),)
                 ],
               ),
             ],
@@ -495,7 +502,7 @@ class _search_mainState extends State<search_main> {
         },
         headers: {'Accept' : 'application/json'}
     );
-    print(response.body);
+   // print(response.body);
     itemdata = jsonDecode(response.body);
     if(itemdata['data'].length<=0){
       setState(() {
@@ -546,7 +553,8 @@ class _search_mainState extends State<search_main> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.mb_id !=null) {
+    print(widget.mb_id);
+    if(widget.mb_id!=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -796,9 +804,9 @@ class _search_mainState extends State<search_main> {
                         child: Image.asset("images/hd_cate04.png"),
                       ),
                       onTap: (){
-                        setState(() {
-                          print("Test");
-                        });
+                        Navigator.push(context,MaterialPageRoute(
+                            builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                        ));
                       },
                     ),
                     InkWell(
@@ -1047,6 +1055,7 @@ class _search_mainState extends State<search_main> {
                             _searchdialog();
                           },
                         ),
+                        widget.title!='광고'?
                         Row(
                           children: <Widget>[
                             Container(
@@ -1054,7 +1063,16 @@ class _search_mainState extends State<search_main> {
                               child: Checkbox(
                                 value: checkbox_soldout,
                                 activeColor: Colors.black12,
-                                onChanged: soldout_changed,
+                                onChanged: (bool value){
+                                  setState(() {
+                                      checkbox_soldout = value;
+                                      if(value==true)
+                                      widget.sch_flgsold = '1';
+                                      else
+                                        widget.sch_flgsold = null;
+                                      get_data();
+                                  });
+                                },
                               ),
                             ),
                             Text("거래완료"),
@@ -1063,12 +1081,21 @@ class _search_mainState extends State<search_main> {
                               child: Checkbox(
                                 value: checkbox_adv,
                                 activeColor: Colors.black12,
-                                onChanged: adv_changed,
+                                onChanged: (bool value){
+                                  setState(() {
+                                    checkbox_adv = value;
+                                    if(value==true)
+                                    widget.sch_flghide = '1';
+                                    else
+                                    widget.sch_flghide = null;
+                                    get_data();
+                                  });
+                                },
                               ),
                             ),
                             Text("업체안보기"),
                           ],
-                        ),
+                        ):Container(),
                       ],
                     )
                 ):Container(),

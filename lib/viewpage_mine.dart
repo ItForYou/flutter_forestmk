@@ -1,8 +1,11 @@
 
 
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/viewpage_mine.dart';
+import 'package:http/http.dart' as http;
 
 class Viewpage_mine extends StatefulWidget {
   String tag,wr_id;
@@ -25,6 +28,10 @@ class Viewpage_mine extends StatefulWidget {
 
 class _ViewpagemineState extends State<Viewpage_mine>{
 
+  var itemdata;
+  double itmes_height=0,itmes_height2=0;
+  List <Widget> list_subitem = [Container()];
+  List <Widget> list_extraitem = [Container()];
 
   Widget get_content2(id,cnt){
 
@@ -66,6 +73,46 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       },
     );
     return temp;
+  }
+
+  Future<dynamic> get_data() async{
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_view.php'),
+        body: {
+          "wr_id" :widget.wr_id,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+    setState(() {
+      //print("test");
+      itemdata = jsonDecode(response.body);
+      set_items();
+    });
+
+  }
+  void set_items(){
+    //print(itemdata['data'][0]);
+    if(itemdata['data'].length > 0) {
+      itmes_height = MediaQuery.of(context).size.height*0.355;
+      list_subitem.clear();
+      for (var i = 0; i < itemdata['data'].length; i++) {
+        list_subitem.add(get_content2(i,1));
+      }
+    }
+
+    if(itemdata['data2'].length > 0) {
+      itmes_height2 = MediaQuery.of(context).size.height*0.35;
+      list_extraitem.clear();
+      for (var i = 0; i < itemdata['data2'].length; i++) {
+        list_extraitem.add(get_content2(i,2));
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -319,10 +366,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                   child:
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      get_content2("another_mine1", "01"),
-                      get_content2("another_mine2", "02"),
-                    ],
+                    children: list_subitem,
                   ),
                 ),
 
@@ -346,10 +390,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                   child:
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      get_content2("another_mine1", "01"),
-                      get_content2("another_mine2", "02"),
-                    ],
+                    children: list_extraitem,
                   ),
                 ),
               ],
