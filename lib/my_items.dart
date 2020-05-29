@@ -56,21 +56,31 @@ class _my_itemsState extends State<my_items> {
 
   void load_myinfo()async{
     SharedPreferences sp = await SharedPreferences.getInstance();
-    setState(() {
+    if(sp.getString('id')!=null) {
+      get_mbdata();
+    }
+  }
 
-      if(sp.getString('id')!=null) {
-        widget.mb_id = sp.getString('id');
-        widget.mb_name = sp.getString('mb_name');
-        widget.mb_hp = sp.getString('mb_hp');
-        widget.mb_1 = sp.getString('mb_1');
-        widget.mb_2 = sp.getString('mb_2');
-        widget.mb_3 = sp.getString('mb_3');
-        widget.mb_4 = sp.getString('mb_4');
-        widget.mb_5 = sp.getString('mb_5');
-        widget.mb_6 = sp.getString('mb_6');
-      }
+  Future<dynamic> get_mbdata() async{
 
-    });
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_mb.php'),
+        body: {
+          "mb_id":widget.mb_id==null?'':widget.mb_id,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+    //print(jsonDecode(response.body));
+
+    var temp_mbdata = jsonDecode(response.body);
+    widget.mb_hp = temp_mbdata['mb_hp'];
+    widget.mb_name = temp_mbdata['mb_name'];
+    widget.mb_1 = "http://14.48.175.177/data/member/"+temp_mbdata['mb_1'];
+    widget.mb_2 = temp_mbdata['mb_2'];
+    widget.mb_3 = temp_mbdata['mb_3'];
+    widget.mb_4 = temp_mbdata['mb_4'];
+    widget.mb_5 = temp_mbdata['mb_5'];
+    widget.mb_6 = temp_mbdata['mb_6'];
 
   }
 
@@ -711,10 +721,13 @@ class _my_itemsState extends State<my_items> {
 
                         child: Image.asset("images/hd_cate05.png"),
                       ),
-                      onTap: (){
-                        Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                      onTap: ()async{
+                        var result = await Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                         ));
+                        if(result == 'back'){
+                          get_data();
+                        }
                       },
                     ),
                   ],
@@ -822,10 +835,13 @@ class _my_itemsState extends State<my_items> {
 
                             child: Image.asset("images/hd_cate05.png"),
                           ),
-                          onTap: (){
-                            Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                          onTap: ()async{
+                            var result = await Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                             ));
+                            if(result == 'back'){
+                              get_data();
+                            }
                           },
                         ),
 

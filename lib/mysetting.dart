@@ -3,6 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutterforestmk/changehp.dart';
 
 class mysetting extends StatefulWidget {
+
+  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id;
+  mysetting({Key key, this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id}) : super(key: key);
+
   @override
   _mysettingState createState() => _mysettingState();
 }

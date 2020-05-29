@@ -1,6 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class register extends StatefulWidget {
   @override
@@ -13,10 +19,24 @@ class _registerState extends State<register> {
   bool privacyagree = false;
   bool service_flg  = false;
   bool privacy_flg  = false;
+  var temp_addrs;
   String input_val ="";
   List <Widget> results_search = [];
   Widget service_widget = Container();
   Widget privacy_widget = Container();
+  TextEditingController input_id = new TextEditingController();
+  TextEditingController input_pwd = new TextEditingController();
+  TextEditingController input_pwd_re = new TextEditingController();
+  TextEditingController input_name = new TextEditingController();
+  TextEditingController input_ph = new TextEditingController();
+  TextEditingController input_ph_chk = new TextEditingController();
+  TextEditingController input_address = new TextEditingController();
+
+  int flg_noticeid=0,flg_noticepwd=0,flg_noticename=0,flg_noticehp=0,flg_noticepwdre=0, flg_certihp=0;
+  String notice_id="",notice_pwd="",notice_pwd_re="", notice_name="",notice_hp="", sended_number="";
+  bool flg_readonly_hp = false;
+  int request_certification=0;
+
 
   void service_changed(bool value) => setState(() => serviceagree = value);
   void privacy_changed(bool value) => setState(() => privacyagree = value);
@@ -33,10 +53,21 @@ class _registerState extends State<register> {
 
   }
 
-  void updatesearch(String text){
+  void certification_hp(){
+
+      if(sended_number==input_ph_chk.text){
+        show_Alert("인증되었습니다.", 1);
+        flg_certihp =1;
+        request_certification=0;
+      }
+      else{
+        show_Alert("인증번호가 올바르지 않습니다.", 1);
+        flg_certihp =0;
+      }
+
   }
 
-  void _showDialog() {
+  void show_Alert(text,flg) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -44,75 +75,222 @@ class _registerState extends State<register> {
         return AlertDialog(
           title:null,
           content: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height*0.34,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height*0.04,
-                  child: TextFormField(
-                    cursorColor: Colors.forestmk,
-                    decoration: InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1,color: Color(0xffefefef))
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1,color: Color(0xffefefef))
-                        ),
-                        prefixIcon: Icon(Icons.search),
-                        hintText: "내 동네 이름(동,읍,면)으로 검색",
-                        hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.width*0.038)
-                    ),
-                    onChanged: (value) =>  setState(() {
-                      results_search.clear();
-                      for(int i=0; i<5; i++) {
-                        Widget temp = Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height*0.05,
-                          child: i==0? Text("'"+value+"'"):Text("테스트 주소"),
-                        );
-                        results_search.add(temp);
-                      }
-                    }),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width*0.9,
-                  height: MediaQuery.of(context).size.height*0.04,
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.015,),
-                  decoration: BoxDecoration(
-                      color: Colors.forestmk,
-                      borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.07))
-                  ),
-                  child: Center(child: Text("현재위치로 찾기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,color: Colors.white))),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height*0.17,
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.04,),
-                  child: SingleChildScrollView(
-                      child: Column(
-                        children: results_search,
-                      )
-                  ),
-                )
-              ],
-            ),
+            height: MediaQuery.of(context).size.height*0.02,
+            child: Text(text),
           ),
           actions: <Widget>[
             new FlatButton(
               child: new Text("확인"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: (){
+                if(flg ==2)
+                  Navigator.of(context).pop(true);
+                Navigator.of(context).pop(true);
               },
             ),
           ],
+        );
+      },
+    );
+  }
+
+  Future<String> request_number() async {
+    try {
+
+      var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/bbs/ajax.send_number.php"));
+      var random = Random();
+      String temp_number = "";
+
+      for(int i=0; i<6; i++){
+        temp_number += random.nextInt(9).toString();
+      }
+
+      request.fields['msg'] = temp_number;
+      request.fields['hp'] = input_ph.text;
+
+      if (profile_img != null) {
+        request.files.add(
+            await http.MultipartFile.fromPath('profile', profile_img.path));
+      }
+
+      var res = await request.send();
+      if (res.statusCode == 200) {
+        show_Alert("문자가 발송되었습니다.",1);
+        flg_readonly_hp = true;
+        flg_certihp=0;
+        sended_number = temp_number;
+        request_certification=1;
+        // return res.stream.bytesToString();
+      }
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
+void change_search(){
+
+        if(temp_addrs['data'].length>0) {
+          for (int i = 0; i < temp_addrs['data'].length; i++) {
+            print(temp_addrs['data'][i]);
+            Widget temp = InkWell(
+                child:Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.05,
+              child: Text(temp_addrs['data'][i]),
+                ),
+              onTap: (){
+                  input_address.text = temp_addrs['data'][i];
+                  Navigator.pop(context);
+              },
+            );
+            results_search.add(temp);
+          }
+        }
+        else {
+          results_search.clear();
+        }
+
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return StatefulBuilder(
+          builder:(context, setState) {
+            return AlertDialog(
+              title: null,
+              content: Container(
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.34,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.04,
+                      child: TextFormField(
+                        cursorColor: Colors.forestmk,
+                        decoration: InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 1, color: Color(0xffefefef))
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    width: 1, color: Color(0xffefefef))
+                            ),
+                            prefixIcon: Icon(Icons.search),
+                            hintText: "내 동네 이름(동,읍,면)으로 검색",
+                            hintStyle: TextStyle(fontSize: MediaQuery
+                                .of(context)
+                                .size
+                                .width * 0.038)
+                        ),
+                        onChanged: (value) async{
+                          results_search.clear();
+                          Widget temp = Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height * 0.05,
+                              child: Text("'" + value + "'")
+                          );
+                          results_search.add(temp);
+                          final response = await http.post(
+                              Uri.encodeFull(
+                                  'http://14.48.175.177/search_location.php'),
+                              body: {
+                                "value": value
+                              },
+                              headers: {'Accept': 'application/json'}
+                          );
+                          temp_addrs = jsonDecode(response.body);
+                          setState(() {
+                             change_search();
+                          });
+                        }
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.9,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.04,
+                      margin: EdgeInsets.only(top: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.015,),
+                      decoration: BoxDecoration(
+                          color: Colors.forestmk,
+                          borderRadius: BorderRadius.all(Radius.circular(
+                              MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 0.07))
+                      ),
+                      child: Center(child: Text("현재위치로 찾기", style: TextStyle(
+                          fontSize: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.035, color: Colors.white))),
+                    ),
+                    Container(
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.17,
+                      margin: EdgeInsets.only(top: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.04,),
+                      child: SingleChildScrollView(
+                          child: Column(
+                            children: results_search,
+                          )
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("확인"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                ),
+                new FlatButton(
+                  child: new Text("취소"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          }
         );
       },
     );
@@ -189,6 +367,100 @@ class _registerState extends State<register> {
     )
     );
 
+
+    Future<dynamic> check_id(String value) async{
+
+        if(value.length < 4 || value.length >12){
+          setState(() {
+            flg_noticeid =1;
+            notice_id ="아이디는 영문과 숫자, 4~12자리까지 가능합니다.";
+          });
+          return;
+        }
+        final response = await http.post(
+            Uri.encodeFull('http://14.48.175.177/check_id.php'),
+            body: {
+              "value":value
+            },
+            headers: {'Accept' : 'application/json'}
+        );
+
+        int cnt_chk = int.parse(response.body);
+
+        if(cnt_chk>0){
+          setState(() {
+              flg_noticeid =1;
+              notice_id="사용중인 아이디입니다.";
+          });
+        }
+        else{
+          setState(() {
+            flg_noticeid =0;
+          });
+        }
+      }
+    void check_pwd(String value){
+
+      if(value.length < 4){
+        setState(() {
+          flg_noticepwd =1;
+          notice_pwd ="비밀번호는 4자리 이상 입력되어야 합니다.";
+        });
+        return;
+      }
+      else{
+        setState(() {
+          flg_noticepwd =0;
+        });
+      }
+    }
+    void check_pwd_re(String value){
+
+      if(value != input_pwd.text){
+        setState(() {
+          flg_noticepwdre =1;
+          notice_pwd_re ="비밀번호가 일치하지 않습니다.";
+        });
+        return;
+      }
+      else{
+        setState(() {
+          flg_noticepwdre =0;
+        });
+      }
+
+    }
+    void check_name(String value){
+
+      if(value.length < 2){
+        setState(() {
+          flg_noticename =1;
+          notice_name ="2글자 이상 입력해주세요.";
+        });
+        return;
+      }
+      else{
+        setState(() {
+          flg_noticename =0;
+        });
+      }
+    }
+    void check_hp(String value){
+
+      if(value.length < 10 || value.length>12){
+        setState(() {
+          flg_noticehp=1;
+          notice_hp ="휴대폰 번호는10~12자리 숫자만 입력하세요.";
+        });
+        return;
+      }
+      else{
+        setState(() {
+          flg_noticehp =0;
+        });
+      }
+    }
+
     void show_service(){
 
       if(service_flg == false){
@@ -216,6 +488,93 @@ class _registerState extends State<register> {
           privacy_flg=false;
           privacy_widget = Container();
         });
+      }
+    }
+
+    void show_Alert(text,flg) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title:null,
+            content: Container(
+              height: MediaQuery.of(context).size.height*0.02,
+              child: Text(text),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("확인"),
+                onPressed: (){
+                  if(flg ==2)
+                    Navigator.of(context).pop(true);
+                  Navigator.of(context).pop(true);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    Future<String> uploadImage() async {
+
+      try {
+
+        if(flg_noticeid==1){
+            show_Alert("아이디가 올바르지 않습니다.", 1);
+            return '';
+        }
+        else if(flg_noticepwd==1){
+          show_Alert("비밀번호가 올바르지 않습니다.", 1);
+          return '';
+        }
+        else if(flg_noticename==1){
+          show_Alert("닉네임이 올바르지 않습니다.", 1);
+          return '';
+        }
+        else if(flg_noticehp==1){
+          show_Alert("휴대번호가 올바르지 않습니다.", 1);
+          return '';
+        }
+        else if(flg_noticepwdre==1){
+          show_Alert("비밀번호가 일치하지 않습니다.", 1);
+          return '';
+        }
+        else if(flg_certihp==0){
+          show_Alert("휴대번호가 인증되지 않았습니다.", 1);
+          return '';
+        }
+        else if(serviceagree!=true){
+          show_Alert("이용약관에 동의하지 않았습니다.", 1);
+          return '';
+        }
+        else if(privacyagree!=true){
+          show_Alert("개인정보처리방침에 동의하지 않았습니다.", 1);
+          return '';
+        }
+
+        var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/insert_mbinfo.php"));
+
+          request.fields['mb_id'] = input_id.text;
+          request.fields['mb_password'] = input_pwd.text;
+          request.fields['mb_name'] = input_name.text;
+          request.fields['mb_hp'] = input_ph.text;
+          request.fields['mb_2'] = input_address.text;
+
+
+        if (profile_img != null) {
+          request.files.add(
+              await http.MultipartFile.fromPath('profile', profile_img.path));
+        }
+
+        var res = await request.send();
+        if (res.statusCode == 200) {
+          show_Alert("회원 가입이 완료되었습니다.",2);
+          // return res.stream.bytesToString();
+        }
+      }catch(e){
+        print(e.toString());
       }
     }
 
@@ -266,6 +625,11 @@ class _registerState extends State<register> {
               margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: TextFormField(
+                  controller: input_id,
+                  inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter(RegExp("[0-9a-zA-z]")),
+                  ],
+                  onChanged: (value) => check_id(value),
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
@@ -284,12 +648,21 @@ class _registerState extends State<register> {
                   )
               ),
             ),
+            flg_noticeid==1?
+            Container(
+                width: MediaQuery.of(context).size.width*0.8,
+                height: MediaQuery.of(context).size.height*0.03,
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                child: Text(notice_id,style: TextStyle(color: Colors.red,fontSize: MediaQuery.of(context).size.height*0.015),)
+            ):SizedBox(),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.05,
               margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: TextFormField(
+                  controller: input_pwd,
+                  onChanged: (value) => check_pwd(value),
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: true,
@@ -309,12 +682,21 @@ class _registerState extends State<register> {
                   )
               ),
             ),
+            flg_noticepwd==1?
+            Container(
+                width: MediaQuery.of(context).size.width*0.8,
+                height: MediaQuery.of(context).size.height*0.03,
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                child: Text(notice_pwd,style: TextStyle(color: Colors.red,fontSize: MediaQuery.of(context).size.height*0.015),)
+            ):SizedBox(),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.05,
               margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: TextFormField(
+                  controller: input_pwd_re,
+                  onChanged: (value) => check_pwd_re(value),
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: true,
@@ -334,12 +716,21 @@ class _registerState extends State<register> {
                   )
               ),
             ),
+            flg_noticepwdre==1?
+            Container(
+                width: MediaQuery.of(context).size.width*0.8,
+                height: MediaQuery.of(context).size.height*0.03,
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                child: Text(notice_pwd_re,style: TextStyle(color: Colors.red,fontSize: MediaQuery.of(context).size.height*0.015),)
+            ):SizedBox(),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.05,
               margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: TextFormField(
+                  controller: input_name,
+                  onChanged: (value) => check_name(value),
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
@@ -358,6 +749,13 @@ class _registerState extends State<register> {
                   )
               ),
             ),
+            flg_noticename==1?
+            Container(
+                width: MediaQuery.of(context).size.width*0.8,
+                height: MediaQuery.of(context).size.height*0.03,
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                child: Text(notice_name,style: TextStyle(color: Colors.red,fontSize: MediaQuery.of(context).size.height*0.015),)
+            ):SizedBox(),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.05,
@@ -369,8 +767,14 @@ class _registerState extends State<register> {
                     width: MediaQuery.of(context).size.width*0.8,
                     height: MediaQuery.of(context).size.height*0.05,
                     child: TextFormField(
+                        controller: input_ph,
+                        readOnly: flg_readonly_hp,
+                        onChanged: (value) => check_hp(value),
                         cursorColor: Colors.forestmk,
-                        keyboardType: TextInputType.emailAddress,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                        ],
+                        keyboardType: TextInputType.number,
                         maxLines: 1,
                         decoration: InputDecoration(
                           contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
@@ -384,14 +788,19 @@ class _registerState extends State<register> {
                             borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
                             borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
                           ),
-                          suffixIcon:   Container(
-                            width: MediaQuery.of(context).size.width*0.2,
-                            height: MediaQuery.of(context).size.height*0.05,
-                            decoration: BoxDecoration(
-                              color: Color(0xfff0f0f0),
-                              borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                          suffixIcon:   InkWell(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*0.2,
+                              height: MediaQuery.of(context).size.height*0.05,
+                              decoration: BoxDecoration(
+                                color: Color(0xfff0f0f0),
+                                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                              ),
+                              child: Center(child: Text("인증")),
                             ),
-                            child: Center(child: Text("인증")),
+                            onTap: (){
+                              request_number();
+                            },
                           )
                         )
                     ),
@@ -399,21 +808,91 @@ class _registerState extends State<register> {
                 ],
               ),
             ),
-            InkWell(
-              child: Container(
+            flg_noticehp==1?
+            Container(
                 width: MediaQuery.of(context).size.width*0.8,
-                height: MediaQuery.of(context).size.height*0.05,
-                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
-                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.6),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Color(0xffefefef)),
-                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
-                ),
-                child: Center(child: Text("동네선택",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04, color: Color(0xff777777)),)),
+                height: MediaQuery.of(context).size.height*0.03,
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                child: Text(notice_hp,style: TextStyle(color: Colors.red,fontSize: MediaQuery.of(context).size.height*0.015),)
+            ):SizedBox(),
+            request_certification==1?
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height*0.05,
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.8,
+                    height: MediaQuery.of(context).size.height*0.05,
+                    child: TextFormField(
+                        controller: input_ph_chk,
+                        onChanged: (value) => check_hp(value),
+                        cursorColor: Colors.forestmk,
+                        inputFormatters: <TextInputFormatter>[
+                          WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                        ],
+                        keyboardType: TextInputType.number,
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                            contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                            hintText: "인증번호",
+                            border: null,
+                            enabledBorder:OutlineInputBorder(
+                              borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                              borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                            ),
+                            focusedBorder:OutlineInputBorder(
+                              borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                              borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                            ),
+                            suffixIcon:   InkWell(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width*0.2,
+                                height: MediaQuery.of(context).size.height*0.05,
+                                decoration: BoxDecoration(
+                                  color: Color(0xfff0f0f0),
+                                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                                ),
+                                child: Center(child: Text("인증하기")),
+                              ),
+                              onTap: (){
+                                certification_hp();
+                              },
+                            )
+                        )
+                    ),
+                  ),
+                ],
               ),
-              onTap: (){
-                _showDialog();
-              },
+            ):SizedBox(),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height*0.05,
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
+              child: TextFormField(
+                  readOnly: true,
+                  controller: input_address,
+                  onTap: _showDialog,
+                  cursorColor: Colors.forestmk,
+                  keyboardType: TextInputType.emailAddress,
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                    contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                    hintText: "동네선택",
+                    border: null,
+                    enabledBorder:OutlineInputBorder(
+                      borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                    ),
+                    focusedBorder:OutlineInputBorder(
+                      borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                    ),
+                  )
+              ),
             ),
            Container(
              width: MediaQuery.of(context).size.width*0.8,
@@ -498,15 +977,20 @@ class _registerState extends State<register> {
                 ),
               ),
             privacy_widget,
-            Container(
-              width: MediaQuery.of(context).size.width*0.3,
-              height:MediaQuery.of(context).size.height*0.08,
-              margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02,),
-              decoration: BoxDecoration(
-                color: Color(0xff777777),
-                borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.025,))
+            InkWell(
+              child: Container(
+                width: MediaQuery.of(context).size.width*0.3,
+                height:MediaQuery.of(context).size.height*0.08,
+                margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02,),
+                decoration: BoxDecoration(
+                  color: Color(0xff777777),
+                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.025,))
+                ),
+                child: Center(child: Text("회원가입",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),)),
               ),
-              child: Center(child: Text("회원가입",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),)),
+              onTap: (){
+                uploadImage();
+              },
             )
           ],
         ),

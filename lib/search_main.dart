@@ -534,11 +534,42 @@ class _search_mainState extends State<search_main> {
     }
   }
 
+  void load_myinfo()async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    if(sp.getString('id')!=null) {
+      get_mbdata();
+    }
+  }
+
+  Future<dynamic> get_mbdata() async{
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_mb.php'),
+        body: {
+          "mb_id":widget.mb_id==null?'':widget.mb_id,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+    //print(jsonDecode(response.body));
+
+    var temp_mbdata = jsonDecode(response.body);
+    widget.mb_hp = temp_mbdata['mb_hp'];
+    widget.mb_name = temp_mbdata['mb_name'];
+    widget.mb_1 = "http://14.48.175.177/data/member/"+temp_mbdata['mb_1'];
+    widget.mb_2 = temp_mbdata['mb_2'];
+    widget.mb_3 = temp_mbdata['mb_3'];
+    widget.mb_4 = temp_mbdata['mb_4'];
+    widget.mb_5 = temp_mbdata['mb_5'];
+    widget.mb_6 = temp_mbdata['mb_6'];
+
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
+    load_myinfo();
     get_data();
 
     if(widget.mb_1==null){
@@ -553,7 +584,7 @@ class _search_mainState extends State<search_main> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.mb_id);
+    load_myinfo();
     if(widget.mb_id!=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,

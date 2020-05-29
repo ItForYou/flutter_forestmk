@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/basicboard.dart';
 import 'package:flutterforestmk/location.dart';
@@ -8,6 +10,7 @@ import 'package:flutterforestmk/mysetting.dart';
 import 'package:flutterforestmk/search_info.dart';
 import 'package:flutterforestmk/search_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 
 class mypage extends StatefulWidget {
@@ -20,6 +23,37 @@ class mypage extends StatefulWidget {
 }
 
 class _mypageState extends State<mypage> {
+
+    void load_myinfo()async{
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      if(sp.getString('id')!=null) {
+        get_mbdata();
+      }
+    }
+
+  Future<dynamic> get_mbdata() async{
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_mb.php'),
+        body: {
+          "mb_id":widget.mb_id==null?'':widget.mb_id,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+    //print(jsonDecode(response.body));
+
+    var temp_mbdata = jsonDecode(response.body);
+    widget.mb_hp = temp_mbdata['mb_hp'];
+    widget.mb_name = temp_mbdata['mb_name'];
+    widget.mb_1 = "http://14.48.175.177/data/member/"+temp_mbdata['mb_1'];
+    widget.mb_2 = temp_mbdata['mb_2'];
+    widget.mb_3 = temp_mbdata['mb_3'];
+    widget.mb_4 = temp_mbdata['mb_4'];
+    widget.mb_5 = temp_mbdata['mb_5'];
+    widget.mb_6 = temp_mbdata['mb_6'];
+
+  }
+
 
   void _showDialog() {
     showDialog(
@@ -58,321 +92,327 @@ class _mypageState extends State<mypage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("홈으로" ,style: TextStyle(color: Colors.black),),
+    load_myinfo();
+    return WillPopScope(
+      onWillPop: (){
+        Navigator.pop(context,'back');
+      },
+      child: Scaffold(
+        resizeToAvoidBottomPadding: false,
         backgroundColor: Colors.white,
-        elevation: 0.0,
-        leading: InkWell(
-          child:Padding(
-              padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02, bottom: MediaQuery.of(context).size.height*0.02, left: MediaQuery.of(context).size.width*0.05),
-              child:Image.asset("images/hd_back.png")
+        appBar: AppBar(
+          title: Text("홈으로" ,style: TextStyle(color: Colors.black),),
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          leading: InkWell(
+            child:Padding(
+                padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02, bottom: MediaQuery.of(context).size.height*0.02, left: MediaQuery.of(context).size.width*0.05),
+                child:Image.asset("images/hd_back.png")
+            ),
+            onTap: (){
+              Navigator.pop(context,'back');
+            },
           ),
-          onTap: (){
-            Navigator.of(context).pop(true);
-          },
-        ),
-    ),
-      body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.01),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height*0.05,
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Color(0xfff7f7f7),width: 1),
-                  )
-                ),
-                child: Padding(
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
-                    child:
-                    Text("나의 메뉴", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04),)
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height*0.12,
-                padding: EdgeInsets.only(left:MediaQuery.of(context).size.width*0.03,right:MediaQuery.of(context).size.width*0.03,),
-                decoration: BoxDecoration(
+      ),
+        body: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.01),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height*0.05,
+                  decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(color: Color(0xfff7f7f7),width: 1),
                     )
+                  ),
+                  child: Padding(
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
+                      child:
+                      Text("나의 메뉴", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04),)
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height*0.12,
+                  padding: EdgeInsets.only(left:MediaQuery.of(context).size.width*0.03,right:MediaQuery.of(context).size.width*0.03,),
+                  decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Color(0xfff7f7f7),width: 1),
+                      )
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
 
-                    Container(
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width*0.15,
-                            height: MediaQuery.of(context).size.width*0.15,
-                            decoration: BoxDecoration(
-                                color: Color(0xfff3f3f3),
-                                borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,)),
-                                image: DecorationImage(//이미지 꾸미기
-                                    fit:BoxFit.cover,
-                                    image:widget.mb_1!='test'?NetworkImage(widget.mb_1):AssetImage("images/wing_mb_noimg2.png")//이미지 가져오기
+                      Container(
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.15,
+                              height: MediaQuery.of(context).size.width*0.15,
+                              decoration: BoxDecoration(
+                                  color: Color(0xfff3f3f3),
+                                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,)),
+                                  image: DecorationImage(//이미지 꾸미기
+                                      fit:BoxFit.cover,
+                                      image:widget.mb_1!='test'?NetworkImage(widget.mb_1):AssetImage("images/wing_mb_noimg2.png")//이미지 가져오기
+                              ),
+                            )
                             ),
-                          )
-                          ),
-                          SizedBox(width: MediaQuery.of(context).size.width*0.03,),
-                          Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),),
-                                SizedBox(height: MediaQuery.of(context).size.height*0.005,),
-                                Text(widget.mb_2, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03,),),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    InkWell(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width*0.23,
-                        height: MediaQuery.of(context).size.width*0.08,
-                        decoration: BoxDecoration(
-                          color: Color(0xff444444),
-                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,)),
+                            SizedBox(width: MediaQuery.of(context).size.width*0.03,),
+                            Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),),
+                                  SizedBox(height: MediaQuery.of(context).size.height*0.005,),
+                                  Text(widget.mb_2, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03,),),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
-                        child: Center(child: Text("프로필편집", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, color: Colors.white), )),
                       ),
-                      onTap: (){
-                        Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => modify_info(mb_name: widget.mb_name,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_hp: widget.mb_hp,mb_5: widget.mb_5,mb_6: widget.mb_6,mb_id:widget.mb_id,)
-                        ));
-                      },
-                    )
-                  ],
+                      InkWell(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*0.23,
+                          height: MediaQuery.of(context).size.width*0.08,
+                          decoration: BoxDecoration(
+                            color: Color(0xff444444),
+                            borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,)),
+                          ),
+                          child: Center(child: Text("프로필편집", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, color: Colors.white), )),
+                        ),
+                        onTap: (){
+                          Navigator.push(context,MaterialPageRoute(
+                              builder:(context) => modify_info(mb_name: widget.mb_name,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_hp: widget.mb_hp,mb_5: widget.mb_5,mb_6: widget.mb_6,mb_id:widget.mb_id,)
+                          ));
+                        },
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.width*0.3,
-                decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    InkWell(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width*0.3,
+                  decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      InkWell(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                                width: MediaQuery.of(context).size.width*0.15,
+                                height: MediaQuery.of(context).size.width*0.15,
+                                decoration: BoxDecoration(
+                                  color: Color(0xffeeeeee),
+                                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,),),
+                                  ),
+                                child: Padding(padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01), child:Image.asset("images/my_icon01.png",)),
+                                ),
+                            Text("판매내역")
+                          ],
+                        ),
+                        onTap: (){
+                          Navigator.push(context,MaterialPageRoute(
+                              builder:(context) => my_items(title:"판매중인 물건", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                          ));
+                        },
+                      ),
+                      SizedBox(width: MediaQuery.of(context).size.width*0.1,),
+                      InkWell(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
                               width: MediaQuery.of(context).size.width*0.15,
                               height: MediaQuery.of(context).size.width*0.15,
                               decoration: BoxDecoration(
                                 color: Color(0xffeeeeee),
                                 borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,),),
-                                ),
-                              child: Padding(padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01), child:Image.asset("images/my_icon01.png",)),
                               ),
-                          Text("판매내역")
-                        ],
-                      ),
-                      onTap: (){
-                        Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => my_items(title:"판매중인 물건", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                        ));
-                      },
-                    ),
-                    SizedBox(width: MediaQuery.of(context).size.width*0.1,),
-                    InkWell(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width*0.15,
-                            height: MediaQuery.of(context).size.width*0.15,
-                            decoration: BoxDecoration(
-                              color: Color(0xffeeeeee),
-                              borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,),),
+                              child: Padding(padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01), child:Image.asset("images/my_icon02.png",)),
                             ),
-                            child: Padding(padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01), child:Image.asset("images/my_icon02.png",)),
-                          ),
-                          Text("나의광고")
-                        ],
+                            Text("나의광고")
+                          ],
+                        ),
+                        onTap: (){
+                          Navigator.push(context,MaterialPageRoute(
+                              builder:(context) => search_main(title:"나의광고",sch_flgmyadv: "1", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                          ));
+                        },
                       ),
-                      onTap: (){
-                        Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => search_main(title:"나의광고",sch_flgmyadv: "1", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                        ));
-                      },
+                    ],
+                  ),
+                ),
+                InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.08,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
                     ),
-                  ],
-                ),
-              ),
-              InkWell(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.08,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
-                  decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width*0.1,
-                        height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.asset("images/myul_icon01.png"),
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                      Text("나의 위치 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.1,
+                          height: MediaQuery.of(context).size.width*0.1,
+                          child: Image.asset("images/myul_icon01.png"),
+                        ),
+                        SizedBox(width: MediaQuery.of(context).size.width*0.01,),
+                        Text("나의 위치 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
 
-                    ],
+                      ],
+                    ),
+                  ),
+                  onTap: (){
+                    Navigator.push(context,MaterialPageRoute(
+                        builder:(context) => location(mb_2: widget.mb_2,)
+                    ));
+                  },
+                ),
+                InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.08,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.1,
+                          height: MediaQuery.of(context).size.width*0.1,
+                          child: Image.asset("images/myul_icon02.png"),
+                        ),
+                        SizedBox(width: MediaQuery.of(context).size.width*0.01,),
+                        Text("숲마켓 공유",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+
+                      ],
+                    ),
                   ),
                 ),
-                onTap: (){
-                  Navigator.push(context,MaterialPageRoute(
-                      builder:(context) => location(mb_2: widget.mb_2,)
-                  ));
+                InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.08,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.1,
+                          height: MediaQuery.of(context).size.width*0.1,
+                          child: Image.asset("images/myul_icon03.png"),
+                        ),
+                        SizedBox(width: MediaQuery.of(context).size.width*0.01,),
+                        Text("공지사항",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+
+                      ],
+                    ),
+                  ),
+                  onTap: (){
+                    Navigator.push(context,MaterialPageRoute(
+                        builder:(context) => basicboard(title: "공지사항",bo_table: 'notice',mb_id: widget.mb_id,)
+                    ));
                 },
-              ),
-              InkWell(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.08,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
-                  decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width*0.1,
-                        height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.asset("images/myul_icon02.png"),
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                      Text("숲마켓 공유",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
-
-                    ],
-                  ),
                 ),
-              ),
-              InkWell(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.08,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
-                  decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width*0.1,
-                        height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.asset("images/myul_icon03.png"),
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                      Text("공지사항",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.08,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.1,
+                          height: MediaQuery.of(context).size.width*0.1,
+                          child: Image.asset("images/myul_icon04.png"),
+                        ),
+                        SizedBox(width: MediaQuery.of(context).size.width*0.01,),
+                        Text("고객 문의",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
 
-                    ],
+                      ],
+                    ),
                   ),
+                  onTap: (){
+                    Navigator.push(context,MaterialPageRoute(
+                        builder:(context) => basicboard(title: "고객문의",bo_table: 'qna',mb_id: widget.mb_id,)
+                    ));
+                  },
                 ),
-                onTap: (){
-                  Navigator.push(context,MaterialPageRoute(
-                      builder:(context) => basicboard(title: "공지사항",bo_table: 'notice',mb_id: widget.mb_id,)
-                  ));
-              },
-              ),
-              InkWell(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.08,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
-                  decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width*0.1,
-                        height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.asset("images/myul_icon04.png"),
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                      Text("고객 문의",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.08,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.1,
+                          height: MediaQuery.of(context).size.width*0.1,
+                          child: Image.asset("images/myul_icon05.png"),
+                        ),
+                        SizedBox(width: MediaQuery.of(context).size.width*0.01,),
+                        Text("앱 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
 
-                    ],
+                      ],
+                    ),
                   ),
+                  onTap: (){
+                    Navigator.push(context,MaterialPageRoute(
+                        builder:(context) => mysetting()
+                    ));
+                  },
                 ),
-                onTap: (){
-                  Navigator.push(context,MaterialPageRoute(
-                      builder:(context) => basicboard(title: "고객문의",bo_table: 'qna',mb_id: widget.mb_id,)
-                  ));
-                },
-              ),
-              InkWell(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.08,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
-                  decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width*0.1,
-                        height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.asset("images/myul_icon05.png"),
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                      Text("앱 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.08,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width*0.1,
+                          height: MediaQuery.of(context).size.width*0.1,
+                          child: Image.asset("images/myul_icon06.png"),
+                        ),
+                        SizedBox(width: MediaQuery.of(context).size.width*0.01,),
+                        Text("로그 아웃",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
 
-                    ],
+                      ],
+                    ),
                   ),
+                  onTap: (){
+                    _showDialog();
+                  },
                 ),
-                onTap: (){
-                  Navigator.push(context,MaterialPageRoute(
-                      builder:(context) => mysetting()
-                  ));
-                },
-              ),
-              InkWell(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.08,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
-                  decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width*0.1,
-                        height: MediaQuery.of(context).size.width*0.1,
-                        child: Image.asset("images/myul_icon06.png"),
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                      Text("로그 아웃",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+              ],
+            ),
+        ),
 
-                    ],
-                  ),
-                ),
-                onTap: (){
-                  _showDialog();
-                },
-              ),
-            ],
-          ),
       ),
-
     );
   }
 }

@@ -501,6 +501,28 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<dynamic> get_mbdata() async{
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_mb.php'),
+        body: {
+          "mb_id":mb_id==null?'':mb_id,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+      //print(jsonDecode(response.body));
+
+      var temp_mbdata = jsonDecode(response.body);
+          mb_hp = temp_mbdata['mb_hp'];
+          mb_name = temp_mbdata['mb_name'];
+          mb_1 = "http://14.48.175.177/data/member/"+temp_mbdata['mb_1'];
+          mb_2 = temp_mbdata['mb_2'];
+          mb_3 = temp_mbdata['mb_3'];
+          mb_4 = temp_mbdata['mb_4'];
+          mb_5 = temp_mbdata['mb_5'];
+          mb_6 = temp_mbdata['mb_6'];
+  }
+
  Future<dynamic> get_data() async{
 
    final response = await http.post(
@@ -522,23 +544,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void load_myinfo()async{
     SharedPreferences sp = await SharedPreferences.getInstance();
-    setState(() {
-
       if(sp.getString('id')!=null) {
         mb_id = sp.getString('id');
-        mb_pwd = sp.getString('pwd');
-        mb_name = sp.getString('mb_name');
-        mb_hp = sp.getString('mb_hp');
-        mb_1 = sp.getString('mb_1');
-        mb_2 = sp.getString('mb_2');
-        mb_3 = sp.getString('mb_3');
-        mb_4 = sp.getString('mb_4');
-        mb_5 = sp.getString('mb_5');
-        mb_6 = sp.getString('mb_6');
+        get_mbdata();
       }
-
-    });
-
   }
 
   @override
@@ -648,11 +657,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           padding: EdgeInsets.all(3),
                           child: Image.asset("images/hd_cate05.png"),
                         ),
-                        onTap: (){
+                        onTap: ()async{
                           if(mb_id!=null) {
-                            Navigator.push(context, MaterialPageRoute(
+                            var result = await Navigator.push(context, MaterialPageRoute(
                                 builder: (context) => mypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
+                            if(result == 'back'){
+                              get_data();
+                            }
                           }
                           else{
                             request_logindialog();
@@ -953,11 +965,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
                             child: Image.asset("images/hd_cate05.png"),
                           ),
-                          onTap: (){
+                          onTap: () async{
                             if(mb_id!=null) {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) =>  mypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                              var result = await Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => mypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                               ));
+                              if(result == 'back'){
+                                get_data();
+                              }
                             }
                             else{
                               request_logindialog();
@@ -992,7 +1007,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         //image:  AssetImage("images/wing_mb_noimg2.png"),
                                         image:mb_1=='test'?
                                         AssetImage("images/wing_mb_noimg2.png"):
-                                        NetworkImage( mb_1,),
+                                        NetworkImage(mb_1),
                                     )
                                 ),
                               ),
