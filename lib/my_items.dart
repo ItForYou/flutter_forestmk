@@ -75,7 +75,10 @@ class _my_itemsState extends State<my_items> {
     var temp_mbdata = jsonDecode(response.body);
     widget.mb_hp = temp_mbdata['mb_hp'];
     widget.mb_name = temp_mbdata['mb_name'];
-    widget.mb_1 = "http://14.48.175.177/data/member/"+temp_mbdata['mb_1'];
+    if(temp_mbdata['mb_1']!='')
+      widget.mb_1 = "http://14.48.175.177/data/member/"+temp_mbdata['mb_1'];
+    else
+      widget.mb_1 = "test";
     widget.mb_2 = temp_mbdata['mb_2'];
     widget.mb_3 = temp_mbdata['mb_3'];
     widget.mb_4 = temp_mbdata['mb_4'];

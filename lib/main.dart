@@ -515,7 +515,12 @@ class _MyHomePageState extends State<MyHomePage> {
       var temp_mbdata = jsonDecode(response.body);
           mb_hp = temp_mbdata['mb_hp'];
           mb_name = temp_mbdata['mb_name'];
-          mb_1 = "http://14.48.175.177/data/member/"+temp_mbdata['mb_1'];
+          if(temp_mbdata['mb_1']!='') {
+            mb_1 = "http://14.48.175.177/data/member/" + temp_mbdata['mb_1'];
+          }
+          else{
+            mb_1='test';
+          }
           mb_2 = temp_mbdata['mb_2'];
           mb_3 = temp_mbdata['mb_3'];
           mb_4 = temp_mbdata['mb_4'];
@@ -547,6 +552,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if(sp.getString('id')!=null) {
         mb_id = sp.getString('id');
         get_mbdata();
+
       }
   }
 
@@ -625,7 +631,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => categorypage()
+                              builder:(context) => categorypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                           ));
 
                         },
@@ -932,7 +938,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => categorypage()
+                                builder:(context) => categorypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
                           },
                         ),

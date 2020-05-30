@@ -126,7 +126,7 @@ class _registerState extends State<register> {
     }
   }
 
-void change_search(){
+void change_search(context){
 
         if(temp_addrs['data'].length>0) {
           for (int i = 0; i < temp_addrs['data'].length; i++) {
@@ -224,7 +224,7 @@ void change_search(){
                           );
                           temp_addrs = jsonDecode(response.body);
                           setState(() {
-                             change_search();
+                             change_search(context);
                           });
                         }
                       ),
@@ -519,8 +519,6 @@ void change_search(){
 
     Future<String> uploadImage() async {
 
-      try {
-
         if(flg_noticeid==1){
             show_Alert("아이디가 올바르지 않습니다.", 1);
             return '';
@@ -570,12 +568,9 @@ void change_search(){
 
         var res = await request.send();
         if (res.statusCode == 200) {
+
           show_Alert("회원 가입이 완료되었습니다.",2);
-          // return res.stream.bytesToString();
         }
-      }catch(e){
-        print(e.toString());
-      }
     }
 
     return Scaffold(
@@ -828,7 +823,6 @@ void change_search(){
                     height: MediaQuery.of(context).size.height*0.05,
                     child: TextFormField(
                         controller: input_ph_chk,
-                        onChanged: (value) => check_hp(value),
                         cursorColor: Colors.forestmk,
                         inputFormatters: <TextInputFormatter>[
                           WhitelistingTextInputFormatter(RegExp("[0-9]")),

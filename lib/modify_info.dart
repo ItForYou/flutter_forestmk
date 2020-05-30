@@ -180,6 +180,7 @@ class _modify_infoState extends State<modify_info> {
 
       var res = await request.send();
       if (res.statusCode == 200) {
+
         show_Alert("정보 수정이 완료되었습니다.",2);
        // return res.stream.bytesToString();
       }
