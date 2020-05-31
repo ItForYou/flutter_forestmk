@@ -26,6 +26,7 @@ class main_item{
     final String timegap;
     final String like;
     final String mb_id;
+    final String comments;
 
 
     main_item({
@@ -38,6 +39,7 @@ class main_item{
       this.mb_2,
       this.timegap,
       this.mb_name,
+      this.comments,
       this.profile_img,
       this.wr_content,
       this.wr_datetime,
@@ -62,6 +64,7 @@ class main_item{
        wr_id: json['wr_id'],
        wr_datetime: json['wr_datetime'],
        wr_subject: json['wr_subject'],
+       comments: json['comments'],
        ca_name: json['ca_name'],
        mb_2: json['mb_2'],
        timegap: json['timegap'],

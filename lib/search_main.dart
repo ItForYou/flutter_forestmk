@@ -488,6 +488,7 @@ class _search_mainState extends State<search_main> {
   }
 
   Future<dynamic> get_data() async{
+
     final response = await http.post(
         Uri.encodeFull("http://14.48.175.177/get_searchwr.php"),
         body: {
@@ -499,11 +500,13 @@ class _search_mainState extends State<search_main> {
           'sch_flgadv':widget.sch_flgadv!=null?widget.sch_flgadv:"",
           'sch_flgmyadv' : widget.sch_flgmyadv!=null?widget.sch_flgmyadv:"",
           'sch_cate' : widget.sch_cate!=null?widget.sch_cate:"",
+          "nowlat":widget.mb_5,
+          "nowlng":widget.mb_6,
         },
         headers: {'Accept' : 'application/json'}
     );
-   // print(response.body);
     itemdata = jsonDecode(response.body);
+
     if(itemdata['data'].length<=0){
       setState(() {
         items_content.add(
@@ -674,10 +677,19 @@ class _search_mainState extends State<search_main> {
                         ),
                         child: Image.asset("images/hd_icon02.png"),
                       ),
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => location()
-                        ));
+                      onTap: () async {
+                        if(widget.mb_id!=null) {
+
+                          var result = await Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => location(mb_2:widget.mb_2, mb_id:widget.mb_id)
+                          ));
+                          if(result == 'change'){
+                            get_data();
+                          }
+                        }
+                        else{
+                          request_logindialog();
+                        }
                       },
                     ),
                     SizedBox(width: MediaQuery
@@ -746,7 +758,8 @@ class _search_mainState extends State<search_main> {
                     InkWell(
                       child: Icon(Icons.search),
                       onTap: (){
-                        print(search_text.text);
+                        widget.sch_text = search_text.text;
+                        get_data();
                       },
                     ),
                     hintText: "원하시는 키워드를 입력하세요",
@@ -813,6 +826,7 @@ class _search_mainState extends State<search_main> {
                         child: Image.asset("images/hd_cate02.png"),
                       ),
                       onTap: (){
+
                       },
                     ),
 

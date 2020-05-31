@@ -1,6 +1,9 @@
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-
-
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class location  extends StatefulWidget {
   String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id;
@@ -11,12 +14,126 @@ class location  extends StatefulWidget {
 }
 
 class location_State extends State<location> {
+
   TextEditingController now_mylocation = TextEditingController();
+  TextEditingController search_location = TextEditingController();
+  List <Widget> searchaddr_widgets = [Container()];
+  var itemdata;
+
+
+  void load_myinfo()async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    if(sp.getString('id')!=null) {
+      widget.mb_id = sp.getString('id');
+    }
+  }
+
+  Future<dynamic> get_data(value) async {
+    searchaddr_widgets.clear();
+    Widget temp = Container(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.05,
+        margin: EdgeInsets.only(top: MediaQuery
+            .of(context)
+            .size
+            .height * 0.03,),
+        padding: EdgeInsets.only(left: MediaQuery
+            .of(context)
+            .size
+            .width * 0.05),
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(width: 1, color: Color(0xfff3f3f3)))
+        ),
+        child: Text("'" + value + "'검색결과", style: TextStyle(fontSize: MediaQuery
+            .of(context)
+            .size
+            .width * 0.04,))
+    );
+    searchaddr_widgets.add(temp);
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/search_location.php'),
+        body: {
+          "value": value
+        },
+        headers: {'Accept': 'application/json'}
+    );
+    // print(response.body);
+    setState(() {
+      itemdata = jsonDecode(response.body);
+
+      get_locatoinwidget();
+    });
+  }
+
+  Future<dynamic> update_location(value) async {
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/update_location.php'),
+        body: {
+          "mb_id": widget.mb_id,
+          "value": value
+        },
+        headers: {'Accept': 'application/json'}
+    );
+    // print(response.body);
+    if(response.statusCode==200){
+      Navigator.pop(context,"change");
+    }
+
+}
+
+  Widget get_locatoinwidget(){
+
+    if(itemdata['data'].length>0) {
+      for (int i = 0; i < itemdata['data'].length; i++) {
+        Widget temp = InkWell(
+          child:Container(
+            margin: EdgeInsets.only(top:MediaQuery
+                .of(context)
+                .size
+                .height * 0.02,),
+            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.05,
+            decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(width: 1,color: Color(0xfff3f3f3)))
+            ),
+            child: Text(itemdata['data'][i], style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.04),),
+          ),
+          onTap: (){
+            update_location(itemdata['data'][i]);
+          },
+        );
+        searchaddr_widgets.add(temp);
+      }
+    }
+    else {
+      searchaddr_widgets.clear();
+    }
+
+  }
+
+
+
 
   @override
   void initState() {
     // TODO: implement initState
     now_mylocation.text = widget.mb_2;
+    load_myinfo();
     super.initState();
 
   }
@@ -39,66 +156,74 @@ class location_State extends State<location> {
           },
         ),
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height*0.4,
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*0.07,
-              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05),
-              child: TextFormField(
-                  readOnly: true,
-                  controller: now_mylocation,
-                  keyboardType: TextInputType.text,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
-                    filled: true,
-                    fillColor: Color(0xfff5f5f5),
-                    border: null,
-                    enabledBorder:OutlineInputBorder(
-                      borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
-                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
-                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
-                    ),
-                  )
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right:  MediaQuery.of(context).size.width*0.05,),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(width: 1,color: Color(0xffefefef))
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(width: 1,color: Color(0xffefefef))
-                    ),
-                  prefixIcon: Icon(Icons.search),
-                  hintText: "내 동네 이름(동,읍,면)으로 검색"
-
+      body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height*0.07,
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05),
+                child: TextFormField(
+                    readOnly: true,
+                    controller: now_mylocation,
+                    onChanged: (value){
+                      get_data(value);
+                    },
+                    keyboardType: TextInputType.text,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                      filled: true,
+                      fillColor: Color(0xfff5f5f5),
+                      border: null,
+                      enabledBorder:OutlineInputBorder(
+                        borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                        borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                        borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                      ),
+                    )
                 ),
               ),
-              ),
-            Container(
-              width: MediaQuery.of(context).size.width*0.9,
-              height: MediaQuery.of(context).size.height*0.05,
-              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.015,),
-              decoration: BoxDecoration(
-                  color: Colors.forestmk,
-                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.07))
-              ),
-              child: Center(child: Text("현재위치로 찾기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,color: Colors.white))),
-            )
-          ],
-        ),
+              Padding(
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right:  MediaQuery.of(context).size.width*0.05,),
+                child: TextFormField(
+                  onChanged: (value){
+                    get_data(value);
+                  },
+                  controller: search_location,
+                  decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(width: 1,color: Color(0xffefefef))
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(width: 1,color: Color(0xffefefef))
+                      ),
+                    prefixIcon: Icon(Icons.search),
+                    hintText: "내 동네 이름(동,읍,면)으로 검색"
 
+                  ),
+                ),
+                ),
+              Container(
+                width: MediaQuery.of(context).size.width*0.9,
+                height: MediaQuery.of(context).size.height*0.05,
+                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.015,),
+                decoration: BoxDecoration(
+                    color: Colors.forestmk,
+                    borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.07))
+                ),
+                child: Center(child: Text("현재위치로 찾기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,color: Colors.white))),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: searchaddr_widgets,
+              )
+            ],
+        ),
       ),
 
     );

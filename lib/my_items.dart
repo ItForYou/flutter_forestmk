@@ -417,6 +417,7 @@ class _my_itemsState extends State<my_items> {
         Uri.encodeFull(url),
         body: {
           'mb_id':widget.mb_id
+
         },
         headers: {'Accept' : 'application/json'}
     );
@@ -542,10 +543,19 @@ class _my_itemsState extends State<my_items> {
                         ),
                         child: Image.asset("images/hd_icon02.png"),
                       ),
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => location()
-                        ));
+                      onTap: () async {
+                        if(widget.mb_id!=null) {
+
+                          var result = await Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => location(mb_2:widget.mb_2, mb_id:widget.mb_id)
+                          ));
+                          if(result == 'change'){
+                            get_data();
+                          }
+                        }
+                        else{
+                          request_logindialog();
+                        }
                       },
                     ),
                     SizedBox(width: MediaQuery
@@ -614,7 +624,9 @@ class _my_itemsState extends State<my_items> {
                     InkWell(
                       child: Icon(Icons.search),
                       onTap: (){
-                        print(search_text.text);
+                        Navigator.push(context,MaterialPageRoute(
+                            builder:(context) => search_main(sch_text: search_text.text, mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                        ));
                       },
                     ),
                     hintText: "원하시는 키워드를 입력하세요",

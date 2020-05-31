@@ -27,6 +27,7 @@ class _mypageState extends State<mypage> {
     void load_myinfo()async{
       SharedPreferences sp = await SharedPreferences.getInstance();
       if(sp.getString('id')!=null) {
+       widget.mb_id = sp.getString('id');
         get_mbdata();
       }
     }
@@ -63,6 +64,7 @@ class _mypageState extends State<mypage> {
     widget.mb_6 = temp_mbdata['mb_6'];
 
   }
+
 
 
   void _showDialog() {
@@ -388,9 +390,9 @@ class _mypageState extends State<mypage> {
                     ),
                   ),
                   onTap: (){
-                    Navigator.push(context,MaterialPageRoute(
-                        builder:(context) => mysetting()
-                    ));
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => mysetting(mb_3:widget.mb_3, mb_hp : widget.mb_hp)
+                      ));
                   },
                 ),
                 InkWell(

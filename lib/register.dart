@@ -107,10 +107,10 @@ class _registerState extends State<register> {
       request.fields['msg'] = temp_number;
       request.fields['hp'] = input_ph.text;
 
-      if (profile_img != null) {
+    /*  if (profile_img != null) {
         request.files.add(
             await http.MultipartFile.fromPath('profile', profile_img.path));
-      }
+      }*/
 
       var res = await request.send();
       if (res.statusCode == 200) {

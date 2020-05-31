@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterforestmk/main_item.dart';
 import 'package:flutterforestmk/view_item.dart';
 import 'package:flutterforestmk/viewpage_mine.dart';
+import 'package:flutterforestmk/write_normal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -87,10 +88,16 @@ class _ViewpageState extends State<Viewpage>{
           ,
         ),
       ),
-      onTap: (){
-        Navigator.push(context,MaterialPageRoute(
-            builder:(context) => Viewpage_mine(wr_id:temp_data.wr_id)
+      onTap: ()async{
+        var result = await Navigator.push(context, MaterialPageRoute(
+            builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id)
         ));
+        if(result == 'delete'){
+          get_data();
+        }
+//        Navigator.push(context,MaterialPageRoute(
+//            builder:(context) => Viewpage_mine(wr_id:temp_data.wr_id)
+//        ));
       },
     );
     return temp;
@@ -148,6 +155,49 @@ class _ViewpageState extends State<Viewpage>{
       );*/
     }
   }
+
+  void show_delete() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context2).size.height*0.06,
+            child: Text("한번 삭제한 자료는 복구할 방법이 없습니다.\n정말 삭제하시겠습니까?"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: ()async{
+                final response = await http.post(
+                    Uri.encodeFull('http://14.48.175.177/delete_wr.php'),
+                    body: {
+                      "bo_table" :"deal",
+                      "wr_id":widget.info.wr_id,
+                    },
+                    headers: {'Accept' : 'application/json'}
+                );
+                if(response.statusCode ==200){
+                  print(response.body);
+                  Navigator.pop(context2);
+                  Navigator.pop(context,"delete");
+                }
+              },
+            ),
+            new FlatButton(
+              child: new Text("취소"),
+              onPressed: () {
+                Navigator.pop(context2);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   Future<dynamic> get_data() async{
     final response = await http.post(
@@ -355,6 +405,14 @@ class _ViewpageState extends State<Viewpage>{
                             height: 35,
                             child: Center(child:Text("수정", style: TextStyle(),),)
                             ),
+                          onTap: ()async{
+                            var result = await Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => write_normal(info: widget.info)
+                            ));
+                            if(result == 'success'){
+                              Navigator.pop(context,"delete");
+                            }
+                          },
                         ),
                         SizedBox(width: 3,),
                         InkWell(
@@ -367,6 +425,9 @@ class _ViewpageState extends State<Viewpage>{
                               height: 35,
                               child: Center(child:Text("삭제", style: TextStyle(),),)
                           ),
+                          onTap: (){
+                            show_delete();
+                          },
                         ),
                       ],
                     ):Container(),
@@ -389,7 +450,7 @@ class _ViewpageState extends State<Viewpage>{
                     Text(widget.info.like,),
                     SizedBox(width: 3,),
                     Text("댓글",style: TextStyle(fontSize: 11),),
-                    Text("2"),
+                    Text(widget.info.comments),
                     SizedBox(width: 3,),
                     Text("조회수",style: TextStyle(fontSize: 11),),
                     SizedBox(width: 3,),

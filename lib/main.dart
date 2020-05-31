@@ -20,7 +20,6 @@ import 'package:flutterforestmk/viewpage.dart';
 import 'package:flutterforestmk/mypage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 void main() => runApp(MyApp());
 
@@ -82,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
   PreferredSize appbar;
   Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black));
   bool flg_search = false;
-  String sort_value = "최근순", mb_id,mb_pwd,mb_2="test",mb_1="test",mb_name="test",mb_hp,mb_3,mb_4,mb_5,mb_6;
+  String sort_value = "최근순", mb_id,mb_pwd,mb_2="test",mb_1="test",mb_name="test",mb_hp,mb_3,mb_4,mb_5='',mb_6='';
   var itemdata;
   List <Widget> items_content=[];
   PreferredSize intro_appbar = PreferredSize(
@@ -330,10 +329,17 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
 
-        onTap: (){
-          Navigator.push(context,MaterialPageRoute(
-              builder:(context) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,)
+        onTap: ()async{
+          var result = await Navigator.push(context, MaterialPageRoute(
+              builder: (context) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,)
           ));
+          if(result == 'delete'){
+            get_data();
+          }
+       /*   Navigator.push(context,MaterialPageRoute(
+
+              builder:(context) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,)
+          ));*/
         },
       );
 
@@ -535,12 +541,15 @@ class _MyHomePageState extends State<MyHomePage> {
        body: {
          "mb_id":mb_id==null?'':mb_id,
          "sch_order":sort_value,
+         "nowlat":mb_5,
+         "nowlng":mb_6,
+         "sch_text" : search_text.text,
          "sch_flghide":checkbox_adv==true?'1':'',
          "sch_flgsold":checkbox_soldout==true?'1':'',
        },
        headers: {'Accept' : 'application/json'}
    );
-  // print(response.body);
+
     setState(() {
      itemdata = jsonDecode(response.body);
      _getWidget();
@@ -757,11 +766,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         child: Image.asset("images/hd_icon02.png"),
                       ),
-                      onTap: () {
+                      onTap: () async{
                         if(mb_id!=null) {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => location(mb_2:mb_2)
+                          var result = await Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => location(mb_2:mb_2, mb_id:mb_id)
                           ));
+                          if(result == 'change'){
+                            get_data();
+                          }
                         }
                         else{
                           request_logindialog();
@@ -789,16 +801,19 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         child: Image.asset("images/hd_icon03.png"),
                       ),
-                      onTap: () {
-                        if(mb_id!=null) {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => location()
+                      onTap: () async{
+/*                        if(mb_id!=null) {
+
+                          var result = await Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => location(mb_2:mb_2, mb_id:mb_id)
                           ));
+                          if(result == 'change'){
+                            get_data();
+                          }
                         }
                         else{
                           request_logindialog();
-                        }
-
+                        }*/
                       },
                     ),
                     SizedBox(width: MediaQuery
@@ -842,7 +857,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         InkWell(
                             child: Icon(Icons.search),
                             onTap: (){
-                              print(search_text.text);
+                              get_data();
                             },
                         ),
                         hintText: "원하시는 키워드를 입력하세요",

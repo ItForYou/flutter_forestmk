@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterforestmk/changehp.dart';
+import 'package:flutterforestmk/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class mysetting extends StatefulWidget {
 
@@ -15,25 +18,44 @@ class _mysettingState extends State<mysetting> {
 
   bool  switchvalue1=true, switchvalue2=true;
 
+  void load_myinfo()async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    if(sp.getString('id')!=null) {
+      widget.mb_id = sp.getString('id');
+    }
+  }
+
   void _showDialog() {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext context2) {
         // return object of type Dialog
         return AlertDialog(
           title:null,
           content: Container(
 
-            height: MediaQuery.of(context).size.height*0.049,
-            child: Text("회원님의 게시물과 모든 정보들이 삭제됩니다.\t숲마켓을 탈퇴하시겠습니까?", style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.022,),),
+            height: MediaQuery.of(context2).size.height*0.049,
+            child: Text("회원님의 게시물과 모든 정보들이 삭제됩니다.\t숲마켓을 탈퇴하시겠습니까?", style: TextStyle(fontSize: MediaQuery.of(context2).size.height*0.022,),),
           ),
           actions: <Widget>[
             new FlatButton(
               child: new Text("확인"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-
+              onPressed: () async {
+                final response = await http.post(
+                    Uri.encodeFull('http://14.48.175.177/delete_member.php'),
+                    body: {
+                      "mb_id":widget.mb_id
+                    },
+                    headers: {'Accept' : 'application/json'}
+                );
+                if(response.statusCode ==200){
+                  SharedPreferences sp = await SharedPreferences.getInstance();
+                  sp.clear();
+                  Navigator.pop(context2);
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => MyApp()),
+                          (Route<dynamic> route) => false);
+                }
               },
             ),
             new FlatButton(
@@ -46,6 +68,74 @@ class _mysettingState extends State<mysetting> {
         );
       },
     );
+  }
+
+  void logout_modal() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.02,
+            child: Text("로그아웃 하시겠습니까?"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: ()async {
+                Navigator.pop(context);
+                SharedPreferences sp = await SharedPreferences.getInstance();
+                sp.clear();
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => MyApp()),
+                        (Route<dynamic> route) => false);
+              },
+            ),
+            new FlatButton(
+              child: new Text("취소"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void show_Alert(text,flg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.02,
+            child: Text(text),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: (){
+                if(flg ==2)
+                  Navigator.of(context).pop(true);
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    load_myinfo();
+    super.initState();
   }
 
   @override
@@ -159,9 +249,15 @@ class _mysettingState extends State<mysetting> {
                 ),
               ),
               onTap: (){
-                Navigator.push(context,MaterialPageRoute(
-                    builder:(context) => changehp()
-                ));
+
+                if(widget.mb_3==0) {
+                  Navigator.push(context,MaterialPageRoute(
+                      builder:(context) => changehp(mb_hp:widget.mb_hp)
+                  ));
+                }
+                else{
+                  show_Alert("이미 1회 변경 하였습니다.",1);
+                }
               },
             ),
             Container(
@@ -195,18 +291,23 @@ class _mysettingState extends State<mysetting> {
                 ],
               ),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*0.063,
-              decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(width: 1, color: Color(0xffe8e8e8)))
+            InkWell(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height*0.063,
+                decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 1, color: Color(0xffe8e8e8)))
+                ),
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,right: MediaQuery.of(context).size.width*0.03,),
+                child: Row(
+                  children: <Widget>[
+                    Text("로그아웃",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
+                  ],
+                ),
               ),
-              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,right: MediaQuery.of(context).size.width*0.03,),
-              child: Row(
-                children: <Widget>[
-                  Text("로그아웃",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
-                ],
-              ),
+              onTap: (){
+                logout_modal();
+              },
             ),
             InkWell(
               child: Container(

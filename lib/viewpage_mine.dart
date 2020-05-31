@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutterforestmk/view_item.dart';
+import 'package:flutterforestmk/write_normal.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,7 +29,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   double itmes_height=0,itmes_height2=0;
   List <Widget> list_subitem = [Container()];
   List <Widget> list_extraitem = [Container()];
-  String wr_id, mb_id,ca_name,real_mbid,price="";
+  String wr_id, mb_id='test',ca_name,real_mbid,price="";
   Widget Swiper_widget=SizedBox();
 
 
@@ -48,10 +49,13 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
     var temp_data;
     String temp_price;
-    if(flg==1)
+    if(flg==1) {
       temp_data = view_item.fromJson(itemdata['data'][id]);
+      print(temp_data.file);
+    }
     else
       temp_data = view_item.fromJson(itemdata['data2'][id]);
+
 
 
     if(temp_data.ca_name =='업체'){
@@ -95,10 +99,16 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         ),
       ),
 
-      onTap: (){
-        Navigator.push(context,MaterialPageRoute(
-            builder:(context) => Viewpage_mine(wr_id:temp_data.wr_id)
+      onTap: ()async{
+        var result = await Navigator.push(context, MaterialPageRoute(
+            builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id)
         ));
+        if(result == 'delete'){
+          get_data();
+        }
+//        Navigator.push(context,MaterialPageRoute(
+//            builder:(context) => Viewpage_mine(wr_id:temp_data.wr_id)
+//        ));
       },
     );
     return temp;
@@ -113,6 +123,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         headers: {'Accept' : 'application/json'}
     );
     setState(() {
+
       itemdata_now = jsonDecode(response.body);
       mb_id = itemdata_now['mb_id'];
       ca_name = itemdata_now['ca_name'];
@@ -121,11 +132,52 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         itemBuilder: (BuildContext context, int index){
           return Image.network(itemdata_now['files'][index]);
         },
-        pagination: (itemdata_now.length)>1?SwiperPagination():null,
-        loop: (itemdata_now.length)>1? true:false,
+        pagination: (itemdata_now['files'].length)>1?SwiperPagination():null,
+        loop: (itemdata_now['files'].length)>1? true:false,
       );
       get_data();
     });
+  }
+
+  void show_delete() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context2).size.height*0.06,
+            child: Text("한번 삭제한 자료는 복구할 방법이 없습니다.\n정말 삭제하시겠습니까?"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: ()async{
+                final response = await http.post(
+                    Uri.encodeFull('http://14.48.175.177/delete_wr.php'),
+                    body: {
+                      "bo_table" :"deal",
+                      "wr_id":widget.wr_id,
+                    },
+                    headers: {'Accept' : 'application/json'}
+                );
+                if(response.statusCode ==200){
+                  Navigator.pop(context2);
+                  Navigator.pop(context,"delete");
+                }
+              },
+            ),
+            new FlatButton(
+              child: new Text("취소"),
+              onPressed: () {
+                Navigator.pop(context2);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
 
@@ -168,6 +220,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   void initState() {
     // TODO: implement initState
     super.initState();
+    load_myinfo();
     get_data_now();
   }
 
@@ -306,7 +359,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
                   ],
                 ),
-
+                real_mbid==mb_id?
                 Row(
                   children: <Widget>[
                     InkWell(
@@ -319,6 +372,15 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                           height: 35,
                           child: Center(child:Text("수정", style: TextStyle(),),)
                       ),
+                      onTap: ()async{
+
+                        var result = await Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => write_normal(wr_id: widget.wr_id)
+                        ));
+                        if(result == 'success'){
+                          Navigator.pop(context,"delete");
+                        }
+                      },
                     ),
                     SizedBox(width: 3,),
                     InkWell(
@@ -331,9 +393,12 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                           height: 35,
                           child: Center(child:Text("삭제", style: TextStyle(),),)
                       ),
+                      onTap: (){
+                        show_delete();
+                      },
                     ),
                   ],
-                )
+                ):Container(),
               ],
             ),
           ),
@@ -352,7 +417,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                 Text(itemdata_now==null?'0':itemdata_now['wr_10'],),
                 SizedBox(width: 3,),
                 Text("댓글",style: TextStyle(fontSize: 11),),
-                Text("2"),
+                Text(itemdata_now==null?'0':itemdata_now['comments']),
                 SizedBox(width: 3,),
                 Text("조회수",style: TextStyle(fontSize: 11),),
                 SizedBox(width: 3,),
