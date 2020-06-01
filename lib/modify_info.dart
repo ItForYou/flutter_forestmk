@@ -19,6 +19,7 @@ class modify_info extends StatefulWidget {
 
 class _modify_infoState extends State<modify_info> {
   String input_val ="";
+  var temp_addrs;
   List <Widget> results_search = [];
   TextEditingController modify_id = new TextEditingController();
   TextEditingController modify_pwd = new TextEditingController();
@@ -26,6 +27,7 @@ class _modify_infoState extends State<modify_info> {
   TextEditingController modify_name = new TextEditingController();
   TextEditingController modify_ph = new TextEditingController();
   TextEditingController modify_address = new TextEditingController();
+
 
   File profile_img;
   ImageProvider profile_widget=AssetImage("images/wing_mb_noimg2.png");
@@ -70,81 +72,169 @@ class _modify_infoState extends State<modify_info> {
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
-        return AlertDialog(
-          title:null,
-          content: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height*0.34,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height*0.04,
-                  child: TextFormField(
-                    cursorColor: Colors.forestmk,
-                    decoration: InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1,color: Color(0xffefefef))
+        return StatefulBuilder(
+            builder:(context, setState) {
+              return AlertDialog(
+                title: null,
+                content: Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.34,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.04,
+                        child: TextFormField(
+                            cursorColor: Colors.forestmk,
+                            decoration: InputDecoration(
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1, color: Color(0xffefefef))
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1, color: Color(0xffefefef))
+                                ),
+                                prefixIcon: Icon(Icons.search),
+                                hintText: "내 동네 이름(동,읍,면)으로 검색",
+                                hintStyle: TextStyle(fontSize: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width * 0.038)
+                            ),
+                            onChanged: (value) async{
+                              results_search.clear();
+                              Widget temp = Container(
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
+                                  height: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .height * 0.05,
+                                  child: Text("'" + value + "'")
+                              );
+                              results_search.add(temp);
+                              final response = await http.post(
+                                  Uri.encodeFull(
+                                      'http://14.48.175.177/search_location.php'),
+                                  body: {
+                                    "value": value
+                                  },
+                                  headers: {'Accept': 'application/json'}
+                              );
+                              temp_addrs = jsonDecode(response.body);
+                              setState(() {
+                                change_search(context);
+                              });
+                            }
                         ),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(width: 1,color: Color(0xffefefef))
+                      ),
+                      Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.9,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.04,
+                        margin: EdgeInsets.only(top: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.015,),
+                        decoration: BoxDecoration(
+                            color: Colors.forestmk,
+                            borderRadius: BorderRadius.all(Radius.circular(
+                                MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width * 0.07))
                         ),
-                        prefixIcon: Icon(Icons.search),
-                        hintText: "내 동네 이름(동,읍,면)으로 검색",
-                        hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.width*0.038)
-                    ),
-                    onChanged: (value) =>  setState(() {
-                      results_search.clear();
-                      for(int i=0; i<5; i++) {
-                        Widget temp = Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height*0.05,
-                          child: i==0? Text("'"+value+"'"):Text("테스트 주소"),
-                        );
-                        results_search.add(temp);
-                      }
-                    }),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width*0.9,
-                  height: MediaQuery.of(context).size.height*0.04,
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.015,),
-                  decoration: BoxDecoration(
-                      color: Colors.forestmk,
-                      borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.07))
-                  ),
-                  child: Center(child: Text("현재위치로 찾기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,color: Colors.white))),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height*0.17,
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.04,),
-                  child: SingleChildScrollView(
-                      child: Column(
-                        children: results_search,
+                        child: Center(child: Text("현재위치로 찾기", style: TextStyle(
+                            fontSize: MediaQuery
+                                .of(context)
+                                .size
+                                .width * 0.035, color: Colors.white))),
+                      ),
+                      Container(
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.17,
+                        margin: EdgeInsets.only(top: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.04,),
+                        child: SingleChildScrollView(
+                            child: Column(
+                              children: results_search,
+                            )
+                        ),
                       )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("확인"),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+                ),
+                actions: <Widget>[
+                  new FlatButton(
+                    child: new Text("확인"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  new FlatButton(
+                    child: new Text("취소"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            }
         );
       },
     );
+  }
+
+  void change_search(context){
+
+    if(temp_addrs['data'].length>0) {
+      for (int i = 0; i < temp_addrs['data'].length; i++) {
+        print(temp_addrs['data'][i]);
+        Widget temp = InkWell(
+          child:Container(
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.05,
+            child: Text(temp_addrs['data'][i]),
+          ),
+          onTap: (){
+            modify_address.text = temp_addrs['data'][i];
+            Navigator.pop(context);
+          },
+        );
+        results_search.add(temp);
+      }
+    }
+    else {
+      results_search.clear();
+    }
+
   }
 
   Future<String> uploadImage() async {
@@ -180,6 +270,10 @@ class _modify_infoState extends State<modify_info> {
 
       var res = await request.send();
       if (res.statusCode == 200) {
+
+        SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
+        sharedPreferences.setString('id', modify_id.text);
+        sharedPreferences.setString('pwd', modify_pwd.text);
 
         show_Alert("정보 수정이 완료되었습니다.",2);
        // return res.stream.bytesToString();
@@ -390,22 +484,49 @@ class _modify_infoState extends State<modify_info> {
                 ],
               ),
             ),
-            InkWell(
-              child: Container(
-                width: MediaQuery.of(context).size.width*0.8,
-                height: MediaQuery.of(context).size.height*0.05,
-                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
-                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.35),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Color(0xffefefef)),
-                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
-                ),
-                child: Center(child: Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.038, color: Color(0xff777777)),)),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height*0.05,
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
+              child: TextFormField(
+                  readOnly: true,
+                  controller: modify_address,
+                  onTap: _showDialog,
+                  cursorColor: Colors.forestmk,
+                  keyboardType: TextInputType.emailAddress,
+                  maxLines: 1,
+                  decoration: InputDecoration(
+                    contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                    hintText: "동네선택",
+                    border: null,
+                    enabledBorder:OutlineInputBorder(
+                      borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                    ),
+                    focusedBorder:OutlineInputBorder(
+                      borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                    ),
+                  )
               ),
-              onTap: (){
-                _showDialog();
-              },
             ),
+//            InkWell(
+//              child: Container(
+//                width: MediaQuery.of(context).size.width*0.8,
+//                height: MediaQuery.of(context).size.height*0.05,
+//                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
+//                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.35),
+//                decoration: BoxDecoration(
+//                  border: Border.all(width: 1, color: Color(0xffefefef)),
+//                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+//                ),
+//                child: Center(child: Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.038, color: Color(0xff777777)),)),
+//              ),
+//              onTap: (){
+//                _showDialog();
+//              },
+//            ),
 
             Container(
               width: MediaQuery.of(context).size.width*0.61,

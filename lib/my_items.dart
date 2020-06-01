@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/categorypage.dart';
+import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/chk_writead.dart';
 import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/loginpage.dart';
@@ -18,8 +19,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class my_items extends StatefulWidget {
 
-  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id,title;
-  my_items({Key key, this.title,this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id}) : super(key: key);
+  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id,mb_pwd,title;
+  my_items({Key key, this.title,this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id,this.mb_pwd}) : super(key: key);
 
 
   @override
@@ -237,7 +238,9 @@ class _my_itemsState extends State<my_items> {
                     ),
                     Hero(
                       tag: "hero"+id.toString(),
-                      child: Container(
+                      child:
+                      temp_data.wr_9!='거래완료'?
+                      Container(
                         width: MediaQuery.of(context).size.width*0.27,
                         height: MediaQuery.of(context).size.height*0.2,
 
@@ -249,6 +252,39 @@ class _my_itemsState extends State<my_items> {
                                 image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
                             )
                         ),
+                      ):Stack(
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.27,
+                              height: MediaQuery.of(context).size.height*0.2,
+
+                              decoration: BoxDecoration(
+                                  border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
+                                  borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
+                                  image: DecorationImage(//이미지 꾸미기
+                                      fit:BoxFit.fitWidth,
+                                      image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                                  )
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.27,
+                              height: MediaQuery.of(context).size.height*0.2,
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.8)
+                              ),
+                              child: Center(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*0.27,
+                                  height: MediaQuery.of(context).size.height*0.04,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white
+                                  ),
+                                  child: Center(child: Text("판매완료")),
+                                ),
+                              ),
+                            )
+                          ]
                       ),
                     ),
                     SizedBox(width: 10,),
@@ -610,8 +646,18 @@ class _my_itemsState extends State<my_items> {
                         ),
                         child: Image.asset("images/hd_icon03.png"),
                       ),
-                      onTap: () {
-
+                      onTap: () async{
+                        if(widget.mb_id!=null) {
+                          var result = await Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+widget.mb_id+"&mb_password="+widget.mb_pwd+"&flg_flutter=1")
+                          ));
+                          if(result == 'change'){
+                            get_data();
+                          }
+                        }
+                        else{
+                          request_logindialog();
+                        }
                       },
                     ),
                     SizedBox(width: MediaQuery
@@ -656,7 +702,7 @@ class _my_itemsState extends State<my_items> {
                       child: Icon(Icons.search),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => search_main(sch_text: search_text.text, mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                            builder:(context) => search_main(sch_text: search_text.text, mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                         ));
                       },
                     ),
@@ -725,7 +771,7 @@ class _my_itemsState extends State<my_items> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => search_main(title:'광고',sch_flgadv: "1", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                            builder:(context) => search_main(title:'광고',sch_flgadv: "1", mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                         ));
                       },
                     ),
@@ -761,6 +807,7 @@ class _my_itemsState extends State<my_items> {
                               builder: (context) =>
                                   my_items(title: "최근 본 글",
                                     mb_id: widget.mb_id,
+                                    mb_pwd: widget.mb_pwd,
                                     mb_1: widget.mb_1,
                                     mb_2: widget.mb_2,
                                     mb_3: widget.mb_3,
@@ -852,7 +899,7 @@ class _my_itemsState extends State<my_items> {
                           ),
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => search_main(title:'광고',sch_flgadv: "1", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                builder:(context) => search_main(title:'광고',sch_flgadv: "1", mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                             ));
                           },
                         ),
@@ -888,6 +935,7 @@ class _my_itemsState extends State<my_items> {
                                   builder: (context) =>
                                       my_items(title: "최근 본 글",
                                         mb_id: widget.mb_id,
+                                        mb_pwd: widget.mb_pwd,
                                         mb_1: widget.mb_1,
                                         mb_2: widget.mb_2,
                                         mb_3: widget.mb_3,

@@ -83,6 +83,7 @@ class _loginpageState extends State<loginpage>{
 
         sharedPreferences =await SharedPreferences.getInstance();
         sharedPreferences.setString('id', id);
+        sharedPreferences.setString('pwd', pwd);
 
           // will be null if never previously saved
         Navigator.of(context).pushAndRemoveUntil(

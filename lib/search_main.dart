@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/categorypage.dart';
+import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/chk_writead.dart';
 import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/loginpage.dart';
@@ -18,9 +19,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class search_main extends StatefulWidget {
 
-  String mb_name,mb_hp,mb_id,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,title,sch_text,sch_order,sch_cate,sch_flgsold,sch_flghide,sch_flgadv,sch_flgmyadv;
+  String mb_name,mb_hp,mb_id,mb_pwd,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,title,sch_text,sch_order,sch_cate,sch_flgsold,sch_flghide,sch_flgadv,sch_flgmyadv;
   search_main({Key key, this.title,this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,
-               this.mb_3,this.mb_hp,this.mb_id,this.sch_flghide,this.sch_flgsold,
+               this.mb_3,this.mb_hp,this.mb_id,this.mb_pwd,this.sch_flghide,this.sch_flgsold,
                this.sch_flgadv,this.sch_order,this.sch_text, this.sch_flgmyadv, this.sch_cate}) : super(key: key);
 
 
@@ -291,7 +292,9 @@ class _search_mainState extends State<search_main> {
                   children: <Widget>[
                     Hero(
                       tag: "hero"+id.toString(),
-                      child: Container(
+                      child:
+                      temp_data.wr_9!='거래완료'?
+                      Container(
                         width: MediaQuery.of(context).size.width*0.27,
                         height: MediaQuery.of(context).size.height*0.2,
 
@@ -303,6 +306,39 @@ class _search_mainState extends State<search_main> {
                                 image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
                             )
                         ),
+                      ):Stack(
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.27,
+                              height: MediaQuery.of(context).size.height*0.2,
+
+                              decoration: BoxDecoration(
+                                  border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
+                                  borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
+                                  image: DecorationImage(//이미지 꾸미기
+                                      fit:BoxFit.fitWidth,
+                                      image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                                  )
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.27,
+                              height: MediaQuery.of(context).size.height*0.2,
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.8)
+                              ),
+                              child: Center(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*0.27,
+                                  height: MediaQuery.of(context).size.height*0.04,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white
+                                  ),
+                                  child: Center(child: Text("판매완료")),
+                                ),
+                              ),
+                            )
+                          ]
                       ),
                     ),
                     SizedBox(width: 10,),
@@ -713,8 +749,18 @@ class _search_mainState extends State<search_main> {
                         ),
                         child: Image.asset("images/hd_icon03.png"),
                       ),
-                      onTap: () {
-
+                      onTap: () async{
+                        if(widget.mb_id!=null) {
+                          var result = await Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+widget.mb_id+"&mb_password="+widget.mb_pwd+"&flg_flutter=1")
+                          ));
+                          if(result == 'change'){
+                            get_data();
+                          }
+                        }
+                        else{
+                          request_logindialog();
+                        }
                       },
                     ),
                     SizedBox(width: MediaQuery

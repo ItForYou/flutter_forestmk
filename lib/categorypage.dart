@@ -9,8 +9,8 @@ import 'package:http/http.dart' as http;
 
 
 class categorypage  extends StatefulWidget {
-  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id;
-  categorypage({Key key, this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id}) : super(key: key);
+  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id,mb_pwd;
+  categorypage({Key key, this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id,this.mb_pwd}) : super(key: key);
   @override
   _categorypageState createState() => _categorypageState();
 }
@@ -51,7 +51,7 @@ class _categorypageState extends State<categorypage> {
             ));
           else {
             Navigator.push(context, MaterialPageRoute(
-                builder: (context) => search_main(sch_cate: menu_names[id] , mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                builder: (context) => search_main(sch_cate: menu_names[id] , mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
             ));
           }
       },

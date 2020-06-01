@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterforestmk/categorypage.dart';
+import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/chk_writead.dart';
 import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/loginpage.dart';
@@ -230,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: <Widget>[
                 Hero(
                   tag: "hero"+id.toString(),
-                  child: Container(
+                  child: temp_data.wr_9!='거래완료'?Container(
                     width: MediaQuery.of(context).size.width*0.27,
                     height: MediaQuery.of(context).size.height*0.2,
 
@@ -242,6 +243,39 @@ class _MyHomePageState extends State<MyHomePage> {
                             image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
                         )
                     ),
+                  ):Stack(
+                    children: <Widget>[
+                     Container(
+                      width: MediaQuery.of(context).size.width*0.27,
+                      height: MediaQuery.of(context).size.height*0.2,
+
+                      decoration: BoxDecoration(
+                          border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
+                          borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
+                          image: DecorationImage(//이미지 꾸미기
+                              fit:BoxFit.fitWidth,
+                              image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                          )
+                      ),
+                    ),
+                      Container(
+                          width: MediaQuery.of(context).size.width*0.27,
+                          height: MediaQuery.of(context).size.height*0.2,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.8)
+                          ),
+                        child: Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width*0.27,
+                            height: MediaQuery.of(context).size.height*0.04,
+                            decoration: BoxDecoration(
+                              color: Colors.white
+                            ),
+                            child: Center(child: Text("판매완료")),
+                          ),
+                        ),
+                      )
+                      ]
                   ),
                 ),
                 SizedBox(width: 10,),
@@ -562,6 +596,7 @@ class _MyHomePageState extends State<MyHomePage> {
     SharedPreferences sp = await SharedPreferences.getInstance();
       if(sp.getString('id')!=null) {
         mb_id = sp.getString('id');
+        mb_pwd = sp.getString('pwd');
         get_mbdata();
 
       }
@@ -627,7 +662,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => search_main(title:'광고',sch_flgadv: "1", mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                              builder:(context) => search_main(title:'광고' ,sch_flgadv: "1", mb_id :mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                           ));
                         },
                       ),
@@ -642,7 +677,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => categorypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                              builder:(context) => categorypage(mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                           ));
 
                         },
@@ -659,7 +694,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: (){
                           if(mb_id!=null) {
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => my_items(title: "최근 본 글",mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                                builder:(context) => my_items(title: "최근 본 글",mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
                           }
                           else{
@@ -677,7 +712,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: ()async{
                           if(mb_id!=null) {
                             var result = await Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => mypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                                builder: (context) => mypage(mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
                             if(result == 'back'){
                               get_data();
@@ -804,10 +839,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Image.asset("images/hd_icon03.png"),
                       ),
                       onTap: () async{
-/*                        if(mb_id!=null) {
-
+                        if(mb_id!=null) {
                           var result = await Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => location(mb_2:mb_2, mb_id:mb_id)
+                              builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+mb_id+"&mb_password="+mb_pwd+"&flg_flutter=1")
                           ));
                           if(result == 'change'){
                             get_data();
@@ -815,7 +849,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         }
                         else{
                           request_logindialog();
-                        }*/
+                        }
                       },
                     ),
                     SizedBox(width: MediaQuery
@@ -940,7 +974,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: (){
                             //print(mb_3);
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => search_main(title:'광고' ,sch_flgadv: "1", mb_id :mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                                builder:(context) => search_main(title:'광고' ,sch_flgadv: "1", mb_id :mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
                           },
                         ),
@@ -955,7 +989,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => categorypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                                builder:(context) => categorypage(mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
                           },
                         ),
@@ -971,7 +1005,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: (){
                             if(mb_id!=null) {
                               Navigator.push(context,MaterialPageRoute(
-                                  builder:(context) => my_items(title: "최근 본 글",mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                                  builder:(context) => my_items(title: "최근 본 글",mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                               ));
                             }
                             else{
@@ -991,7 +1025,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: () async{
                             if(mb_id!=null) {
                               var result = await Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => mypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                                  builder: (context) => mypage(mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                               ));
                               if(result == 'back'){
                                 get_data();
@@ -1058,7 +1092,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 }
                                 else{
                                   Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) => mypage(mb_id:mb_id,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                                      builder: (context) => mypage(mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                                   ));
                                 }
                               },

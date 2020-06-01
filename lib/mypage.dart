@@ -15,8 +15,8 @@ import 'package:http/http.dart' as http;
 
 class mypage extends StatefulWidget {
 
-  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id;
-  mypage({Key key, this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id}) : super(key: key);
+  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id,mb_pwd;
+  mypage({Key key, this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id,this.mb_pwd}) : super(key: key);
 
   @override
   _mypageState createState() => _mypageState();
@@ -28,6 +28,7 @@ class _mypageState extends State<mypage> {
       SharedPreferences sp = await SharedPreferences.getInstance();
       if(sp.getString('id')!=null) {
        widget.mb_id = sp.getString('id');
+       widget.mb_pwd = sp.getString('pwd');
         get_mbdata();
       }
     }
@@ -235,7 +236,7 @@ class _mypageState extends State<mypage> {
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => my_items(title:"판매중인 물건", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                              builder:(context) => my_items(title:"판매중인 물건", mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                           ));
                         },
                       ),
@@ -258,7 +259,7 @@ class _mypageState extends State<mypage> {
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => search_main(title:"나의광고",sch_flgmyadv: "1", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                              builder:(context) => search_main(title:"나의광고",sch_flgmyadv: "1", mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                           ));
                         },
                       ),

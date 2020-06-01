@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterforestmk/chat_webview.dart';
+import 'package:flutterforestmk/loginpage.dart';
 import 'package:flutterforestmk/main_item.dart';
 import 'package:flutterforestmk/view_item.dart';
 import 'package:flutterforestmk/viewpage_mine.dart';
@@ -29,7 +32,7 @@ class Viewpage extends StatefulWidget {
 }
 
 class _ViewpageState extends State<Viewpage>{
-  String price,real_mbid;
+  String price,real_mbid,real_mbpwd;
   var itemdata;
   List <dynamic> path =[];
   List <Widget> list_subitem = [Container()];
@@ -37,9 +40,34 @@ class _ViewpageState extends State<Viewpage>{
   Widget  hero_content= Container();
   double itmes_height=0,itmes_height2=0;
   int flg_soldout=0;
-  String txt_soldout = "완료하기";
+  String txt_soldout = "완료하기",declare_cate="사기신고";
   Color color_soldout = Color(0xff515151);
 
+
+  void show_ban() {
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.02,
+            child: Text("자신의 글입니다."),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: (){
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void show_soldout() {
     String temp_title = "";
@@ -83,40 +111,198 @@ class _ViewpageState extends State<Viewpage>{
   }
 
   void show_declare() {
-    String temp_title = "";
-    if(flg_soldout==1){
-      temp_title = "거래완료를 취소 하시겠습니가?";
-    }
-    else{
-      temp_title = "거래를 완료 하시겠습니가?";
-    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
+          contentPadding: EdgeInsets.all(0.0),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.02))
+          ),
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
-            child: Text(temp_title),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height*0.55,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.07,
+                    padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.02,left: MediaQuery.of(context).size.width*0.02),
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color:Color(0xffdddddd)))
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("신고하기"),
+                        Icon(Icons.clear,color: Color(0xffdddddd),),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.05,
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color:Color(0xffdddddd)))
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Radio(
+                          value: "사기신고",
+                          groupValue: declare_cate,
+                          activeColor: Colors.forestmk,
+                          onChanged: (T){
+                            setState(() {
+                              declare_cate =T;
+                            });
+                          },
+                        ),
+                        Text("사기신고")
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.05,
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color:Color(0xffdddddd)))
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Radio(
+                          value: "성희롱욕설등",
+                          groupValue: declare_cate,
+                          activeColor: Colors.forestmk,
+                          onChanged: (T){
+                            setState(() {
+                              declare_cate =T;
+                            });
+                          },
+                        ),
+                        Text("성희롱, 욕설 등")
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.05,
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color:Color(0xffdddddd)))
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Radio(
+                          value: "선정적인게시물",
+                          groupValue: declare_cate,
+                          activeColor: Colors.forestmk,
+                          onChanged: (T){
+                            setState(() {
+                              declare_cate =T;
+                            });
+                          },
+                        ),
+                        Text("선정적인 게시물")
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.05,
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color:Color(0xffdddddd)))
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Radio(
+                          value: "판매금지품목",
+                          groupValue: declare_cate,
+                          activeColor: Colors.forestmk,
+                          onChanged: (T){
+                            setState(() {
+                              declare_cate =T;
+                            });
+                          },
+                        ),
+                        Text("판매금지 품목")
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.05,
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color:Color(0xffdddddd)))
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Radio(
+                          value: "복사중복도배",
+                          groupValue: declare_cate,
+                          activeColor: Colors.forestmk,
+                          onChanged: (T){
+                            setState(() {
+                              declare_cate =T;
+                            });
+                          },
+                        ),
+                        Text("복사 중복 도배")
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.04,
+                    margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.01, left: MediaQuery.of(context).size.width*0.025),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(text:"숲니",style: TextStyle(color: Colors.forestmk,fontSize: MediaQuery.of(context).size.width*0.04)),
+                            TextSpan(text:"님을 신고합니다.",style: TextStyle(color: Colors.black,fontSize: MediaQuery.of(context).size.width*0.03)),
+                          ]
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.1,
+                    margin: EdgeInsets.only(left:MediaQuery.of(context).size.width*0.03, right:MediaQuery.of(context).size.width*0.03,),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Color(0xffdddddd))
+                    ),
+                    child:TextFormField(
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        border: InputBorder.none
+                      ),
+
+                    )
+                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.06,
+                      margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02,),
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Color(0xffdddddd)),
+                          color: Color(0xff333333)
+                      ),
+                      child:Center(child:Text("신고하기",style: TextStyle(color: Colors.white),))
+
+                      ),
+
+
+                ],
+              ),
+            ),
           ),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("확인"),
-              onPressed: (){
-                if(flg_soldout==1)
-                  update_soldout(1);
-                else
-                  update_soldout(2);
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+
+          actions:null,
         );
       },
     );
@@ -222,6 +408,7 @@ class _ViewpageState extends State<Viewpage>{
     setState(() {
       if(sp.getString('id')!=null) {
         real_mbid = sp.getString('id');
+        real_mbpwd = sp.getString('pwd');
       }
       else
         real_mbid='';
@@ -367,6 +554,8 @@ class _ViewpageState extends State<Viewpage>{
     super.initState();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -379,6 +568,45 @@ class _ViewpageState extends State<Viewpage>{
     }
     else{
       price='금액 '+widget.info.wr_1+'원';
+    }
+
+    void request_logindialog(){
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.03))
+
+              ),
+              content: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height*0.03,
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text("로그인이 필요합니다.", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04),)
+                  ],
+                ),
+              ),
+              actions:  <Widget>[
+                new FlatButton(
+                  child: new Text("확인"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(context,MaterialPageRoute(
+                        builder:(context) => loginpage()
+                    ));
+                  },
+                ),
+              ]
+          );
+        },
+      );
     }
 
     return WillPopScope(
@@ -403,7 +631,29 @@ class _ViewpageState extends State<Viewpage>{
               actions : <Widget>[
                 RaisedButton(
                   color: Color(0xfffae100),
-                  onPressed: (){},
+                  onPressed: () async{
+                    if (widget.info.mb_id != null && real_mbid !=null && real_mbid!='' && real_mbid!=widget.info.mb_id) {
+                      var result = await Navigator.push(
+                          context, MaterialPageRoute(
+                          builder: (context) =>
+                              chat_webview(
+                                  url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
+                                      real_mbid + "&mb_password=" +
+                                      real_mbpwd+ "&flg_view=1&view_id="+widget.info.wr_id+"-"+real_mbid
+
+                              )
+                      ));
+                      if (result == 'change') {
+                        get_data();
+                      }
+                    }
+                    else if(real_mbid == widget.info.mb_id){
+                        show_ban();
+                    }
+                    else {
+                      request_logindialog();
+                    }
+                  },
                   child: Text("1:1채팅"),
                   textColor: Colors.black,
                 )
@@ -475,25 +725,30 @@ class _ViewpageState extends State<Viewpage>{
                             },
                           ):Container(),
                           SizedBox(width: 3,),
-                          Container(
-                            width: MediaQuery.of(context).size.width*0.17,
-                            height: MediaQuery.of(context).size.height*0.055,
-                            padding: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(23)),
-                                border: Border.all(color: Color(0xffcccccc)),
+                          InkWell(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*0.17,
+                              height: MediaQuery.of(context).size.height*0.055,
+                              padding: EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(23)),
+                                  border: Border.all(color: Color(0xffcccccc)),
 //                              image: DecorationImage(//이미지 꾸미기
 //                                  fit:BoxFit.cover,
 //                                  image:NetworkImage("http://forestmk.itforone.co.kr/data/member/3542386191_O4hMBHJf_d1f767e86e735db50a43847faef0544e41ede2ed.jpg")//이미지 가져오기
 //                              )
-                                color: Color(0xff515151)
+                                  color: Color(0xff515151)
+                              ),
+                              child: Column(
+                                children: <Widget>[
+                                  Image.asset("images/fa-siren-on.png",   width: MediaQuery.of(context).size.width*0.08, height: MediaQuery.of(context).size.height*0.027,),
+                                  Text("신고하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white))
+                                ],
+                              ),
                             ),
-                            child: Column(
-                              children: <Widget>[
-                                Image.asset("images/fa-siren-on.png",   width: MediaQuery.of(context).size.width*0.08, height: MediaQuery.of(context).size.height*0.027,),
-                                Text("신고하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white))
-                              ],
-                            ),
+                            onTap: (){
+                              show_declare();
+                            },
                           ),
                         ],
                       ),
