@@ -31,8 +31,9 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   List <Widget> list_extraitem = [Container()];
   String wr_id, mb_id='test',ca_name,real_mbid,price="";
   Widget Swiper_widget=SizedBox();
-
-
+  String txt_soldout = "완료하기";
+  Color color_soldout = Color(0xff515151);
+  int flg_soldout=0;
 
   void load_myinfo()async{
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -45,13 +46,82 @@ class _ViewpagemineState extends State<Viewpage_mine>{
     });
   }
 
+  void show_soldout() {
+    String temp_title = "";
+    if(flg_soldout ==1){
+      temp_title = "거래완료를 취소 하시겠습니가?";
+    }
+    else{
+      temp_title = "거래를 완료 하시겠습니가?";
+    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.02,
+            child: Text(temp_title),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: (){
+                print(flg_soldout);
+                if(flg_soldout ==1)
+                  update_soldout(1);
+                else
+                  update_soldout(2);
+              },
+            ),
+            new FlatButton(
+              child: new Text("취소"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<dynamic> update_soldout(flg) async{
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/update_soldout.php'),
+        body: {
+          "wr_id":widget.wr_id==null?'':widget.wr_id,
+          "flg" :flg.toString()
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+    if(response.statusCode==200){
+      Navigator.pop(context);
+    }
+
+    setState(() {
+
+      if(flg==1) {
+        flg_soldout =0;
+        color_soldout = Color(0xff515151);
+        txt_soldout = "완료하기";
+      }
+      else{
+        flg_soldout=1;
+        color_soldout = Color(0xffbebebe);
+        txt_soldout = "거래완료";
+      }
+    });
+  }
+
   Widget get_content2(id,flg){
 
     var temp_data;
     String temp_price;
     if(flg==1) {
       temp_data = view_item.fromJson(itemdata['data'][id]);
-      print(temp_data.file);
     }
     else
       temp_data = view_item.fromJson(itemdata['data2'][id]);
@@ -103,7 +173,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         var result = await Navigator.push(context, MaterialPageRoute(
             builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id)
         ));
-        if(result == 'delete'){
+        if(result == 'delete' || result=='refresh'){
           get_data();
         }
 //        Navigator.push(context,MaterialPageRoute(
@@ -122,6 +192,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         },
         headers: {'Accept' : 'application/json'}
     );
+
     setState(() {
 
       itemdata_now = jsonDecode(response.body);
@@ -136,6 +207,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         loop: (itemdata_now['files'].length)>1? true:false,
       );
       get_data();
+
     });
   }
 
@@ -226,298 +298,310 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-          title: Text(price ,style: TextStyle(color: Colors.black),),
-          backgroundColor: Colors.white,
-          leading: InkWell(
 
-            child:Padding(
-                padding: EdgeInsets.all(13),
-                child:Image.asset("images/hd_back.png")
-            ),
-            onTap: (){
-              Navigator.of(context).pop(true);
-            },
-          ),
-          actions : <Widget>[
-            RaisedButton(
-              color: Color(0xfffae100),
-              onPressed: (){},
-              child: Text("1:1채팅"),
-              textColor: Colors.black,
-            )
-          ]
-      ),
-      body:
-      ListView(
-        children: <Widget>[
-            Container(
-                height: MediaQuery.of(context).size.height*0.33,
-                width: MediaQuery.of(context).size.width,
-                child:Swiper_widget,
+    return WillPopScope(
+      onWillPop: (){
+        Navigator.pop(context,'refresh');
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+            title: Text(price ,style: TextStyle(color: Colors.black),),
+            backgroundColor: Colors.white,
+            leading: InkWell(
+
+              child:Padding(
+                  padding: EdgeInsets.all(13),
+                  child:Image.asset("images/hd_back.png")
               ),
-          Container(
-            height: MediaQuery.of(context).size.height*0.13,
-            padding: EdgeInsets.all(10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 50,
-                      height: 50,
-                      padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                          border: Border.all(color: Color(0xffcccccc)),
-                          image: DecorationImage(//이미지 꾸미기
-                              fit:BoxFit.cover,
-                              image:NetworkImage("http://forestmk.itforone.co.kr/data/member/3542386191_O4hMBHJf_d1f767e86e735db50a43847faef0544e41ede2ed.jpg")//이미지 가져오기
-                          )
-                      ),
-                    ),
-                    SizedBox(width: 3,),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(itemdata_now==null?"테스트":itemdata_now['mb_name'],style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
-                        SizedBox(height: 8,),
-                        Text(itemdata_now==null?"테스트":itemdata_now['mb_2'],style: TextStyle(fontSize: 12)),
-                      ],
-                    ),
-                  ],
+              onTap: (){
+                Navigator.of(context).pop(true);
+              },
+            ),
+            actions : <Widget>[
+              RaisedButton(
+                color: Color(0xfffae100),
+                onPressed: (){},
+                child: Text("1:1채팅"),
+                textColor: Colors.black,
+              )
+            ]
+        ),
+        body:
+        ListView(
+          children: <Widget>[
+              Container(
+                  height: MediaQuery.of(context).size.height*0.33,
+                  width: MediaQuery.of(context).size.width,
+                  child:Swiper_widget,
                 ),
-
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.17,
-                      height: MediaQuery.of(context).size.height*0.055,
-                      padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(23)),
-                          border: Border.all(color: Color(0xffcccccc)),
-                          color: Color(0xff515151)
+            Container(
+              height: MediaQuery.of(context).size.height*0.13,
+              padding: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        width: 50,
+                        height: 50,
+                        padding: EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            border: Border.all(color: Color(0xffcccccc)),
+                            image: DecorationImage(//이미지 꾸미기
+                                fit:BoxFit.cover,
+                              image:itemdata_now!=null?NetworkImage(itemdata_now['mb_1']):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
+                            )
+                        ),
                       ),
-                      child: Column(
+                      SizedBox(width: 3,),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Image.asset("images/write_icon01.png",   width: MediaQuery.of(context).size.width*0.08, height: MediaQuery.of(context).size.height*0.027,),
-                          Text("완료하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white),)
+                          Text(itemdata_now==null?"테스트":itemdata_now['mb_name'],style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
+                          SizedBox(height: 8,),
+                          Text(itemdata_now==null?"테스트":itemdata_now['mb_2'],style: TextStyle(fontSize: 12)),
                         ],
                       ),
-                    ),
-                    SizedBox(width: 3,),
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.17,
-                      height: MediaQuery.of(context).size.height*0.055,
-                      padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(23)),
-                          border: Border.all(color: Color(0xffcccccc)),
+                    ],
+                  ),
+
+                  Row(
+                    children: <Widget>[
+                      real_mbid==mb_id?
+                      InkWell(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*0.17,
+                          height: MediaQuery.of(context).size.height*0.055,
+                          padding: EdgeInsets.all(3),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(23)),
+                              border: Border.all(color: Color(0xffcccccc)),
+                              color: color_soldout
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              Image.asset("images/write_icon01.png",   width: MediaQuery.of(context).size.width*0.08, height: MediaQuery.of(context).size.height*0.027,),
+                              Text(txt_soldout,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white),)
+                            ],
+                          ),
+                        ),
+                        onTap: (){
+                            show_soldout();
+                        },
+                      ):Container(),
+                      SizedBox(width: 3,),
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.17,
+                        height: MediaQuery.of(context).size.height*0.055,
+                        padding: EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(23)),
+                            border: Border.all(color: Color(0xffcccccc)),
 //                              image: DecorationImage(//이미지 꾸미기
 //                                  fit:BoxFit.cover,
 //                                  image:NetworkImage("http://forestmk.itforone.co.kr/data/member/3542386191_O4hMBHJf_d1f767e86e735db50a43847faef0544e41ede2ed.jpg")//이미지 가져오기
 //                              )
-                          color: Color(0xff515151)
+                            color: Color(0xff515151)
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Image.asset("images/fa-siren-on.png",   width: MediaQuery.of(context).size.width*0.08, height: MediaQuery.of(context).size.height*0.027,),
+                            Text("신고하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white))
+                          ],
+                        ),
                       ),
-                      child: Column(
-                        children: <Widget>[
-                          Image.asset("images/fa-siren-on.png",   width: MediaQuery.of(context).size.width*0.08, height: MediaQuery.of(context).size.height*0.027,),
-                          Text("신고하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white))
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 15,right: 15,top: 10, bottom: 10),
-            height: MediaQuery.of(context).size.height*0.1,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(itemdata_now==null?'테스트':itemdata_now['wr_subject'],style: TextStyle(fontSize: 20),),
-                    SizedBox(height: 10,),
+            Container(
+              padding: EdgeInsets.only(left: 15,right: 15,top: 10, bottom: 10),
+              height: MediaQuery.of(context).size.height*0.1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(itemdata_now==null?'테스트':itemdata_now['wr_subject'],style: TextStyle(fontSize: 20),),
+                      SizedBox(height: 10,),
+                      Row(
+                          children:<Widget>[
+                            Text(itemdata_now==null?'테스트':itemdata_now['timegap'],style: TextStyle(fontSize: 10),),
+                            SizedBox(width: 2,),
+                            Text(itemdata_now==null?'테스트':itemdata_now['ca_name'],style: TextStyle(fontSize: 10),),
+                          ]
+                      )
+
+
+                    ],
+                  ),
+                  real_mbid==mb_id?
+                  Row(
+                    children: <Widget>[
+                      InkWell(
+                        child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color:Color(0xffdddddd)),
+                              color: Color(0xffffffff),
+                            ),
+                            width: 35,
+                            height: 35,
+                            child: Center(child:Text("수정", style: TextStyle(),),)
+                        ),
+                        onTap: ()async{
+
+                          var result = await Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => write_normal(wr_id: widget.wr_id)
+                          ));
+                          if(result == 'success'){
+                            Navigator.pop(context,"delete");
+                          }
+                        },
+                      ),
+                      SizedBox(width: 3,),
+                      InkWell(
+                        child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color:Color(0xffdddddd)),
+                              color: Color(0xffffffff),
+                            ),
+                            width: 35,
+                            height: 35,
+                            child: Center(child:Text("삭제", style: TextStyle(),),)
+                        ),
+                        onTap: (){
+                          show_delete();
+                        },
+                      ),
+                    ],
+                  ):Container(),
+                ],
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height*0.2,
+              child: Text(itemdata_now==null?'테스트':itemdata_now['wr_content']),
+
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height*0.05,
+              padding: EdgeInsets.only(left: 10),
+              child: Row(
+                children: <Widget>[
+                  Text("좋아요",style: TextStyle(fontSize: 11),),
+                  SizedBox(width: 3,),
+                  Text(itemdata_now==null?'0':itemdata_now['wr_10'],),
+                  SizedBox(width: 3,),
+                  Text("댓글",style: TextStyle(fontSize: 11),),
+                  Text(itemdata_now==null?'0':itemdata_now['comments']),
+                  SizedBox(width: 3,),
+                  Text("조회수",style: TextStyle(fontSize: 11),),
+                  SizedBox(width: 3,),
+                  Text(itemdata_now==null?'0':itemdata_now['wr_hit']),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
+              height: MediaQuery.of(context).size.height*0.07,
+              decoration: BoxDecoration(
+                  border: Border(top: BorderSide(width: 1,color: Color(0xffefefef)), bottom: BorderSide(width: 1,color: Color(0xffefefef)),)
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+
+                      Container(
+                          width:MediaQuery.of(context).size.width*0.05,
+                          child: Image.asset("images/fa-heart.png")
+                      ),
+                      Text("좋아요"),
+
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                          width:MediaQuery.of(context).size.width*0.05,
+                          child: Image.asset("images/fa-comment-alt.png")
+                      ),
+                      Text("댓글 달기"),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                          width:MediaQuery.of(context).size.width*0.05,
+                          child: Image.asset("images/fa-share.png")
+                      ),
+                      Text("공유하기"),
+                    ],
+                  ),
+
+                ],
+              ),
+            ),
+            Container(
+              height: itmes_height,
+              decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(width: 1,color: Color(0xffefefef)))
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height*0.1,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
+                    child: Text(itemdata_now==null?"테스트":itemdata_now['mb_name']+"님의 판매상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.25,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
+                    child:
                     Row(
-                        children:<Widget>[
-                          Text(itemdata_now==null?'테스트':itemdata_now['timegap'],style: TextStyle(fontSize: 10),),
-                          SizedBox(width: 2,),
-                          Text(itemdata_now==null?'테스트':itemdata_now['ca_name'],style: TextStyle(fontSize: 10),),
-                        ]
-                    )
-
-
-                  ],
-                ),
-                real_mbid==mb_id?
-                Row(
-                  children: <Widget>[
-                    InkWell(
-                      child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color:Color(0xffdddddd)),
-                            color: Color(0xffffffff),
-                          ),
-                          width: 35,
-                          height: 35,
-                          child: Center(child:Text("수정", style: TextStyle(),),)
-                      ),
-                      onTap: ()async{
-
-                        var result = await Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => write_normal(wr_id: widget.wr_id)
-                        ));
-                        if(result == 'success'){
-                          Navigator.pop(context,"delete");
-                        }
-                      },
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: list_subitem,
                     ),
-                    SizedBox(width: 3,),
-                    InkWell(
-                      child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color:Color(0xffdddddd)),
-                            color: Color(0xffffffff),
-                          ),
-                          width: 35,
-                          height: 35,
-                          child: Center(child:Text("삭제", style: TextStyle(),),)
-                      ),
-                      onTap: (){
-                        show_delete();
-                      },
-                    ),
-                  ],
-                ):Container(),
-              ],
-            ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height*0.2,
-            child: Text(itemdata_now==null?'테스트':itemdata_now['wr_content']),
-
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height*0.05,
-            padding: EdgeInsets.only(left: 10),
-            child: Row(
-              children: <Widget>[
-                Text("좋아요",style: TextStyle(fontSize: 11),),
-                SizedBox(width: 3,),
-                Text(itemdata_now==null?'0':itemdata_now['wr_10'],),
-                SizedBox(width: 3,),
-                Text("댓글",style: TextStyle(fontSize: 11),),
-                Text(itemdata_now==null?'0':itemdata_now['comments']),
-                SizedBox(width: 3,),
-                Text("조회수",style: TextStyle(fontSize: 11),),
-                SizedBox(width: 3,),
-                Text(itemdata_now==null?'0':itemdata_now['wr_hit']),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
-            height: MediaQuery.of(context).size.height*0.07,
-            decoration: BoxDecoration(
-                border: Border(top: BorderSide(width: 1,color: Color(0xffefefef)), bottom: BorderSide(width: 1,color: Color(0xffefefef)),)
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-
-                    Container(
-                        width:MediaQuery.of(context).size.width*0.05,
-                        child: Image.asset("images/fa-heart.png")
-                    ),
-                    Text("좋아요"),
-
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                        width:MediaQuery.of(context).size.width*0.05,
-                        child: Image.asset("images/fa-comment-alt.png")
-                    ),
-                    Text("댓글 달기"),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                        width:MediaQuery.of(context).size.width*0.05,
-                        child: Image.asset("images/fa-share.png")
-                    ),
-                    Text("공유하기"),
-                  ],
-                ),
-
-              ],
-            ),
-          ),
-          Container(
-            height: itmes_height,
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 1,color: Color(0xffefefef)))
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height*0.1,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                  child: Text(itemdata_now==null?"테스트":itemdata_now['mb_name']+"님의 판매상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.25,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
-                  child:
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: list_subitem,
                   ),
-                ),
 
-              ],
+                ],
+              ),
             ),
-          ),
-          Container(
-            height: itmes_height2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height*0.1,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                  child: Text("관련상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.25,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
-                  child:
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: list_extraitem,
+            Container(
+              height: itmes_height2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height*0.1,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
+                    child: Text("관련상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.25,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
+                    child:
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: list_extraitem,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

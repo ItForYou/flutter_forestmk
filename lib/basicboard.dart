@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutterforestmk/basic_item.dart';
 import 'package:flutterforestmk/basicview.dart';
 import 'package:flutterforestmk/my_items.dart';
+import 'package:flutterforestmk/write_basic.dart';
 import 'package:http/http.dart' as http;
 
 class basicboard extends StatefulWidget {
 
-  final String title, bo_table,mb_id;
-  basicboard({Key key, this.title,@required this.bo_table, this.mb_id}) : super(key: key);
+  final String title, bo_table,mb_id,mb_name;
+  basicboard({Key key, this.title,@required this.bo_table, this.mb_name, this.mb_id}) : super(key: key);
 
   @override
   _basicboardState createState() => _basicboardState();
@@ -72,7 +73,7 @@ class _basicboardState extends State<basicboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            widget.title, style: TextStyle(fontSize: MediaQuery
+                            temp_data.wr_subject, style: TextStyle(fontSize: MediaQuery
                               .of(context)
                               .size
                               .width * 0.04),),
@@ -83,11 +84,13 @@ class _basicboardState extends State<basicboard> {
                           Text(temp_data.mb_name+" | "+temp_data.wr_datetime.substring(5,10)+" | 조회 "+temp_data.wr_hit)
                         ],
                       ),
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) =>
-                                basicview(title: widget.title,)
+                      onTap: () async{
+                        var result = await Navigator.push(context, MaterialPageRoute(
+                            builder: (context) =>  basicview(title: widget.title, item: temp_data,bo_table: widget.bo_table,mb_id:widget.mb_id, mb_name:widget.mb_name)
                         ));
+                        if(result == 'delete'){
+                          get_data();
+                        }
                       },
                     )
                   ],
@@ -158,8 +161,7 @@ class _basicboardState extends State<basicboard> {
       body: widget_writes,
       floatingActionButton: Container(
         margin: EdgeInsets.only(top : (widget.mb_id=='admin')||(widget.mb_id=='lets080')?MediaQuery.of(context).size.height*0.85:MediaQuery.of(context).size.height*0.9,),
-        child: InkWell(
-          child: Column(
+        child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               (widget.mb_id=='admin')||(widget.mb_id=='lets080')?
@@ -179,24 +181,31 @@ class _basicboardState extends State<basicboard> {
               (widget.mb_id=='admin')||(widget.mb_id=='lets080')?
               SizedBox(height: MediaQuery.of(context).size.height*0.01,):Container(),
               ((widget.title=='공지사항')&&((widget.mb_id=='admin')||(widget.mb_id=='lets080')))||(widget.title=='고객문의')?
-              Container(
-                  height: MediaQuery.of(context).size.height*0.07,
-                  child: FloatingActionButton(
-                    heroTag: null,
-                    onPressed: null,
-                    backgroundColor: Colors.forestmk,
-                    child:
-                    Padding(
-                      padding:  EdgeInsets.all(MediaQuery.of(context).size.height*0.01,),
-                      child: Image.asset("images/fa-plus-w.png"),
-                    ),)):Container(),
+              InkWell(
+                child: Container(
+                    height: MediaQuery.of(context).size.height*0.07,
+                    child: FloatingActionButton(
+                      heroTag: null,
+                      onPressed: null,
+                      backgroundColor: Colors.forestmk,
+                      child:
+                      Padding(
+                        padding:  EdgeInsets.all(MediaQuery.of(context).size.height*0.01,),
+                        child: Image.asset("images/fa-plus-w.png"),
+                      ),)),
+                onTap: ()async{
+                  var result = await Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => write_basic(title:widget.title+" 글쓰기", bo_table: widget.bo_table, mb_id: widget.mb_id, mb_name:widget.mb_name)
+                  ));
+                  if(result == 'success'){
+                    get_data();
+                  }
+                },
+              ):Container(),
             ],
-          ),
-          onTap: (){
 
-          },
-        ),
-      ),
+          ),
+           ),
     );
 
   }

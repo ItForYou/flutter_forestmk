@@ -163,11 +163,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                   ),
-                  onTap: (){
-
-                    Navigator.push(context,MaterialPageRoute(
-                        builder:(context) => write_normal()
+                  onTap: ()async{
+                    var result = await Navigator.push(context, MaterialPageRoute(
+                        builder: (context) =>  write_normal()
                     ));
+                    if(result == 'success'){
+                      Navigator.pop(bc);
+                      get_data();
+                    }
                   },
                 ),
                 InkWell(
@@ -198,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget get_content(id){
 
     var temp_data = main_item.fromJson(itemdata['data'][id]);
-    //print(temp_data.file[0]);
+
     String temp_price;
     if(temp_data.ca_name =='업체'){
       temp_price=temp_data.wr_subject;
@@ -384,9 +387,8 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         },
       );
-
   }
-  void _searchdialog() {
+  void _searchdialog(){
     showDialog(
       context: context,
       builder: (BuildContext context) {

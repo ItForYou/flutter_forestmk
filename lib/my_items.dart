@@ -157,10 +157,40 @@ class _my_itemsState extends State<my_items> {
     }
   }
 
+
+  Future<dynamic> delete_recent() async{
+
+    List <String> checked_id=[];
+    for(int i=0; i<checkbox_values.length; i++){
+      if(checkbox_values[i] == true)
+        checked_id.add(itemdata['data'][i]['wr_id']);
+    }
+
+    if(checked_id.length<=0){
+      return;
+    }
+
+    var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/delete_myitems.php"));
+
+    request.fields['mb_id'] = widget.mb_id;
+    request.fields['title'] = widget.title;
+    for(int i=0; i<checked_id.length; i++){
+      request.fields['wr_id['+i.toString()+']'] = checked_id[i];
+    }
+
+    var res = await request.send();
+    if (res.statusCode == 200) {
+     // return res.stream.bytesToString();
+     setState(() {
+        get_data();
+      });
+    }
+  }
+
   Widget get_content(id){
 
     var temp_data = main_item.fromJson(itemdata['data'][id]);
-    //print(temp_data.file[0]);
+
     String temp_price;
     if(temp_data.ca_name =='업체'){
       temp_price=temp_data.wr_subject;
@@ -406,6 +436,7 @@ class _my_itemsState extends State<my_items> {
   }
 
   Future<dynamic> get_data() async{
+
     String url ="";
     if(widget.title=="최근 본 글"){
        url="http://14.48.175.177/get_myrecent.php";
@@ -417,7 +448,6 @@ class _my_itemsState extends State<my_items> {
         Uri.encodeFull(url),
         body: {
           'mb_id':widget.mb_id
-
         },
         headers: {'Accept' : 'application/json'}
     );
@@ -451,6 +481,7 @@ class _my_itemsState extends State<my_items> {
     // TODO: implement initState
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
+
     get_data();
     super.initState();
   }
@@ -709,7 +740,7 @@ class _my_itemsState extends State<my_items> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => categorypage()
+                            builder:(context) => categorypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                         ));
                       },
                     ),
@@ -723,9 +754,23 @@ class _my_itemsState extends State<my_items> {
                         child: Image.asset("images/hd_cate04.png"),
                       ),
                       onTap: (){
-                        Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                        ));
+                        if(widget.title=='최근 본 글')
+                          get_data();
+                        else {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) =>
+                                  my_items(title: "최근 본 글",
+                                    mb_id: widget.mb_id,
+                                    mb_1: widget.mb_1,
+                                    mb_2: widget.mb_2,
+                                    mb_3: widget.mb_3,
+                                    mb_4: widget.mb_4,
+                                    mb_hp: widget.mb_hp,
+                                    mb_5: widget.mb_5,
+                                    mb_6: widget.mb_6,
+                                    mb_name: widget.mb_name,)
+                          ));
+                        }
                       },
                     ),
                     InkWell(
@@ -822,7 +867,7 @@ class _my_itemsState extends State<my_items> {
                           ),
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => categorypage()
+                                builder:(context) => categorypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                             ));
                           },
                         ),
@@ -836,9 +881,23 @@ class _my_itemsState extends State<my_items> {
                             child: Image.asset("images/hd_cate04.png"),
                           ),
                           onTap: (){
-                            Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                            ));
+                            if(widget.title=='최근 본 글')
+                              get_data();
+                            else {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) =>
+                                      my_items(title: "최근 본 글",
+                                        mb_id: widget.mb_id,
+                                        mb_1: widget.mb_1,
+                                        mb_2: widget.mb_2,
+                                        mb_3: widget.mb_3,
+                                        mb_4: widget.mb_4,
+                                        mb_hp: widget.mb_hp,
+                                        mb_5: widget.mb_5,
+                                        mb_6: widget.mb_6,
+                                        mb_name: widget.mb_name,)
+                              ));
+                            }
                           },
                         ),
 
@@ -989,8 +1048,9 @@ class _my_itemsState extends State<my_items> {
                             SizedBox(width:  MediaQuery.of(context).size.width*0.03,),
                             InkWell(
                                 child: Text("지우기",style: TextStyle(color: Colors.forestmk),),
-                                onTap: (){
-
+                                onTap: ()async{
+                                  var result = await delete_recent();
+                                  print(result);
                                 },
                             ),
                           ],

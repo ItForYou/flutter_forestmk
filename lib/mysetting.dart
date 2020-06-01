@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterforestmk/changehp.dart';
@@ -23,7 +25,57 @@ class _mysettingState extends State<mysetting> {
     if(sp.getString('id')!=null) {
       widget.mb_id = sp.getString('id');
     }
+    load_state();
   }
+
+  Future<String> update_state(flg,value) async{
+
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/update_state.php'),
+        body: {
+              "flg": flg.toString(),
+              "value":value.toString(),
+              "mb_id":widget.mb_id==null?'':widget.mb_id
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+
+  }
+
+  Future<String> load_state() async{
+
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_state.php'),
+        body: {
+            "mb_id":widget.mb_id==null?'':widget.mb_id
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+
+    if(response.statusCode==200){
+      var temp = jsonDecode(response.body);
+      print(temp['fcm_flg']);
+      setState(() {
+        if(temp['fcm_flg']=="1"){
+          switchvalue1=true;
+        }
+        else{
+          switchvalue1=false;
+        }
+        if(temp['flg_notice']=="1"){
+          switchvalue2=true;
+        }
+        else{
+          switchvalue2=false;
+        }
+      });
+
+    }
+  }
+
+
 
   void _showDialog() {
     showDialog(
@@ -61,7 +113,7 @@ class _mysettingState extends State<mysetting> {
             new FlatButton(
               child: new Text("취소"),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context2);
               },
             ),
           ],
@@ -187,6 +239,7 @@ class _mysettingState extends State<mysetting> {
                     onChanged: (value){
                       setState(() {
                         switchvalue1 = value;
+                        update_state(1,value);
                       });
                     },
                     activeTrackColor: Colors.forestmk,
@@ -212,6 +265,7 @@ class _mysettingState extends State<mysetting> {
                     onChanged: (value){
                       setState(() {
                         switchvalue2 = value;
+                        update_state(2,value);
                       });
                     },
                     activeTrackColor: Colors.forestmk,

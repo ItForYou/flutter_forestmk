@@ -32,6 +32,7 @@ class writenormal_State extends State<write_normal> {
   int first_build =1;
   double grid_height;
   String mb_id,mb_name,mb_5,mb_6;
+  int click_upload =0;
   var itemdata_now;
   void load_myinfo()async{
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -296,6 +297,10 @@ class writenormal_State extends State<write_normal> {
   }
 
   Future<String> uploaddata() async {
+
+    if(click_upload==1){
+      return '';
+    }
 
     var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/insert_writedeal.php"));
 
@@ -669,6 +674,7 @@ class writenormal_State extends State<write_normal> {
                   ),
                     onTap: (){
                       uploaddata();
+                      click_upload=1;
                     },
                   ),
           ],

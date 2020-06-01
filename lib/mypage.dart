@@ -337,7 +337,7 @@ class _mypageState extends State<mypage> {
                   ),
                   onTap: (){
                     Navigator.push(context,MaterialPageRoute(
-                        builder:(context) => basicboard(title: "공지사항",bo_table: 'notice',mb_id: widget.mb_id,)
+                        builder:(context) => basicboard(title: "공지사항",bo_table: 'notice',mb_id: widget.mb_id,mb_name: widget.mb_name,)
                     ));
                 },
                 ),
@@ -364,7 +364,7 @@ class _mypageState extends State<mypage> {
                   ),
                   onTap: (){
                     Navigator.push(context,MaterialPageRoute(
-                        builder:(context) => basicboard(title: "고객문의",bo_table: 'qna',mb_id: widget.mb_id,)
+                        builder:(context) => basicboard(title: "고객문의",bo_table: 'qna',mb_name:widget.mb_name,mb_id: widget.mb_id,)
                     ));
                   },
                 ),

@@ -28,7 +28,6 @@ class main_item{
     final String mb_id;
     final String comments;
 
-
     main_item({
       this.wr_id,
       this.mb_id,
