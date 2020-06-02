@@ -35,7 +35,7 @@ class _basicviewState extends State<basicview> {
             new FlatButton(
               child: new Text("확인"),
               onPressed: (){
-                delete_data();
+                delete_data(context);
               },
             ),
             new FlatButton(
@@ -50,8 +50,7 @@ class _basicviewState extends State<basicview> {
     );
   }
 
-  Future<dynamic> delete_data() async{
-    print(widget.bo_table);
+  Future<dynamic> delete_data(popcontext) async{
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/delete_wr.php'),
         body: {
@@ -62,9 +61,8 @@ class _basicviewState extends State<basicview> {
     );
 
       if(response.statusCode==200){
-        Navigator.pop(context);
+        Navigator.pop(popcontext);
           Navigator.pop(context,"delete");
-
       }
   }
 

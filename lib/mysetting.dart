@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutterforestmk/block_list.dart';
 import 'package:flutterforestmk/changehp.dart';
 import 'package:flutterforestmk/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -275,18 +276,25 @@ class _mysettingState extends State<mysetting> {
                 ],
               ),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*0.063,
-              decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(width: 1, color: Color(0xffe8e8e8)))
+            InkWell(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height*0.063,
+                decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(width: 1, color: Color(0xffe8e8e8)))
+                ),
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,right: MediaQuery.of(context).size.width*0.03,),
+                child:  Row(
+                  children: <Widget>[
+                    Text("차단 사용자관리",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04),),
+                  ],
+                ),
               ),
-              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,right: MediaQuery.of(context).size.width*0.03,),
-              child:  Row(
-                children: <Widget>[
-                  Text("차단 사용자관리",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04),),
-                ],
-              ),
+              onTap: (){
+                Navigator.push(context,MaterialPageRoute(
+                    builder:(context) => block_list()
+                ));
+              },
             ),
             InkWell(
               child: Container(

@@ -121,9 +121,10 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
           if(appbar != scroll_appbar)
            appbar = scroll_appbar;
-           if(list_height == MediaQuery.of(context).size.height-MediaQuery.of(context).size.height*0.15) {
+
+           if(list_height == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.15).floor()) {
              start_height =0;
-             list_height = list_height - MediaQuery.of(context).size.height*0.08;
+             list_height = list_height - (MediaQuery.of(context).size.height*0.08).floor();
            }
       });
     }
@@ -131,13 +132,12 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         if(appbar == scroll_appbar) {
           appbar = intro_appbar;
-          start_height =0;
-          list_height = list_height + MediaQuery.of(context).size.height*0.08;
         }
       //실값이 반올림되어져 비교되어짐 그래서 값이 다르게 나옴
-         /*if(list_height  == MediaQuery.of(context).size.height-MediaQuery.of(context).size.height*0.23) {
-
-         }*/
+         if(list_height  == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.15).floor()- (MediaQuery.of(context).size.height*0.08).floor()) {
+           start_height =0;
+           list_height = list_height + (MediaQuery.of(context).size.height*0.08).floor();
+         }
       });
     }
   }
@@ -626,7 +626,7 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
     if(start_height == 1){
-        list_height = MediaQuery.of(context).size.height-MediaQuery.of(context).size.height*0.15;
+        list_height = MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.15).floor();
         scrollbar_height = MediaQuery.of(context).size.height*0.08;
         scroll_appbar = PreferredSize(
             preferredSize: Size.fromHeight(scrollbar_height),

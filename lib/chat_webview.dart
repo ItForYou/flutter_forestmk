@@ -8,7 +8,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 class chat_webview extends StatefulWidget {
 
   String url;
-  chat_webview({Key key, this.url}) : super(key: key);
+  int view;
+  chat_webview({Key key, this.url,this.view}) : super(key: key);
 
   @override
   _chat_webviewState createState() => _chat_webviewState();
@@ -19,23 +20,21 @@ class _chat_webviewState extends State<chat_webview> {
 
 
   void presed_bak(){
-      _webViewController.canGoBack().then((bool value) {
-          if(value ==false) {
+
+          if(widget.view ==1){
+            Navigator.pop(context);
+          }
+          else {
             _webViewController.currentUrl().then((String value) {
               if (value.contains("chatting.php")) {
                 _webViewController.evaluateJavascript(
                     "javascript:leavepage();");
+              }
+              else {
                 Navigator.pop(context);
               }
-              else
-                Navigator.pop(context);
             });
           }
-          else{
-            _webViewController.evaluateJavascript("javascript:leavepage();");
-          }
-      });
-
   }
 
   @override

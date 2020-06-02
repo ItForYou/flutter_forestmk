@@ -22,11 +22,11 @@ class _write_basicState extends State<write_basic> {
 
 
   Future<dynamic> uploaddata() async{
-      print(widget.mb_name);
+      //print(widget.mb_name);
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/update_basic.php'),
         body: {
-          "wr_id":widget.info.wr_id!=null?widget.info.wr_id:'',
+          "wr_id":widget.info!=null?widget.info.wr_id:'',
           "mb_id":widget.mb_id==null?'':widget.mb_id,
           "bo_table":widget.bo_table==null?'':widget.bo_table,
           "wr_subject": input_wrsubject.text,
