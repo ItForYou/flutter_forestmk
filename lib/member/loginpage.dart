@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/main.dart';
-import 'package:flutterforestmk/register.dart';
+import 'package:flutterforestmk/member/register.dart';
 import 'package:flutterforestmk/search_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;

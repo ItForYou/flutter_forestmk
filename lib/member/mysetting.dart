@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutterforestmk/block_list.dart';
-import 'package:flutterforestmk/changehp.dart';
+import 'package:flutterforestmk/member/block_list.dart';
+import 'package:flutterforestmk/member/changehp.dart';
 import 'package:flutterforestmk/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;

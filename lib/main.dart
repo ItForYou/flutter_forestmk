@@ -11,15 +11,15 @@ import 'package:flutterforestmk/categorypage.dart';
 import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/chk_writead.dart';
 import 'package:flutterforestmk/location.dart';
-import 'package:flutterforestmk/loginpage.dart';
+import 'package:flutterforestmk/member/loginpage.dart';
 import 'package:flutterforestmk/main_item.dart';
-import 'package:flutterforestmk/my_items.dart';
-import 'package:flutterforestmk/register.dart';
+import 'package:flutterforestmk/member/my_items.dart';
+import 'package:flutterforestmk/member/register.dart';
 import 'package:flutterforestmk/search_main.dart';
 import 'package:flutterforestmk/write_normal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutterforestmk/viewpage.dart';
-import 'package:flutterforestmk/mypage.dart';
+import 'package:flutterforestmk/member/mypage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
@@ -602,7 +602,6 @@ class _MyHomePageState extends State<MyHomePage> {
         mb_id = sp.getString('id');
         mb_pwd = sp.getString('pwd');
         get_mbdata();
-
       }
   }
 
@@ -610,19 +609,22 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
 
-   /* _firebaseMessaging.configure(
+    _firebaseMessaging.getToken().then((token){
+      print('token:'+token);
+    });
+
+    _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
+          print("test");
           print("onMessage: $message");
-          _showItemDialog(message);
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
-          _navigateToItemDetail(message);
         },
         onResume: (Map<String, dynamic> message) async {
           print("onResume: $message");
-          _navigateToItemDetail(message);
-        },*/
+        },
+    );
 
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
@@ -633,7 +635,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("Build!");
     load_myinfo();
+    if(mb_name=='test') {
+      setState(() {});
+    }
     if(mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,

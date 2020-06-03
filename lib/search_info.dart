@@ -2,7 +2,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutterforestmk/loginpage.dart';
+import 'package:flutterforestmk/member/loginpage.dart';
 
 class search_info extends StatefulWidget {
 
