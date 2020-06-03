@@ -57,7 +57,6 @@ class _mysettingState extends State<mysetting> {
 
     if(response.statusCode==200){
       var temp = jsonDecode(response.body);
-      print(temp['fcm_flg']);
       setState(() {
         if(temp['fcm_flg']=="1"){
           switchvalue1=true;
@@ -187,6 +186,7 @@ class _mysettingState extends State<mysetting> {
   @override
   void initState() {
     // TODO: implement initState
+    print(widget.mb_3);
     load_myinfo();
     super.initState();
   }
@@ -311,8 +311,7 @@ class _mysettingState extends State<mysetting> {
                 ),
               ),
               onTap: (){
-
-                if(widget.mb_3==0) {
+                if(widget.mb_3==0.toString()) {
                   Navigator.push(context,MaterialPageRoute(
                       builder:(context) => changehp(mb_hp:widget.mb_hp)
                   ));

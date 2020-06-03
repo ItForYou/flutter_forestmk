@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -21,6 +22,7 @@ import 'package:flutterforestmk/viewpage.dart';
 import 'package:flutterforestmk/mypage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
 void main() => runApp(MyApp());
 
@@ -97,6 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
       )
   );
   PreferredSize scroll_appbar;
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   void _incrementCounter() {
     setState(() {
@@ -605,6 +609,21 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     // TODO: implement initState
+
+   /* _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print("onMessage: $message");
+          _showItemDialog(message);
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+          print("onLaunch: $message");
+          _navigateToItemDetail(message);
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print("onResume: $message");
+          _navigateToItemDetail(message);
+        },*/
+
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
     load_myinfo();
@@ -933,7 +952,10 @@ class _MyHomePageState extends State<MyHomePage> {
 //          borderRadius: BorderRadius.all(Radius.circular(50)),
 //          border: Border.all(color: Color(0xffcccccc))
 //      ),
-        body:Column(
+        body:DoubleBackToCloseApp(
+          snackBar: const SnackBar(content: Text("한번 더 뒤로가기시 종료됩니다.")),
+        child:
+        Column(
         children: <Widget>[
           Container(
             height: list_height,
@@ -1211,7 +1233,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ],
-      ),
+          ),
+        )
  // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

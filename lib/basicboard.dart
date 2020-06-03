@@ -20,8 +20,95 @@ class _basicboardState extends State<basicboard> {
 
    // List <bool> chebkbox_wr = [];
    Widget widget_writes;
-
+   List <bool> checkbox_values;
     var itemdata;
+
+   void show_Alert(text,flg) {
+     showDialog(
+       context: context,
+       builder: (BuildContext context) {
+         // return object of type Dialog
+         return AlertDialog(
+           title:null,
+           content: Container(
+             height: MediaQuery.of(context).size.height*0.02,
+             child: Text(text),
+           ),
+           actions: <Widget>[
+             new FlatButton(
+               child: new Text("확인"),
+               onPressed: (){
+                 if(flg ==2)
+                   Navigator.of(context).pop(true);
+                 Navigator.of(context).pop(true);
+               },
+             ),
+           ],
+         );
+       },
+     );
+   }
+
+   void show_delete() {
+     showDialog(
+       context: context,
+       builder: (BuildContext context) {
+         // return object of type Dialog
+         return AlertDialog(
+           title:null,
+           content: Container(
+             height: MediaQuery.of(context).size.height*0.05,
+             child: Text("한번 삭제한 자료는 복구할 방법이 없습니다.\n선택한 게시물을 정말 삭제하시겠습니까?"),
+           ),
+           actions: <Widget>[
+             new FlatButton(
+               child: new Text("확인"),
+               onPressed: ()async{
+                  var result = await delete_data(context);
+                  print(result);
+               },
+             ),
+             new FlatButton(
+               child: new Text("취소"),
+               onPressed: () {
+                 Navigator.pop(context);
+               },
+             ),
+           ],
+         );
+       },
+     );
+   }
+
+   Future<dynamic> delete_data(popcontext) async{
+
+     List <String> checked_id=[];
+     for(int i=0; i<checkbox_values.length; i++){
+       if(checkbox_values[i] == true)
+         checked_id.add(itemdata['data'][i]['wr_id']);
+     }
+
+     if(checked_id.length<=0){
+       return;
+     }
+
+     var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/delete_board.php"));
+
+     request.fields['bo_table'] = widget.bo_table;
+     for(int i=0; i<checked_id.length; i++){
+       request.fields['wr_id['+i.toString()+']'] = checked_id[i];
+     }
+
+     var res = await request.send();
+     if (res.statusCode == 200) {
+       // return res.stream.bytesToString();
+       setState(() {
+         get_data();
+         Navigator.pop(popcontext);
+       });
+     }
+
+   }
 
    void get_writes(size){
         List <Widget> temp_list = [];
@@ -33,16 +120,11 @@ class _basicboardState extends State<basicboard> {
               child: Align(alignment:Alignment.bottomRight,child: Text("Total "+itemdata['data'].length.toString()+"건",style: TextStyle(color: Color(0xff888888)),)),
             );
         temp_list.add(total_widget);
-     List <bool> chebkbox_wr = [];
 
         if(size>0) {
           for (int i = 0; i < size; i++) {
 
             var temp_data = basic_item.fromJson(itemdata['data'][i]);
-
-            if (chebkbox_wr.length <= i) {
-              chebkbox_wr.add(false);
-            }
 
             Widget temp_widget = Container(
                 width: MediaQuery
@@ -60,10 +142,11 @@ class _basicboardState extends State<basicboard> {
                   children: <Widget>[
                     widget.mb_id=='admin'?
                     Checkbox(
-                      value: chebkbox_wr[i],
+                      value: checkbox_values[i],
                       onChanged: (bool value) {
                         setState(() {
-                          chebkbox_wr[i] = value;
+                          checkbox_values[i] = value;
+                          get_writes(itemdata['data'].length);
                         });
                       },
                     ):SizedBox(width: MediaQuery.of(context).size.width*0.1,),
@@ -127,10 +210,16 @@ class _basicboardState extends State<basicboard> {
       );
 
       itemdata = jsonDecode(response.body);
-      //print(itemdata['data'][0]);
+
       setState(() {
+
+        checkbox_values = List<bool>(itemdata['data'].length);
+        for(int i=0; i< itemdata['data'].length; i++){
+          checkbox_values[i] = false;
+        }
         get_writes(itemdata['data'].length);
       });
+
     }
     @override
   void initState() {
@@ -165,18 +254,26 @@ class _basicboardState extends State<basicboard> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               (widget.mb_id=='admin')||(widget.mb_id=='lets080')?
-              Container(
-                height: MediaQuery.of(context).size.height*0.07,
-                child: FloatingActionButton(
-                    heroTag: null,
-                    onPressed: null,
-                    backgroundColor: Color(0xff211a2c),
-                    child: Padding(
-                        padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.015,),
-                        child: Image.asset("images/fa-trash.png")
-                    ),
+              InkWell(
+                child: Container(
+                  height: MediaQuery.of(context).size.height*0.07,
+                  child: FloatingActionButton(
+                      heroTag: null,
+                      onPressed: null,
+                      backgroundColor: Color(0xff211a2c),
+                      child: Padding(
+                          padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.015,),
+                          child: Image.asset("images/fa-trash.png")
+                      ),
+                  ),
                 ),
-
+                onTap: (){
+                  if(checkbox_values.contains(true))
+                  show_delete();
+                  else{
+                    show_Alert("선택된 항목이 없습니다.", 1);
+                  }
+                },
               ):Container(),
               (widget.mb_id=='admin')||(widget.mb_id=='lets080')?
               SizedBox(height: MediaQuery.of(context).size.height*0.01,):Container(),

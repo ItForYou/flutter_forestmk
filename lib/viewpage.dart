@@ -528,7 +528,7 @@ class _ViewpageState extends State<Viewpage>{
 
                   ),
                   onTap: (){
-                    update_declare();
+                    update_declare(context);
                   },
                 ),
 
@@ -570,7 +570,7 @@ class _ViewpageState extends State<Viewpage>{
     }
   }
 
-  Future<dynamic> update_declare() async{
+  Future<dynamic> update_declare(popcontext) async{
 
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/update_declare.php'),
@@ -584,7 +584,7 @@ class _ViewpageState extends State<Viewpage>{
         headers: {'Accept' : 'application/json'}
     );
     if(response.statusCode==200){
-      Navigator.pop(context);
+      Navigator.pop(popcontext);
     }
 
   }

@@ -93,8 +93,9 @@ class _block_listState extends State<block_list> {
 
       setState(() {
 
-        if(response.body!=null)
+        if(response.body!='[]')
         itemdata = jsonDecode(response.body);
+
         list_blocks.clear();
         _getblocks();
       });

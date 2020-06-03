@@ -159,13 +159,18 @@ class _basicviewState extends State<basicview> {
                     },
                   ),
                   SizedBox(width: MediaQuery.of(context).size.width*0.02),
-                  Container(
-                    width: MediaQuery.of(context).size.width*0.12,
-                    height: MediaQuery.of(context).size.height*0.08,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: Color(0xffd9d9d9))
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.12,
+                      height: MediaQuery.of(context).size.height*0.08,
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Color(0xffd9d9d9))
+                      ),
+                      child: Center(child: Text("목록")),
                     ),
-                    child: Center(child: Text("목록")),
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
                   )
                 ],
               ),

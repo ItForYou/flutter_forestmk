@@ -22,10 +22,12 @@ dependencies:
   http: ^0.12.1
   fluttertoast: ^4.0.0
   flutter_custom_dialog: ^1.0.19
+  firebase_messaging: ^6.0.16
   shared_preferences:  ^0.5.7+3
   cached_network_image: ^2.2.0+1
   webview_flutter: ^0.3.22+1
   flutter_swiper : ^1.1.6
+  double_back_to_close_app: ^1.2.0
   kopo: "^0.1.1"
   image_picker:
   # The following adds the Cupertino Icons font to your application.

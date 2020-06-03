@@ -144,7 +144,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
     }
   }
 
-  Future<dynamic> update_declare() async{
+  Future<dynamic> update_declare(popcontext) async{
 
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/update_declare.php'),
@@ -158,7 +158,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         headers: {'Accept' : 'application/json'}
     );
     if(response.statusCode==200){
-      Navigator.pop(context);
+      Navigator.pop(popcontext);
     }
 
   }
@@ -454,7 +454,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
                           ),
                           onTap: (){
-                            update_declare();
+                            update_declare(context);
                           },
                         ),
 

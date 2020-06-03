@@ -50,7 +50,10 @@ class _changehpState extends State<changehp> {
 
   Future<String> request_number() async {
     try {
-
+    if(input_ph.text == widget.mb_hp.replaceAll('-', '')){
+    show_Alert("현재 등록된 번호와 일치합니다.",1);
+    return'';
+    }
       var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/bbs/ajax.send_number.php"));
       var random = Random();
       String temp_number = "";
@@ -95,18 +98,25 @@ class _changehpState extends State<changehp> {
   }
 
   Future<dynamic> update_hp() async {
-    final response = await http.post(
-        Uri.encodeFull('http://14.48.175.177/update_hp.php'),
-        body: {
-          "mb_id": mb_id,
-          "value": input_ph.text
-        },
-        headers: {'Accept': 'application/json'}
-    );
-    // print(response.body);
-    if(response.statusCode==200){
-      Navigator.pop(context);
+
+    if(flg_certihp==1 && input_ph.text != widget.mb_hp.replaceAll('-', '') ) {
+      final response = await http.post(
+          Uri.encodeFull('http://14.48.175.177/update_hp.php'),
+          body: {
+            "mb_id": mb_id,
+            "value": input_ph.text
+          },
+          headers: {'Accept': 'application/json'}
+      );
+      // print(response.body);
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+      }
     }
+    else{
+      show_Alert("번호가 인증되지 않았습니다.",1);
+    }
+
   }
 
   void load_myinfo()async{
@@ -119,7 +129,7 @@ class _changehpState extends State<changehp> {
   void initState() {
     // TODO: implement initState
     load_myinfo();
-    input_ph.text = widget.mb_hp;
+    input_ph.text = widget.mb_hp.replaceAll('-', '');
     super.initState();
   }
 
