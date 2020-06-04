@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class modify_info extends StatefulWidget {
 
 class _modify_infoState extends State<modify_info> {
   String input_val ="";
+  Widget notify_namedate=SizedBox();
   var temp_addrs;
   List <Widget> results_search = [];
   TextEditingController modify_id = new TextEditingController();
@@ -27,8 +29,7 @@ class _modify_infoState extends State<modify_info> {
   TextEditingController modify_name = new TextEditingController();
   TextEditingController modify_ph = new TextEditingController();
   TextEditingController modify_address = new TextEditingController();
-
-
+  bool flg_namereadonly = false;
   File profile_img;
   ImageProvider profile_widget=AssetImage("images/wing_mb_noimg2.png");
 
@@ -283,6 +284,69 @@ class _modify_infoState extends State<modify_info> {
     }
   }
 
+  static const _daysInMonth = const [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+  bool isLeapYear(int value) =>
+      value % 400 == 0 || (value % 4 == 0 && value % 100 != 0);
+
+  int daysInMonth(int year, int month) {
+    var result = _daysInMonth[month];
+    if (month == 2 && isLeapYear(year)) result++;
+    return result;
+  }
+
+  DateTime addMonths(DateTime dt, int value) {
+    var r = value % 12;
+    var q = (value - r) ~/ 12;
+    var newYear = dt.year + q;
+    var newMonth = dt.month + r;
+    if (newMonth > 12) {
+      newYear++;
+      newMonth -= 12;
+    }
+    var newDay = min(dt.day, daysInMonth(newYear, newMonth));
+    if (dt.isUtc) {
+      return new DateTime.utc(
+          newYear,
+          newMonth,
+          newDay,
+          dt.hour,
+          dt.minute,
+          dt.second,
+        );
+    } else {
+      return new DateTime(
+          newYear,
+          newMonth,
+          newDay,
+          dt.hour,
+          dt.minute,
+          dt.second,
+        );
+    }
+  }
+
+  void check_namedate() {
+
+    if (widget.mb_4 != null && widget.mb_4 !='0000-00-00 00:00:00') {
+      DateTime now = DateTime.now().toUtc();
+      DateTime modified_date = DateTime.parse(widget.mb_4).toUtc();
+      DateTime add1month = addMonths(modified_date, 1);
+      String format_modify = modified_date.toString().substring(0,10);
+      String format_addmonth = add1month.toString().substring(0,10);
+
+      if (now.compareTo(now) <=0) {
+        notify_namedate =   Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height*0.05,
+          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
+          child: Text("$format_modify 로 부터 1달 후, $format_addmonth이후로 변경이 가능합니다.")
+        );
+        flg_namereadonly = true;
+      }
+    }
+  }
+
 
   @override
   void initState() {
@@ -291,10 +355,12 @@ class _modify_infoState extends State<modify_info> {
     modify_name.text = widget.mb_name;
     modify_ph.text = widget.mb_hp;
     modify_id.text = widget.mb_id;
+
   }
 
   @override
   Widget build(BuildContext context) {
+    check_namedate();
     if(widget.mb_1!=null && profile_img ==null)
     profile_widget = widget.mb_1!='test'? NetworkImage(widget.mb_1):AssetImage("images/wing_mb_noimg2.png");
     return Scaffold(
@@ -367,7 +433,16 @@ class _modify_infoState extends State<modify_info> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.05,
-              child: Text("아이디는 수정할 수 없습니다."),
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      width: MediaQuery.of(context).size.width*0.05,
+                      height: MediaQuery.of(context).size.width*0.05,
+                      child: Image.asset("images/fa-exclamation-circle.png")),
+                  Align(alignment: Alignment.centerLeft,child: Text("아이디는 수정할 수 없습니다.")),
+                ],
+              ),
             ),
             Container(
               width: MediaQuery.of(context).size.width,
@@ -427,6 +502,7 @@ class _modify_infoState extends State<modify_info> {
               margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: TextFormField(
+                  readOnly: flg_namereadonly,
                   controller: modify_name,
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.emailAddress,
@@ -446,6 +522,7 @@ class _modify_infoState extends State<modify_info> {
                   )
               ),
             ),
+            notify_namedate,
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.05,
@@ -486,6 +563,20 @@ class _modify_infoState extends State<modify_info> {
                         )
                     ),
                   ),
+                ],
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height*0.05,
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      width: MediaQuery.of(context).size.width*0.05,
+                      height: MediaQuery.of(context).size.width*0.05,
+                      child: Image.asset("images/fa-exclamation-circle.png")),
+                  Align(alignment: Alignment.centerLeft,child: Text("휴대번호 변경시 앱설정에서 변경바랍니다.")),
                 ],
               ),
             ),

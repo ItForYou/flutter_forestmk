@@ -370,7 +370,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                         Image.asset("images/fa-comment.png",height: MediaQuery.of(context).size.height*0.018,),
-                        Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
+                        Text(temp_data.comments, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
                       ],
                     ),
                   ],

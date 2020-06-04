@@ -202,7 +202,7 @@ class _mypageState extends State<mypage> {
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => modify_info(mb_name: widget.mb_name,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_hp: widget.mb_hp,mb_5: widget.mb_5,mb_6: widget.mb_6,mb_id:widget.mb_id,)
+                              builder:(context) => modify_info(mb_name: widget.mb_name,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_hp: widget.mb_hp,mb_4:widget.mb_4,mb_5: widget.mb_5,mb_6: widget.mb_6,mb_id:widget.mb_id,)
                           ));
                         },
                       )

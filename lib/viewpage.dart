@@ -570,6 +570,24 @@ class _ViewpageState extends State<Viewpage>{
     }
   }
 
+  Future<dynamic> update_hitnrecent() async{
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/update_hitnrecent.php'),
+        body: {
+          "wr_id":widget.info.wr_id,
+          "mb_id":real_mbid,
+          "bo_table":'deal'
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+
+    if(response.statusCode==200){
+      print(response.body);
+    }
+
+  }
+
   Future<dynamic> update_declare(popcontext) async{
 
     final response = await http.post(
@@ -709,7 +727,10 @@ class _ViewpageState extends State<Viewpage>{
       }
       else
         real_mbid='';
+
+
     });
+
   }
 
   void set_herocontent(List <dynamic> path){
@@ -854,10 +875,12 @@ class _ViewpageState extends State<Viewpage>{
 @override
   void initState() {
     // TODO: implement initState
+
     load_myinfo();
     get_data();
     path= widget.info.file;
     count_like=int.parse(widget.info.like);
+
     if(widget.info.wr_9 =='거래완료') {
       setState(() {
         txt_soldout ="거래완료";
@@ -865,7 +888,11 @@ class _ViewpageState extends State<Viewpage>{
         flg_soldout = 1;
       });
     }
+
+    //update_hitnrecent();
+
     super.initState();
+
   }
 
 
