@@ -367,6 +367,11 @@ class _modify_infoState extends State<modify_info> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.05,
+              child: Text("아이디는 수정할 수 없습니다."),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height*0.05,
               margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: TextFormField(

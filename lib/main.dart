@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutterforestmk/categorypage.dart';
 import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/chk_writead.dart';
@@ -24,7 +25,21 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
-void main() => runApp(MyApp());
+Future <void> main() async{
+
+
+  WidgetsFlutterBinding.ensureInitialized();
+  var initAndroidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initIosSetting = IOSInitializationSettings();
+  var initSetting = InitializationSettings(initAndroidSetting, initIosSetting);
+  await FlutterLocalNotificationsPlugin().initialize(initSetting, onSelectNotification: (String value) async{
+
+    List <String> values = value.split('-');
+    print(values[0]);
+
+  });
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
 
@@ -144,6 +159,24 @@ class _MyHomePageState extends State<MyHomePage> {
          }
       });
     }
+  }
+
+  Future<dynamic> update_settoken(token) async{
+
+    if(mb_id != null && mb_id !='') {
+      final response = await http.post(
+          Uri.encodeFull('http://14.48.175.177/update_token.php'),
+          body: {
+            "mb_id": mb_id,
+            "token": token,
+          },
+          headers: {'Accept': 'application/json'}
+      );
+
+      if (response.statusCode == 200) {
+      }
+    }
+
   }
 
   void _showcontent() {
@@ -601,22 +634,31 @@ class _MyHomePageState extends State<MyHomePage> {
       if(sp.getString('id')!=null) {
         mb_id = sp.getString('id');
         mb_pwd = sp.getString('pwd');
-        get_mbdata();
+        if(mb_id !=null && mb_id !='') {
+          get_mbdata();
+        }
       }
+  }
+
+  Future<void> showNotification(title,body) async {
+    var android = AndroidNotificationDetails(
+        'channelId', 'channelName', 'channelDescription');
+    var iOS = IOSNotificationDetails();
+    var platform = NotificationDetails(android, iOS);
+    List <String> temp_list=[];
+    temp_list.add(title);
+    temp_list.add(body);
+    await FlutterLocalNotificationsPlugin().show(0, title, body, platform,payload: temp_list.join('-'));
   }
 
   @override
   void initState() {
     // TODO: implement initState
 
-    _firebaseMessaging.getToken().then((token){
-      print('token:'+token);
-    });
-
     _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
-          print("test");
-          print("onMessage: $message");
+          print("onLaunch: $message");
+          showNotification(message['notification']['title'].toString(),message['notification']['body'].toString());
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
@@ -629,13 +671,15 @@ class _MyHomePageState extends State<MyHomePage> {
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
     load_myinfo();
+    _firebaseMessaging.getToken().then((token) {
+      update_settoken(token);
+    });
     get_data();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Build!");
     load_myinfo();
     if(mb_name=='test') {
       setState(() {});
