@@ -25,8 +25,15 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
-Future <void> main() async{
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
+/*Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  print("onBackgroundMessage: $message");
+  //_showBigPictureNotification(message);
+  return Future<void>.value();
+}*/
+
+Future <void> main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
   var initAndroidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -39,7 +46,9 @@ Future <void> main() async{
 
   });
   runApp(MyApp());
+
 }
+//void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
 
@@ -68,6 +77,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title,}) : super(key: key);
 
@@ -87,6 +98,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   int _counter = 0;
   bool checkbox_soldout = false;
   bool checkbox_adv = false;
@@ -115,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
   );
   PreferredSize scroll_appbar;
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
 
   void _incrementCounter() {
     setState(() {
@@ -655,25 +667,29 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
 
-    _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          print("onLaunch: $message");
-          showNotification(message['notification']['title'].toString(),message['notification']['body'].toString());
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-          print("onLaunch: $message");
-        },
-        onResume: (Map<String, dynamic> message) async {
-          print("onResume: $message");
-        },
-    );
-
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
+
     load_myinfo();
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        showNotification(message['notification']['title'].toString(),message['notification']['body'].toString());
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        sort_value='테스트';
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+
     _firebaseMessaging.getToken().then((token) {
       update_settoken(token);
     });
+
     get_data();
     super.initState();
   }
@@ -681,9 +697,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     load_myinfo();
-    if(mb_name=='test') {
-      setState(() {});
-    }
+
     if(mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,

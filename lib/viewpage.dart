@@ -890,12 +890,9 @@ class _ViewpageState extends State<Viewpage>{
     }
 
     //update_hitnrecent();
-
     super.initState();
 
   }
-
-
 
   @override
   Widget build(BuildContext context) {
