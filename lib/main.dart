@@ -114,6 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String sort_value = "최근순", mb_id,mb_pwd,mb_2="test",mb_1="test",mb_name="test",mb_hp,mb_3,mb_4,mb_5='',mb_6='';
   var itemdata;
   List <Widget> items_content=[];
+
   PreferredSize intro_appbar = PreferredSize(
     // Here we take the value from the MyHomePage object that was created by
     // the App.build method, and use it to set our appbar title.
@@ -126,8 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
       )
   );
   PreferredSize scroll_appbar;
-
-
 
   void _incrementCounter() {
     setState(() {
@@ -176,6 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<dynamic> update_settoken(token) async{
 
     if(mb_id != null && mb_id !='') {
+
       final response = await http.post(
           Uri.encodeFull('http://14.48.175.177/update_token.php'),
           body: {
@@ -184,9 +184,9 @@ class _MyHomePageState extends State<MyHomePage> {
           },
           headers: {'Accept': 'application/json'}
       );
-
       if (response.statusCode == 200) {
       }
+
     }
 
   }
@@ -416,8 +416,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
 
         onTap: ()async{
-          var result = await Navigator.push(context, MaterialPageRoute(
-              builder: (context) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,)
+          var result = await Navigator.push(context, PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 400),
+            pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+
           ));
           if(result == 'delete'){
             get_data();
@@ -612,11 +614,13 @@ class _MyHomePageState extends State<MyHomePage> {
           else{
             mb_1='test';
           }
+
           mb_2 = temp_mbdata['mb_2'];
           mb_3 = temp_mbdata['mb_3'];
           mb_4 = temp_mbdata['mb_4'];
           mb_5 = temp_mbdata['mb_5'];
           mb_6 = temp_mbdata['mb_6'];
+
   }
 
  Future<dynamic> get_data() async{

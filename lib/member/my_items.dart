@@ -374,10 +374,18 @@ class _my_itemsState extends State<my_items> {
         ),
       ),
 
-      onTap: (){
-        Navigator.push(context,MaterialPageRoute(
-            builder:(context) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,)
+      onTap: ()async{
+        var result = await Navigator.push(context, PageRouteBuilder(
+          transitionDuration: Duration(milliseconds: 400),
+          pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+
         ));
+        if(result == 'delete'){
+          get_data();
+        }
+//        Navigator.push(context,MaterialPageRoute(
+//            builder:(context) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,)
+//        ));
       },
     );
 
