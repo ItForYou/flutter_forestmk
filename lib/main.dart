@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
 
 /*Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   print("onBackgroundMessage: $message");
@@ -320,7 +322,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             decoration: BoxDecoration(
                               color: Colors.white
                             ),
-                            child: Center(child: Text("판매완료")),
+                            child: Center(child: Text("판매완료", style: TextStyle(color: Color(0xff000000),fontSize: MediaQuery.of(context).size.width*0.035))),
                           ),
                         ),
                       )

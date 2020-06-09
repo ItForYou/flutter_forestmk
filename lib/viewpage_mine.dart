@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutterforestmk/chat_webview.dart';
+import 'package:flutterforestmk/comment_reply.dart';
 import 'package:flutterforestmk/member/loginpage.dart';
 import 'package:flutterforestmk/view_item.dart';
 import 'package:flutterforestmk/write_normal.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutterforestmk/comment_item.dart';
 
 class Viewpage_mine extends StatefulWidget {
   String wr_id;
@@ -27,16 +29,27 @@ class Viewpage_mine extends StatefulWidget {
 
 class _ViewpagemineState extends State<Viewpage_mine>{
 
-  var itemdata,itemdata_now;
+  var itemdata,itemdata_now,comment_data;
   double itmes_height=0,itmes_height2=0;
   List <Widget> list_subitem = [Container()];
   List <Widget> list_extraitem = [Container()];
-  String wr_id, mb_id='test',ca_name,real_mbid,price="", real_mbpwd, now_price="";
+  List <Widget> widget_comments = [
+    Container(
+        height: 100,
+        child:Center(
+          child:Text("등록된 댓글이 없습니다."),
+        )
+    )
+  ];
+  String wr_id, mb_id='test',ca_name,real_mbid,price="", real_mbpwd, now_price="",seleted_comm_wrid='',uploadcomm_bt_txt="댓글게시";
   Widget Swiper_widget=SizedBox();
   String txt_soldout = "완료하기",declare_cate="사기신고";
   Color color_soldout = Color(0xff515151);
-  int flg_soldout=0, flg_likenow=0, count_like=0;
+  int flg_soldout=0, flg_likenow=0, count_like=0,flg_opencomments=0,flg_uploadcomm_bt=0;
+
   TextEditingController delare_content = TextEditingController();
+  TextEditingController input_comment = TextEditingController();
+  ScrollController change_scroll = ScrollController(initialScrollOffset: 0);
 
   void load_myinfo()async{
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -44,6 +57,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       if(sp.getString('id')!=null) {
         real_mbid = sp.getString('id');
         real_mbpwd = sp.getString('pwd');
+        update_hitnrecent();
       }
       else
         real_mbid='';
@@ -89,6 +103,161 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         );
       },
     );
+  }
+
+  void add_widget_comments(){
+    widget_comments.clear();
+
+    for(int i=0; i<comment_data.length;i++) {
+
+      var before_tdata =null;
+      var temp_data  = comment_item.fromJson(comment_data[i]);
+
+      if(i!=0)
+        before_tdata  = comment_item.fromJson(comment_data[i-1]);
+      else
+        before_tdata  = comment_item.fromJson(comment_data[comment_data.length-1]);
+
+      Widget temp = Container(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * (0.085+(temp_data.wr_content.length/MediaQuery.of(context).size.width*0.135)),
+        margin: EdgeInsets.only(bottom: MediaQuery
+            .of(context)
+            .size
+            .height * 0.01),
+        padding: EdgeInsets.only(left:
+        (temp_data.wr_comment != before_tdata.wr_comment)||(i==0)?
+        MediaQuery
+            .of(context)
+            .size
+            .width * 0.05:
+        MediaQuery
+            .of(context)
+            .size
+            .width * 0.1,
+          right: MediaQuery
+              .of(context)
+              .size
+              .width * 0.05,),
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(width: 1, color: Color(0xffdddddd)))
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                (temp_data.wr_comment != before_tdata.wr_comment)||(i==0)?
+                Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.02,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.02,
+                  decoration: BoxDecoration(
+                      color: Colors.forestmk,
+                      borderRadius: BorderRadius.all(Radius.circular(MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.05,))
+                  ),
+                ):SizedBox(width: 0,),
+                SizedBox(width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.02,),
+                Text(temp_data.mb_name==''?'':temp_data.mb_name, style: TextStyle(fontSize: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.032),)
+
+              ],
+            ),
+            SizedBox(height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.005,),
+            Text(
+                temp_data.wr_content==''?'':temp_data.wr_content,
+                style: TextStyle(fontSize: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.032)),
+            SizedBox(height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.005,),
+            Row(
+              children: <Widget>[
+                Text(temp_data.wr_datetime==''?'':temp_data.wr_datetime, style: TextStyle(
+                    color: Color(0xffdddddd), fontSize: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.03),),
+                SizedBox(width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.02,),
+                InkWell(
+                  child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd)),),
+                  onTap: ()async{
+                    var result = await Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => comment_reply(wr_comment: temp_data.wr_comment,wr_parent:temp_data.wr_parent)
+                    ));
+                    if(result == 'reply'){
+                      get_comment();
+                    }
+                  },
+                ),
+                (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                SizedBox(width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.02,):SizedBox(),
+                (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                InkWell(
+                  child: Text("수정", style: TextStyle(color: Color(0xffdddddd)),),
+                  onTap: (){
+                    setState(() {
+                      seleted_comm_wrid = temp_data.wr_id;
+                      input_comment.text=temp_data.wr_content;
+                      uploadcomm_bt_txt="수정하기";
+                      flg_uploadcomm_bt = 1;
+//                        change_scroll.animateTo(change_scroll.position.maxScrollExtent-MediaQuery.of(context).size.height * 0.45,duration: Duration(milliseconds: 300),curve: Curves.easeOutCirc);
+                      change_scroll.jumpTo(change_scroll.position.maxScrollExtent);
+                    });
+                  },
+                ):SizedBox(),
+                (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                SizedBox(width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.02,):SizedBox(),
+                (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                InkWell(
+                  child: Text("삭제", style: TextStyle(color: Color(0xffdddddd)),
+                  ),
+                  onTap: (){
+                    show_deletecmmt(temp_data.wr_id);
+                  },
+                ):SizedBox(),
+              ],
+            )
+          ],
+        ),
+      );
+      widget_comments.add(temp);
+    }
   }
 
   Future<dynamic> update_soldout(flg) async{
@@ -161,6 +330,84 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       Navigator.pop(popcontext);
     }
 
+  }
+
+  Future<dynamic> update_comment() async{
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/update_comment.php'),
+        body: {
+          "wr_id":flg_uploadcomm_bt==0?widget.wr_id:seleted_comm_wrid,
+          "comment_content":input_comment.text,
+          "ca_name":itemdata_now!=null?itemdata_now['ca_name']:'',
+          "mb_id":real_mbid,
+          "w":flg_uploadcomm_bt==1?'u':''
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+    if(response.statusCode==200){
+      // print(response.body);
+      get_comment();
+    }
+  }
+
+  Future<dynamic> get_comment() async{
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_comments.php'),
+        body: {
+          "wr_id":widget.wr_id,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+    if(response.statusCode==200){
+      //print(response.body);
+      setState(() {
+        comment_data = jsonDecode(response.body);
+        add_widget_comments();
+      });
+    }
+  }
+
+  void show_deletecmmt(id) {
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context2).size.height*0.02,
+            child: Text("이 댓글을 삭제를 하시겠습니까?"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: ()async{
+                final response = await http.post(
+                    Uri.encodeFull('http://14.48.175.177/delete_comment.php'),
+                    body: {
+                      "wr_id":id,
+                    },
+                    headers: {'Accept' : 'application/json'}
+                );
+                if(response.statusCode ==200){
+                  Navigator.pop(context2);
+                  get_comment();
+                }
+              },
+            ),
+            new FlatButton(
+              child: new Text("취소"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void show_declare() {
@@ -608,6 +855,24 @@ class _ViewpagemineState extends State<Viewpage_mine>{
     }
   }
 
+  Future<dynamic> update_hitnrecent() async{
+
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/update_hitnrecent.php'),
+        body: {
+          "wr_id":widget.wr_id,
+          "mb_id":real_mbid,
+          "bo_table":'deal'
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+
+    if(response.statusCode==200){
+    }
+
+  }
+
 
   Widget get_content2(id,flg){
 
@@ -694,6 +959,8 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       });
     }
   }
+
+
 
   Future<dynamic> get_data_now() async{
     final response = await http.post(
@@ -881,6 +1148,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
     super.initState();
     load_myinfo();
     get_data_now();
+    get_comment();
   }
 
 
@@ -939,6 +1207,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         ),
         body:
         ListView(
+          controller: change_scroll,
           children: <Widget>[
               Container(
                   height: MediaQuery.of(context).size.height*0.33,
@@ -1160,14 +1429,35 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                         update_like();
                     },
                   ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                          width:MediaQuery.of(context).size.width*0.05,
-                          child: Image.asset("images/fa-comment-alt.png")
-                      ),
-                      Text("댓글 달기"),
-                    ],
+                  InkWell(
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                            width:MediaQuery.of(context).size.width*0.05,
+                            child: Image.asset("images/fa-comment-alt.png")
+                        ),
+                        Text("댓글 달기",style: TextStyle(color: flg_opencomments==0?Colors.black:Colors.forestmk),),
+                      ],
+                    ),
+                    onTap: (){
+                      if(real_mbid!='') {
+                        setState(() {
+                          if (flg_opencomments == 0) {
+                            setState(() {
+                              flg_opencomments = 1;
+                            });
+                          }
+                          else {
+                            setState(() {
+                              flg_opencomments = 0;
+                            });
+                          }
+                        });
+                      }
+                      else{
+                        request_logindialog();
+                      }
+                    },
                   ),
                   Row(
                     children: <Widget>[
@@ -1182,6 +1472,130 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                 ],
               ),
             ),
+
+            (flg_opencomments==1) && (real_mbid!='')?
+            Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.05,
+              child: Row(
+                children: <Widget>[
+
+                  Container(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.06,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.06,
+                      margin: EdgeInsets.only(left: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.03,),
+                      child: Image.asset("images/fa-comment-alt.png")
+                  ),
+                  SizedBox(width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.02,),
+                  Text("댓글")
+                ],
+              ),
+            ):SizedBox(),
+            (flg_opencomments==1) && (real_mbid!='')?
+            Column(
+              children: widget_comments,
+            ):SizedBox(),
+            (flg_opencomments==1) && (real_mbid!='')?
+            Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.16,
+              margin: EdgeInsets.all(MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.05,),
+              padding: EdgeInsets.all(MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.02,),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: Color(0xffdddddd))
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "댓글을 입력하세요",
+                        hintStyle: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.02 )
+                    ),
+                    maxLines: 2,
+                    controller: input_comment,
+                  ),
+                  Container(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          flg_uploadcomm_bt==1?
+                          InkWell(
+                              child: Text(
+                                "수정취소", style: TextStyle(color: Colors.forestmk),
+                                textAlign: TextAlign.right,),
+                              onTap: (){
+                                setState((){
+                                  seleted_comm_wrid='';
+                                  flg_uploadcomm_bt=0;
+                                  uploadcomm_bt_txt="등록하기";
+                                  input_comment.text ='';
+                                });
+                              }
+                          ):SizedBox(),
+                          SizedBox(width: MediaQuery.of(context).size.width*0.02,),
+                          InkWell(
+                              child: Text(
+                                uploadcomm_bt_txt, style: TextStyle(color: Colors.forestmk),
+                                textAlign: TextAlign.right,),
+                              onTap: (){
+                                if(real_mbid!=''){
+                                  update_comment();
+                                  flg_uploadcomm_bt=0;
+                                  uploadcomm_bt_txt="댓글게시";
+                                  seleted_comm_wrid='';
+                                  input_comment.text = '';
+                                }
+                              }
+                          ),
+                        ],
+                      )
+                  ),
+
+                ],
+              ),
+
+            ):SizedBox(),
+
+
             Container(
               height: itmes_height,
               decoration: BoxDecoration(

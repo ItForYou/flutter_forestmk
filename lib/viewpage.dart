@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/comment_item.dart';
+import 'package:flutterforestmk/comment_reply.dart';
 import 'package:flutterforestmk/member/loginpage.dart';
 import 'package:flutterforestmk/main_item.dart';
 import 'package:flutterforestmk/view_item.dart';
@@ -49,12 +50,13 @@ class _ViewpageState extends State<Viewpage>{
   Widget  hero_content= Container();
   double itmes_height=0,itmes_height2=0;
   int flg_soldout=0,count_like=0,flg_opencomments=0;
-  String txt_soldout = "완료하기",declare_cate="사기신고";
+  String txt_soldout = "완료하기",declare_cate="사기신고",uploadcomm_bt_txt="댓글게시",seleted_comm_wrid='';
   Color color_soldout = Color(0xff515151);
   TextEditingController delare_content = TextEditingController();
   TextEditingController input_comment = TextEditingController();
+  ScrollController change_scroll = ScrollController(initialScrollOffset: 0);
+  int flg_likenow=0,flg_uploadcomm_bt=0;
 
-  int flg_likenow=0;
 
 
   void add_widget_comments(){
@@ -140,7 +142,7 @@ class _ViewpageState extends State<Viewpage>{
                 .size
                 .height * 0.005,),
             Text(
-                temp_data.wr_content==''?'':temp_data.wr_content+temp_data.wr_content.length.toString(),
+                temp_data.wr_content==''?'':temp_data.wr_content,
                 style: TextStyle(fontSize: MediaQuery
                     .of(context)
                     .size
@@ -162,8 +164,13 @@ class _ViewpageState extends State<Viewpage>{
                     .width * 0.02,),
                 InkWell(
                     child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd)),),
-                    onTap: (){
-
+                    onTap: ()async{
+                      var result = await Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => comment_reply(wr_comment: temp_data.wr_comment,wr_parent:temp_data.wr_parent)
+                      ));
+                      if(result == 'reply'){
+                        get_comment();
+                      }
                     },
                 ),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
@@ -172,7 +179,19 @@ class _ViewpageState extends State<Viewpage>{
                     .size
                     .width * 0.02,):SizedBox(),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
-                Text("수정", style: TextStyle(color: Color(0xffdddddd)),):SizedBox(),
+                InkWell(
+                    child: Text("수정", style: TextStyle(color: Color(0xffdddddd)),),
+                    onTap: (){
+                      setState(() {
+                        seleted_comm_wrid = temp_data.wr_id;
+                        input_comment.text=temp_data.wr_content;
+                        uploadcomm_bt_txt="수정하기";
+                        flg_uploadcomm_bt = 1;
+//                        change_scroll.animateTo(change_scroll.position.maxScrollExtent-MediaQuery.of(context).size.height * 0.45,duration: Duration(milliseconds: 300),curve: Curves.easeOutCirc);
+                      change_scroll.jumpTo(change_scroll.position.maxScrollExtent);
+                      });
+                    },                        
+                ):SizedBox(),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
                 SizedBox(width: MediaQuery
                     .of(context)
@@ -186,8 +205,6 @@ class _ViewpageState extends State<Viewpage>{
                     show_deletecmmt(temp_data.wr_id);
                   },
                 ):SizedBox(),
-
-
               ],
             )
           ],
@@ -347,15 +364,16 @@ class _ViewpageState extends State<Viewpage>{
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/update_comment.php'),
         body: {
-          "wr_id":widget.info.wr_id,
+          "wr_id":flg_uploadcomm_bt==0?widget.info.wr_id:seleted_comm_wrid,
           "comment_content":input_comment.text,
           "ca_name":widget.info.ca_name,
           "mb_id":real_mbid,
-
+          "w":flg_uploadcomm_bt==1?'u':''
         },
         headers: {'Accept' : 'application/json'}
     );
     if(response.statusCode==200){
+     // print(response.body);
       get_comment();
     }
   }
@@ -388,7 +406,7 @@ class _ViewpageState extends State<Viewpage>{
           title:null,
           content: Container(
             height: MediaQuery.of(context2).size.height*0.02,
-            child: Text("이 댓글을 삭제를 하시겠습니가?"),
+            child: Text("이 댓글을 삭제를 하시겠습니까?"),
           ),
           actions: <Widget>[
             new FlatButton(
@@ -803,6 +821,7 @@ class _ViewpageState extends State<Viewpage>{
 
   Future<dynamic> update_hitnrecent() async{
 
+
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/update_hitnrecent.php'),
         body: {
@@ -814,7 +833,6 @@ class _ViewpageState extends State<Viewpage>{
     );
 
     if(response.statusCode==200){
-      print(response.body);
     }
 
   }
@@ -955,6 +973,7 @@ class _ViewpageState extends State<Viewpage>{
       if(sp.getString('id')!=null) {
         real_mbid = sp.getString('id');
         real_mbpwd = sp.getString('pwd');
+        update_hitnrecent();
       }
       else
         real_mbid='';
@@ -1120,15 +1139,13 @@ class _ViewpageState extends State<Viewpage>{
         flg_soldout = 1;
       });
     }
-
-    //update_hitnrecent();
     super.initState();
 
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Build!");
+    //print("Build!");
 
     set_herocontent(path);
     if(widget.info.ca_name =='업체'){
@@ -1232,6 +1249,7 @@ class _ViewpageState extends State<Viewpage>{
             ),
         body:
             ListView(
+              controller: change_scroll,
               children: <Widget>[
                 Hero(
                       tag: widget.tag,
@@ -1571,23 +1589,47 @@ class _ViewpageState extends State<Viewpage>{
                           maxLines: 2,
                           controller: input_comment,
                         ),
-
-                        InkWell(
-                          child: Container(
+                      Container(
                               width: MediaQuery
                                   .of(context)
                                   .size
                                   .width,
-                              child: Text(
-                                "댓글게시", style: TextStyle(color: Colors.forestmk),
-                                textAlign: TextAlign.right,)),
-                          onTap: (){
-                            if(real_mbid!='') {
-                              update_comment();
-                              input_comment.text = '';
-                            }
-                          },
-                        )
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  flg_uploadcomm_bt==1?
+                                  InkWell(
+                                    child: Text(
+                                      "수정취소", style: TextStyle(color: Colors.forestmk),
+                                      textAlign: TextAlign.right,),
+                                      onTap: (){
+                                        setState((){
+                                          seleted_comm_wrid='';
+                                          flg_uploadcomm_bt=0;
+                                          uploadcomm_bt_txt="등록하기";
+                                          input_comment.text ='';
+                                        });
+                                      }
+                                  ):SizedBox(),
+                                  SizedBox(width: MediaQuery.of(context).size.width*0.02,),
+                                  InkWell(
+                                      child: Text(
+                                        uploadcomm_bt_txt, style: TextStyle(color: Colors.forestmk),
+                                        textAlign: TextAlign.right,),
+                                      onTap: (){
+                                        if(real_mbid!=''){
+                                          update_comment();
+                                          flg_uploadcomm_bt=0;
+                                          uploadcomm_bt_txt="댓글게시";
+                                          seleted_comm_wrid='';
+                                          input_comment.text = '';
+                                        }
+                                      }
+                                  ),
+                                ],
+                              )
+                      ),
+
                       ],
                     ),
 

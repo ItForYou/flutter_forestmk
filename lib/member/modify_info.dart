@@ -643,7 +643,7 @@ class _modify_infoState extends State<modify_info> {
                     ),
                     onTap:()async{
                       var result = await uploadImage();
-                      print(result);
+                      //print(result);
                     },
                   ),
                   InkWell(
