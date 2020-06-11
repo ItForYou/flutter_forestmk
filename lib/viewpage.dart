@@ -373,7 +373,7 @@ class _ViewpageState extends State<Viewpage>{
         headers: {'Accept' : 'application/json'}
     );
     if(response.statusCode==200){
-     // print(response.body);
+      print(response.body);
       get_comment();
     }
   }

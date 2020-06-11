@@ -26,14 +26,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
-final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-
-/*Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
-  print("onBackgroundMessage: $message");
-  //_showBigPictureNotification(message);
-  return Future<void>.value();
-}*/
 
 Future <void> main() async{
 
@@ -52,10 +44,24 @@ Future <void> main() async{
 }
 //void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
 
   // This widget is the root of your application.
 
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+/*Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) {
+  print("_backgroundMessageHandler");
+  if (message.containsKey('data')) {
+    // Handle data message
+    final dynamic data = message['data'];
+    print("_backgroundMessageHandler data: ${data}");
+  }
+}*/
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
 
@@ -99,8 +105,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   int _counter = 0;
   bool checkbox_soldout = false;
   bool checkbox_adv = false;
@@ -669,6 +675,42 @@ class _MyHomePageState extends State<MyHomePage> {
     await FlutterLocalNotificationsPlugin().show(0, title, body, platform,payload: temp_list.join('-'));
   }
 
+
+  Future handelDynamicLinks() async{
+
+    final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
+
+    _handleDeeplink(data);
+
+    FirebaseDynamicLinks.instance.onLink(
+
+        onSuccess: (PendingDynamicLinkData dynamicLinkdata) async{
+          _handleDeeplink(dynamicLinkdata);
+        },
+        onError: (OnLinkErrorException e) async{
+          print("Dynamic Link Failed: ${e.message}");
+        }
+    );
+  }
+
+  void _handleDeeplink(PendingDynamicLinkData data){
+    final Uri deepLink = data?.link;
+    if(deepLink !=null){
+      print('test | $deepLink');
+    }
+  }
+
+
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    handelDynamicLinks();
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -683,8 +725,8 @@ class _MyHomePageState extends State<MyHomePage> {
         print("onMessage: $message");
         showNotification(message['notification']['title'].toString(),message['notification']['body'].toString());
       },
+      //onBackgroundMessage:backgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
-        sort_value='테스트';
         print("onLaunch: $message");
       },
       onResume: (Map<String, dynamic> message) async {
