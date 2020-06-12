@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name=".Application"
         android:label="숲마켓"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
@@ -42,7 +42,7 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
             android:name="flutterEmbedding"
-            android:value="2" />
+            android:value="1" />
 
     </application>
 

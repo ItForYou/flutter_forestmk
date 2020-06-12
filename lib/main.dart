@@ -27,7 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
 
-Future <void> main() async{
+/*Future <void> main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
   var initAndroidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -35,14 +35,24 @@ Future <void> main() async{
   var initSetting = InitializationSettings(initAndroidSetting, initIosSetting);
   await FlutterLocalNotificationsPlugin().initialize(initSetting, onSelectNotification: (String value) async{
 
-    List <String> values = value.split('-');
-    print(values[0]);
+    var result = await Navigator.push(
+        context, MaterialPageRoute(
+        builder: (context) =>
+            chat_webview(
+              url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
+                  mb_id + "&mb_password=" +
+                  mb_pwd+ "&flg_view=1&view_id="+message['data']['flutter_go'],view: 1,
+            )
+    ));
+    if (result == 'change') {
+      get_data();
+    }
 
   });
   runApp(MyApp());
 
-}
-//void main() => runApp(MyApp());
+}*/
+void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
 
@@ -52,16 +62,27 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-/*Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) {
-  print("_backgroundMessageHandler");
-  if (message.containsKey('data')) {
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+  print("test_callbackground");
+/*  if (message.containsKey('data')) {
     // Handle data message
     final dynamic data = message['data'];
-    print("_backgroundMessageHandler data: ${data}");
+    print(data);
   }
-}*/
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+    print(notification);
+  }
+  // Or do other work.*/
+}
 
 class _MyAppState extends State<MyApp> {
+
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -106,8 +127,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
+
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  int _counter = 0;
   bool checkbox_soldout = false;
   bool checkbox_adv = false;
   ScrollController change_appbar = ScrollController();
@@ -118,10 +139,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   static double scrollbar_height=1;
   PreferredSize appbar;
   Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black));
-  bool flg_search = false;
+  bool flg_search = false, flg_pushchat=false;
   String sort_value = "최근순", mb_id,mb_pwd,mb_2="test",mb_1="test",mb_name="test",mb_hp,mb_3,mb_4,mb_5='',mb_6='';
   var itemdata;
   List <Widget> items_content=[];
+  int build_cnt = 0;
 
   PreferredSize intro_appbar = PreferredSize(
     // Here we take the value from the MyHomePage object that was created by
@@ -136,20 +158,34 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   );
   PreferredSize scroll_appbar;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
   double roundDouble(double value, int places){
     double mod = pow(10.0, places);
     return ((value * mod).round().toDouble() / mod);
   }
+
+  Future <void> initlocalnotice() async{
+
+  WidgetsFlutterBinding.ensureInitialized();
+  var initAndroidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initIosSetting = IOSInitializationSettings();
+  var initSetting = InitializationSettings(initAndroidSetting, initIosSetting);
+  await FlutterLocalNotificationsPlugin().initialize(initSetting, onSelectNotification: (String value) async{
+
+    var result = await Navigator.push(
+        context, MaterialPageRoute(
+        builder: (context) =>
+            chat_webview(
+              url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
+                  mb_id + "&mb_password=" +
+                  mb_pwd+ "&flg_view=1&view_id="+value,view: 1,
+            )
+    ));
+    if (result == 'change') {
+      get_data();
+    }
+ // print("noticevalue : $value");
+  });
+}
 
   _changeappbar() {
 
@@ -196,7 +232,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       }
 
     }
-
   }
 
   void _showcontent() {
@@ -664,15 +699,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       }
   }
 
-  Future<void> showNotification(title,body) async {
+  Future<void> showNotification(title,body,link) async {
     var android = AndroidNotificationDetails(
         'channelId', 'channelName', 'channelDescription');
     var iOS = IOSNotificationDetails();
     var platform = NotificationDetails(android, iOS);
-    List <String> temp_list=[];
-    temp_list.add(title);
-    temp_list.add(body);
-    await FlutterLocalNotificationsPlugin().show(0, title, body, platform,payload: temp_list.join('-'));
+
+    await FlutterLocalNotificationsPlugin().show(0, title, body, platform,payload: link);
   }
 
 
@@ -701,8 +734,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   }
 
 
-
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // TODO: implement didChangeAppLifecycleState
@@ -715,6 +746,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   void initState() {
     // TODO: implement initState
 
+    initlocalnotice();
     appbar = intro_appbar;
     change_appbar.addListener(_changeappbar);
 
@@ -722,15 +754,39 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        showNotification(message['notification']['title'].toString(),message['notification']['body'].toString());
+        showNotification(message['notification']['title'].toString(),message['notification']['body'].toString(),message['data']['flutter_go'].toString());
       },
-      //onBackgroundMessage:backgroundMessageHandler,
+      onBackgroundMessage:myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
+          setState(() {
+            flg_pushchat = true;
+          });
+          var result = await Navigator.push(
+              context, MaterialPageRoute(
+              builder: (context) =>
+                  chat_webview(
+                    url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
+                        mb_id + "&mb_password=" +
+                        mb_pwd+ "&flg_view=1&view_id="+message['data']['flutter_go'],view: 1,
+                  )
+          ));
+          if (result == 'change') {
+            get_data();
+          }
       },
       onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
+          var result = await Navigator.push(
+              context, MaterialPageRoute(
+              builder: (context) =>
+                  chat_webview(
+                    url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
+                        mb_id + "&mb_password=" +
+                        mb_pwd+ "&flg_view=1&view_id="+message['data']['flutter_go'],view: 1,
+                  )
+          ));
+          if (result == 'change') {
+            get_data();
+          }
       },
     );
 
@@ -745,7 +801,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   @override
   Widget build(BuildContext context) {
     load_myinfo();
-
+    build_cnt++;
+    print(build_cnt);
     if(mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
