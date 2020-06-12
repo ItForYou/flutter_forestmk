@@ -1263,7 +1263,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                       InkWell(
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.17,
-                          height: MediaQuery.of(context).size.height*0.055,
+                          height: MediaQuery.of(context).size.height*0.06,
                           padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(23)),
@@ -1285,7 +1285,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                       InkWell(
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.17,
-                          height: MediaQuery.of(context).size.height*0.055,
+                          height: MediaQuery.of(context).size.height*0.06,
                           padding: EdgeInsets.all(3),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(23)),

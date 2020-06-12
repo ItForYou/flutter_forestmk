@@ -1213,7 +1213,7 @@ class _ViewpageState extends State<Viewpage>{
                   child:Image.asset("images/hd_back.png")
                 ),
                 onTap: (){
-                  Navigator.of(context).pop(true);
+                  Navigator.pop(context,'delete');
                 },
               ),
               actions : <Widget>[
@@ -1304,7 +1304,7 @@ class _ViewpageState extends State<Viewpage>{
                           InkWell(
                             child: Container(
                               width: MediaQuery.of(context).size.width*0.17,
-                              height: MediaQuery.of(context).size.height*0.055,
+                              height: MediaQuery.of(context).size.height*0.06,
                               padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(Radius.circular(23)),
@@ -1326,7 +1326,7 @@ class _ViewpageState extends State<Viewpage>{
                           InkWell(
                             child: Container(
                               width: MediaQuery.of(context).size.width*0.17,
-                              height: MediaQuery.of(context).size.height*0.055,
+                              height: MediaQuery.of(context).size.height*0.06,
                               padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(Radius.circular(23)),

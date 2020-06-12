@@ -1092,9 +1092,21 @@ class _search_mainState extends State<search_main> {
                             InkWell(
                               child: mb_infowidget,
                               onTap: (){
-                                Navigator.push(context,MaterialPageRoute(
-                                    builder:(context) => loginpage()
-                                ));
+                                if(widget.mb_id==null) {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => loginpage()
+                                  ));
+                                  /*if(result!=null){
+                                    setState(() {
+
+                                    });
+                                  }*/
+                                }
+                                else{
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => mypage(mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                  ));
+                                }
                               },
                             ),
                           ],

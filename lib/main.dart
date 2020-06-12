@@ -462,7 +462,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           var result = await Navigator.push(context, PageRouteBuilder(
             transitionDuration: Duration(milliseconds: 400),
             pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
-
           ));
           if(result == 'delete'){
             get_data();
@@ -686,6 +685,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
      itemdata = jsonDecode(response.body);
      _getWidget();
    });
+
   }
 
   void load_myinfo()async{
@@ -801,8 +801,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   @override
   Widget build(BuildContext context) {
     load_myinfo();
-    build_cnt++;
-    print(build_cnt);
     if(mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -837,6 +835,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                           child: Image.asset("images/hd_cate01.png"),
                         ),
                         onTap: (){
+                          sort_value='최근순';
                           get_data();
                         },
                       ),
@@ -1150,6 +1149,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                             child: Image.asset("images/hd_cate01.png"),
                           ),
                           onTap: (){
+                            sort_value='최근순';
                             get_data();
                           },
                         ),
@@ -1292,8 +1292,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                         ),
                         InkWell(
                           child: Container(
-                            width: 100,
-                            height: 30,
+                            width: MediaQuery.of(context).size.width*0.25,
+                            height: MediaQuery.of(context).size.height*0.035,
                             padding: EdgeInsets.all(3),
                             decoration: BoxDecoration(
                                 color: Color(0xff444444),
