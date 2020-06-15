@@ -523,6 +523,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
+          contentPadding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03, right: MediaQuery.of(context).size.width*0.03, top: MediaQuery.of(context).size.height*0.02,bottom: MediaQuery.of(context).size.height*0.005),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.03))
             

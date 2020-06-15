@@ -166,9 +166,9 @@ class writenormal_State extends State<write_normal> {
     var cnt;
     for(int i=0; i<menu_names.length; i++){
 
-      String path_img=""+i.toString();
-      if(i<10){
-        path_img  = "0"+i.toString();
+      String path_img;
+      if((i+1)<10){
+        path_img  = "0"+(i+1).toString();
       }
       else{
         path_img  = i.toString();
