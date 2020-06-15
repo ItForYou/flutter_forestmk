@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class comment_reply extends StatefulWidget {
-  String wr_comment, wr_parent;
-  comment_reply({Key key, this.wr_comment,this.wr_parent}) : super(key: key);
+  String wr_comment, wr_parent,writer_id;
+  comment_reply({Key key, this.wr_comment,this.wr_parent, this.writer_id}) : super(key: key);
 
   @override
   _comment_replyState createState() => _comment_replyState();
@@ -129,7 +129,7 @@ class _comment_replyState extends State<comment_reply> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  i==0?
+                  widget.writer_id == temp_data.mb_id?
                   Container(
                     width: MediaQuery
                         .of(context)

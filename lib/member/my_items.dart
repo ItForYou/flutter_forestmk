@@ -241,14 +241,14 @@ class _my_itemsState extends State<my_items> {
                       child:
                       temp_data.wr_9!='거래완료'?
                       Container(
-                        width: MediaQuery.of(context).size.width*0.27,
+                        width: MediaQuery.of(context).size.width*0.24,
                         height: MediaQuery.of(context).size.height*0.2,
 
                         decoration: BoxDecoration(
                             border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
                             borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
                             image: DecorationImage(//이미지 꾸미기
-                                fit:BoxFit.fitWidth,
+                                fit:BoxFit.fitHeight,
                                 image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
                             )
                         ),
@@ -298,9 +298,11 @@ class _my_itemsState extends State<my_items> {
                         Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                         SizedBox(height: 8,),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+
                             SizedBox(width: MediaQuery.of(context).size.width*0.005,),
+                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
                               height: MediaQuery.of(context).size.width*0.01,
@@ -1064,7 +1066,7 @@ class _my_itemsState extends State<my_items> {
                 ),
                 Container(
                     padding: EdgeInsets.only(left: 22, right: 22),
-                    height: MediaQuery.of(context).size.height*0.06,
+                    height: MediaQuery.of(context).size.height*0.05,
                     decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border(
@@ -1076,7 +1078,7 @@ class _my_itemsState extends State<my_items> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                            Text(widget.title ,style: TextStyle(fontWeight: FontWeight.bold, fontSize:MediaQuery.of(context).size.width*0.045)),
+                            Text(widget.title ,style: TextStyle(fontSize:MediaQuery.of(context).size.width*0.04)),
                         Row(
                           children: <Widget>[
 

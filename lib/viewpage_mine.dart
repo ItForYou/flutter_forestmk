@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/comment_reply.dart';
@@ -11,8 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutterforestmk/comment_item.dart';
 
 class Viewpage_mine extends StatefulWidget {
-  String wr_id;
-  Viewpage_mine({Key key, this.wr_id}) : super(key: key);
+  String wr_id,mb_id;
+  Viewpage_mine({Key key, this.wr_id, this.mb_id}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -46,7 +47,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   String txt_soldout = "완료하기",declare_cate="사기신고";
   Color color_soldout = Color(0xff515151);
   int flg_soldout=0, flg_likenow=0, count_like=0,flg_opencomments=0,flg_uploadcomm_bt=0;
-
+  bool got_item_now =false;
   TextEditingController delare_content = TextEditingController();
   TextEditingController input_comment = TextEditingController();
   ScrollController change_scroll = ScrollController(initialScrollOffset: 0);
@@ -154,7 +155,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
           children: <Widget>[
             Row(
               children: <Widget>[
-                (temp_data.wr_comment != before_tdata.wr_comment)||(i==0)?
+                (temp_data.mb_id == widget.mb_id)?
                 Container(
                   width: MediaQuery
                       .of(context)
@@ -212,7 +213,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                   child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd)),),
                   onTap: ()async{
                     var result = await Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => comment_reply(wr_comment: temp_data.wr_comment,wr_parent:temp_data.wr_parent)
+                        builder: (context) => comment_reply(wr_comment: temp_data.wr_comment,wr_parent:temp_data.wr_parent, writer_id: widget.mb_id,)
                     ));
                     if(result == 'reply'){
                       get_comment();
@@ -352,7 +353,11 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   }
 
   Future<dynamic> get_comment() async{
-
+/*
+    if(got_item_now ==false){
+      get_comment();
+      return;
+    }*/
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/get_comments.php'),
         body: {
@@ -468,150 +473,185 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                             ],
                           ),
                         ),
-                        Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width,
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.05,
-                          decoration: BoxDecoration(
-                              border: Border(bottom: BorderSide(
-                                  width: 1, color: Color(0xffdddddd)))
+                        InkWell(
+                          child: Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.05,
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(
+                                    width: 1, color: Color(0xffdddddd)))
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Radio(
+                                  value: "사기신고",
+                                  groupValue: declare_cate,
+                                  activeColor: Colors.forestmk,
+                                  onChanged: (T) {
+                                    setState(() {
+                                      declare_cate = T;
+                                    });
+                                  },
+                                ),
+                                Text("사기신고")
+                              ],
+                            ),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Radio(
-                                value: "사기신고",
-                                groupValue: declare_cate,
-                                activeColor: Colors.forestmk,
-                                onChanged: (T) {
-                                  setState(() {
-                                    declare_cate = T;
-                                  });
-                                },
-                              ),
-                              Text("사기신고")
-                            ],
-                          ),
+                          onTap: (){
+                            setState(() {
+                              declare_cate = '사기신고';
+                            });
+                          },
                         ),
-                        Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width,
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.05,
-                          decoration: BoxDecoration(
-                              border: Border(bottom: BorderSide(
-                                  width: 1, color: Color(0xffdddddd)))
+                        InkWell(
+                          child: Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.05,
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(
+                                    width: 1, color: Color(0xffdddddd)))
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Radio(
+                                  value: "성희롱, 욕설 등",
+                                  groupValue: declare_cate,
+                                  activeColor: Colors.forestmk,
+                                  onChanged: (T) {
+                                    setState(() {
+                                      declare_cate = T;
+                                    });
+                                  },
+                                ),
+                                Text("성희롱, 욕설 등")
+                              ],
+                            ),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Radio(
-                                value: "성희롱, 욕설 등",
-                                groupValue: declare_cate,
-                                activeColor: Colors.forestmk,
-                                onChanged: (T) {
-                                  setState(() {
-                                    declare_cate = T;
-                                  });
-                                },
-                              ),
-                              Text("성희롱, 욕설 등")
-                            ],
-                          ),
+                          onTap: (){
+                            setState(() {
+                              declare_cate = '성희롱, 욕설 등';
+                            });
+                          },
                         ),
-                        Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width,
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.05,
-                          decoration: BoxDecoration(
-                              border: Border(bottom: BorderSide(
-                                  width: 1, color: Color(0xffdddddd)))
+                        InkWell(
+                          child: Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.05,
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(
+                                    width: 1, color: Color(0xffdddddd)))
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Radio(
+                                  value: "선정적인 게시물",
+                                  groupValue: declare_cate,
+                                  activeColor: Colors.forestmk,
+                                  onChanged: (T) {
+                                    setState(() {
+                                      declare_cate = T;
+                                    });
+                                  },
+                                ),
+                                Text("선정적인 게시물")
+                              ],
+                            ),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Radio(
-                                value: "선정적인 게시물",
-                                groupValue: declare_cate,
-                                activeColor: Colors.forestmk,
-                                onChanged: (T) {
-                                  setState(() {
-                                    declare_cate = T;
-                                  });
-                                },
-                              ),
-                              Text("선정적인 게시물")
-                            ],
-                          ),
+                          onTap: (){
+                            setState(() {
+                              declare_cate = '선정적인 게시물';
+                            });
+                          },
                         ),
-                        Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width,
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.05,
-                          decoration: BoxDecoration(
-                              border: Border(bottom: BorderSide(
-                                  width: 1, color: Color(0xffdddddd)))
+                        InkWell(
+                          child: Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.05,
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(
+                                    width: 1, color: Color(0xffdddddd)))
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Radio(
+                                  value: "판매금지 품목",
+                                  groupValue: declare_cate,
+                                  activeColor: Colors.forestmk,
+                                  onChanged: (T) {
+                                    setState(() {
+                                      declare_cate = T;
+                                    });
+                                  },
+                                ),
+                                Text("판매금지 품목")
+                              ],
+                            ),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Radio(
-                                value: "판매금지 품목",
-                                groupValue: declare_cate,
-                                activeColor: Colors.forestmk,
-                                onChanged: (T) {
-                                  setState(() {
-                                    declare_cate = T;
-                                  });
-                                },
-                              ),
-                              Text("판매금지 품목")
-                            ],
-                          ),
+                          onTap: (){
+                            setState(() {
+                              declare_cate = '판매금지 품목';
+                            });
+                          },
                         ),
-                        Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width,
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * 0.05,
-                          decoration: BoxDecoration(
-                              border: Border(bottom: BorderSide(
-                                  width: 1, color: Color(0xffdddddd)))
+                        InkWell(
+                          child: Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.05,
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(
+                                    width: 1, color: Color(0xffdddddd)))
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Radio(
+                                  value: "복사 중복 도배",
+                                  groupValue: declare_cate,
+                                  activeColor: Colors.forestmk,
+                                  onChanged: (T) {
+                                    setState(() {
+                                      declare_cate = T;
+                                    });
+                                  },
+                                ),
+                                Text("복사 중복 도배")
+                              ],
+                            ),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Radio(
-                                value: "복사 중복 도배",
-                                groupValue: declare_cate,
-                                activeColor: Colors.forestmk,
-                                onChanged: (T) {
-                                  setState(() {
-                                    declare_cate = T;
-                                  });
-                                },
-                              ),
-                              Text("복사 중복 도배")
-                            ],
-                          ),
+                          onTap: (){
+                            setState(() {
+                              declare_cate = '복사 중복 도배';
+                            });
+                          },
                         ),
                         Container(
                           width: MediaQuery
@@ -893,7 +933,8 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       price=temp_data.wr_1;
     }
     else{
-      price='금액 '+temp_data.wr_1+'원';
+      MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
+      price='금액 ' + fmf.withoutFractionDigits.toString()+'원';
     }
 
     InkWell temp = InkWell(
@@ -929,7 +970,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
       onTap: ()async{
         var result = await Navigator.push(context, MaterialPageRoute(
-            builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id)
+            builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id, mb_id:temp_data.mb_id)
         ));
         if(result == 'delete' || result=='refresh'){
           get_data();
@@ -970,35 +1011,39 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         },
         headers: {'Accept' : 'application/json'}
     );
+    if(response.statusCode ==200) {
+      setState(() {
+        got_item_now = true;
+        itemdata_now = jsonDecode(response.body);
 
-    setState(() {
-
-      itemdata_now = jsonDecode(response.body);
-
-      if(itemdata_now['ca_name'] =='업체'){
-        now_price=itemdata_now['wr_subject'];
-      }
-      else if(itemdata_now['wr_1'] =='무료나눔'){
-        now_price=itemdata_now['wr_1'];
-      }
-      else{
-        now_price='금액 '+itemdata_now['wr_1']+'원';
-      }
-      mb_id = itemdata_now['mb_id'];
-      ca_name = itemdata_now['ca_name'];
-      count_like=int.parse( itemdata_now['wr_10']);
-      Swiper_widget = Swiper(
-        itemCount: itemdata_now['files'].length,
-        itemBuilder: (BuildContext context, int index){
-          return Image.network(itemdata_now['files'][index]);
-        },
-        pagination: (itemdata_now['files'].length)>1?SwiperPagination():null,
-        loop: (itemdata_now['files'].length)>1? true:false,
-      );
-      get_lkeflg();
-      get_data();
-
-    });
+        if (itemdata_now['ca_name'] == '업체') {
+          now_price = itemdata_now['wr_subject'];
+        }
+        else if (itemdata_now['wr_1'] == '무료나눔') {
+          now_price = itemdata_now['wr_1'];
+        }
+        else {
+          MoneyFormatterOutput fmf = FlutterMoneyFormatter(
+              amount: double.parse(itemdata_now['wr_1'])).output;
+          now_price = '금액 ' + fmf.withoutFractionDigits.toString() + '원';
+        }
+        mb_id = itemdata_now['mb_id'];
+        ca_name = itemdata_now['ca_name'];
+        count_like = int.parse(itemdata_now['wr_10']);
+        Swiper_widget = Swiper(
+          itemCount: itemdata_now['files'].length,
+          itemBuilder: (BuildContext context, int index) {
+            return Image.network(itemdata_now['files'][index]);
+          },
+          pagination: (itemdata_now['files'].length) > 1
+              ? SwiperPagination()
+              : null,
+          loop: (itemdata_now['files'].length) > 1 ? true : false,
+        );
+        get_lkeflg();
+        get_data();
+      });
+    }
   }
 
   void show_delete() {
@@ -1304,7 +1349,11 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                           ),
                         ),
                         onTap: (){
-                          show_declare();
+                          if(real_mbid!='')
+                            show_declare();
+                          else {
+                            request_logindialog();
+                          }
                         },
                       ),
                     ],

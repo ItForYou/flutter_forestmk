@@ -59,6 +59,7 @@ class _mypageState extends State<mypage> {
       widget.mb_1 = "test";
     }
     widget.mb_2 = temp_mbdata['mb_2'];
+    print(widget.mb_2);
     widget.mb_3 = temp_mbdata['mb_3'];
     widget.mb_4 = temp_mbdata['mb_4'];
     widget.mb_5 = temp_mbdata['mb_5'];
@@ -200,10 +201,13 @@ class _mypageState extends State<mypage> {
                           ),
                           child: Center(child: Text("프로필편집", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, color: Colors.white), )),
                         ),
-                        onTap: (){
-                          Navigator.push(context,MaterialPageRoute(
+                        onTap: ()async{
+                       Navigator.push(context,MaterialPageRoute(
                               builder:(context) => modify_info(mb_name: widget.mb_name,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_hp: widget.mb_hp,mb_4:widget.mb_4,mb_5: widget.mb_5,mb_6: widget.mb_6,mb_id:widget.mb_id,)
                           ));
+//                          Navigator.push(context,MaterialPageRoute(
+//                              builder:(context) => modify_info(mb_name: widget.mb_name,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_hp: widget.mb_hp,mb_4:widget.mb_4,mb_5: widget.mb_5,mb_6: widget.mb_6,mb_id:widget.mb_id,)
+//                          ));
                         },
                       )
                     ],

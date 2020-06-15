@@ -551,6 +551,10 @@ void change_search(context){
           show_Alert("개인정보처리방침에 동의하지 않았습니다.", 1);
           return '';
         }
+        else if(input_address.text=='' || input_address==null){
+          show_Alert("동네를 선택해야 합니다.", 1);
+          return '';
+        }
 
         var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/insert_mbinfo.php"));
 

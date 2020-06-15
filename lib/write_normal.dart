@@ -319,6 +319,10 @@ class writenormal_State extends State<write_normal> {
       request.fields['wr_id'] = widget.info.wr_id;
       request.fields['w'] = 'u';
     }
+    else if(widget.wr_id!=null){
+      request.fields['wr_id'] = widget.wr_id;
+      request.fields['w'] = 'u';
+    }
     request.fields['ca_name'] = cate_value;
     request.fields['mb_id'] = mb_id;
     request.fields['mb_name'] = mb_name;
@@ -328,9 +332,7 @@ class writenormal_State extends State<write_normal> {
     request.fields['wr_4'] = mb_6;
     request.fields['wr_file'] = (Images.length+modify_imges.length).toString();
 
-
     if (Images.length >0) {
-
       for(int i=0; i<Images.length; i++) {
         request.files.add(await http.MultipartFile.fromPath('bf_file['+i.toString()+']', Images[i].path));
       }

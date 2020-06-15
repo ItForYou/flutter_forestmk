@@ -45,7 +45,7 @@ class _modify_infoState extends State<modify_info> {
   void show_Alert(text,flg) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext context2) {
         // return object of type Dialog
         return AlertDialog(
           title:null,
@@ -58,8 +58,8 @@ class _modify_infoState extends State<modify_info> {
               child: new Text("확인"),
               onPressed: (){
                 if(flg ==2)
-                Navigator.of(context).pop(true);
-                Navigator.of(context).pop(true);
+                Navigator.of(context2).pop(true);
+                Navigator.pop(context,'modify');
               },
             ),
           ],
@@ -186,13 +186,12 @@ class _modify_infoState extends State<modify_info> {
                   ),
                 ),
                 actions: <Widget>[
-                  new FlatButton(
-                    child: new Text("확인"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                  ),
+//                  new FlatButton(
+//                    child: new Text("확인"),
+//                    onPressed: () {
+//                      Navigator.pop(context);
+//                    },
+//                  ),
                   new FlatButton(
                     child: new Text("취소"),
                     onPressed: () {
@@ -225,8 +224,9 @@ class _modify_infoState extends State<modify_info> {
             child: Text(temp_addrs['data'][i]),
           ),
           onTap: (){
-            modify_address.text = temp_addrs['data'][i];
-            Navigator.pop(context);
+              modify_address.text = temp_addrs['data'][i];
+              Navigator.pop(context);
+              results_search.clear();
           },
         );
         results_search.add(temp);
@@ -262,7 +262,7 @@ class _modify_infoState extends State<modify_info> {
       request.fields['mb_password'] = modify_pwd.text;
       request.fields['mb_name'] = modify_name.text;
       request.fields['mb_hp'] = modify_ph.text;
-      request.fields['mb_2'] = widget.mb_2;
+      request.fields['mb_2'] = modify_address.text;
 
       if (profile_img != null) {
         request.files.add(
@@ -272,9 +272,12 @@ class _modify_infoState extends State<modify_info> {
       var res = await request.send();
       if (res.statusCode == 200) {
 
-        SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
-        sharedPreferences.setString('id', modify_id.text);
-        sharedPreferences.setString('pwd', modify_pwd.text);
+        if(modify_pwd.text!='' && modify_pwd.text!=null) {
+          SharedPreferences sharedPreferences = await SharedPreferences
+              .getInstance();
+          sharedPreferences.setString('id', modify_id.text);
+          sharedPreferences.setString('pwd', modify_pwd.text);
+        }
 
         show_Alert("정보 수정이 완료되었습니다.",2);
        // return res.stream.bytesToString();
@@ -594,7 +597,7 @@ class _modify_infoState extends State<modify_info> {
                   maxLines: 1,
                   decoration: InputDecoration(
                     contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
-                    hintText: "동네선택",
+                    hintText: widget.mb_2!=null? widget.mb_2:'동네선택',
                     border: null,
                     enabledBorder:OutlineInputBorder(
                       borderSide: BorderSide(width: 1, color: Color(0xffefefef)),

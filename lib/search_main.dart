@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutterforestmk/categorypage.dart';
 import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/chk_writead.dart';
@@ -81,102 +82,142 @@ class _search_mainState extends State<search_main> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.05,
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.05,
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("최근순"),
+                          Radio(
+                            value: "최근순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                sort_value = T;
+                                widget.sch_order = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("최근순"),
-                        Radio(
-                          value: "최근순",
-                          groupValue: sort_value,
-                          onChanged: (T){
-                            setState(() {
-                              sort_value = T;
-                              widget.sch_order = T;
-                              get_data();
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
+                    onTap: (){
+                      setState(() {
+                        sort_value = '최근순';
+                        widget.sch_order = '최근순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.07,
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.07,
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("조회수순"),
+                          Radio(
+                            value: "조회수순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                sort_value = T;
+                                widget.sch_order = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("조회수순"),
-                        Radio(
-                          value: "조회수순",
-                          groupValue: sort_value,
-                          onChanged: (T){
-                            setState(() {
-                              sort_value = T;
-                              widget.sch_order = T;
-                              get_data();
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
+                    onTap: (){
+                      setState(() {
+                        sort_value = '조회수순';
+                        widget.sch_order = '조회수순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.07,
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.07,
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("낮은가격순"),
+                          Radio(
+                            value: "낮은가격순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                sort_value = T;
+                                widget.sch_order = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("낮은가격순"),
-                        Radio(
-                          value: "낮은가격순",
-                          groupValue: sort_value,
-                          onChanged: (T){
-                            setState(() {
-                              sort_value = T;
-                              widget.sch_order = T;
-                              get_data();
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
+                    onTap: (){
+                      setState(() {
+                        sort_value = '낮은가격순';
+                        widget.sch_order = '낮은가격순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.07,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("거리순"),
-                        Radio(
-                          value: "거리순",
-                          groupValue: sort_value,
-                          onChanged: (T){
-                            setState(() {
-                              sort_value = T;
-                              widget.sch_order = T;
-                              get_data();
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.07,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("거리순"),
+                          Radio(
+                            value: "거리순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                sort_value = T;
+                                widget.sch_order = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
+                    onTap:(){
+                      setState(() {
+                        sort_value = '거리순';
+                        widget.sch_order = '거리순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
                   ),
 
                 ],
@@ -270,7 +311,9 @@ class _search_mainState extends State<search_main> {
       temp_price=temp_data.wr_1;
     }
     else{
-      temp_price=temp_data.wr_1+'원';
+      MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
+      temp_price=fmf.withoutFractionDigits.toString()+'원';
+      //temp_price=temp_data.wr_1+'원';
     }
 
     InkWell temp = InkWell(
