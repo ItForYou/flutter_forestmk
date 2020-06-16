@@ -70,7 +70,7 @@ class _registerState extends State<register> {
   void show_Alert(text,flg) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext context2) {
         // return object of type Dialog
         return AlertDialog(
           title:null,
@@ -83,7 +83,7 @@ class _registerState extends State<register> {
               child: new Text("확인"),
               onPressed: (){
                 if(flg ==2)
-                  Navigator.of(context).pop(true);
+                  Navigator.of(context2).pop(true);
                 Navigator.of(context).pop(true);
               },
             ),
@@ -146,6 +146,7 @@ void change_search(context){
               onTap: (){
                   input_address.text = temp_addrs['data'][i];
                   Navigator.pop(context);
+                  results_search.clear();
               },
             );
             results_search.add(temp);
@@ -211,7 +212,7 @@ void change_search(context){
                                   .of(context)
                                   .size
                                   .height * 0.05,
-                              child: Text("'" + value + "'")
+                              child: Text("'" + value + "' 검색결과")
                           );
                           results_search.add(temp);
                           final response = await http.post(
@@ -275,13 +276,13 @@ void change_search(context){
                 ),
               ),
               actions: <Widget>[
-                new FlatButton(
+              /*  new FlatButton(
                   child: new Text("확인"),
                   onPressed: () {
                     Navigator.pop(context);
                     Navigator.pop(context);
                   },
-                ),
+                ),*/
                 new FlatButton(
                   child: new Text("취소"),
                   onPressed: () {
@@ -399,6 +400,7 @@ void change_search(context){
           });
         }
       }
+
     void check_pwd(String value){
 
       if(value.length < 4){
@@ -414,6 +416,7 @@ void change_search(context){
         });
       }
     }
+
     void check_pwd_re(String value){
 
       if(value != input_pwd.text){
@@ -428,8 +431,8 @@ void change_search(context){
           flg_noticepwdre =0;
         });
       }
-
     }
+
     void check_name(String value){
 
       if(value.length < 2){
@@ -572,7 +575,6 @@ void change_search(context){
 
         var res = await request.send();
         if (res.statusCode == 200) {
-
           show_Alert("회원 가입이 완료되었습니다.",2);
         }
     }
@@ -798,7 +800,12 @@ void change_search(context){
                               child: Center(child: Text("인증")),
                             ),
                             onTap: (){
-                              request_number();
+                              if(input_ph.text!=null && input_ph.text!='' && input_ph.text.length>10 && input_ph.text.length<12) {
+                                request_number();
+                              }
+                              else{
+                                show_Alert("핸드폰 번호가 올바르지 않습니다.", 1);
+                              }
                             },
                           )
                         )

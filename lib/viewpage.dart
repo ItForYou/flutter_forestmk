@@ -1414,17 +1414,15 @@ class _ViewpageState extends State<Viewpage>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(widget.info.wr_subject==null?'teest':widget.info.wr_subject,style: TextStyle(fontSize: 20),),
-                          SizedBox(height: 10,),
+                          Text(widget.info.wr_subject==null?'teest':widget.info.wr_subject,style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),),
+                          SizedBox(height: MediaQuery.of(context).size.height*0.012,),
                           Row(
                             children:<Widget>[
-                              Text(widget.info.timegap==null?'test':widget.info.timegap,style: TextStyle(fontSize: 10),),
+                              Text(widget.info.timegap==null?'test':widget.info.timegap,style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.013),),
                               SizedBox(width: 2,),
-                              Text(widget.info.ca_name==null?'test':widget.info.ca_name,style: TextStyle(fontSize: 10),),
+                              Text(widget.info.ca_name==null?'test':widget.info.ca_name,style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.013),),
                             ]
                           )
-
-
                         ],
                       ),
                       real_mbid==widget.info.mb_id?

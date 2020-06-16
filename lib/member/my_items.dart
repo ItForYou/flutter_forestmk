@@ -315,7 +315,6 @@ class _my_itemsState extends State<my_items> {
                             Text(temp_data.timegap,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
 
                           ],
-
                         ),
                         SizedBox(height: MediaQuery.of(context).size.height*0.006,),
                         Row(

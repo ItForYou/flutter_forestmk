@@ -358,6 +358,7 @@ class _modify_infoState extends State<modify_info> {
     modify_name.text = widget.mb_name;
     modify_ph.text = widget.mb_hp;
     modify_id.text = widget.mb_id;
+    modify_address.text = widget.mb_2;
 
   }
 
