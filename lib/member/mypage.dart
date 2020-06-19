@@ -77,7 +77,7 @@ class _mypageState extends State<mypage> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text("로그아웃 하시겠습니까?"),
           ),
           actions: <Widget>[
@@ -136,10 +136,10 @@ class _mypageState extends State<mypage> {
               children: <Widget>[
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.05,
+                  height: MediaQuery.of(context).size.height*0.035,
                   decoration: BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(color: Color(0xfff7f7f7),width: 1),
+                      bottom: BorderSide(color: Color(0xffdddddd),width: 1),
                     )
                   ),
                   child: Padding(
@@ -150,11 +150,11 @@ class _mypageState extends State<mypage> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.12,
+                  height: MediaQuery.of(context).size.height*0.11,
                   padding: EdgeInsets.only(left:MediaQuery.of(context).size.width*0.03,right:MediaQuery.of(context).size.width*0.03,),
                   decoration: BoxDecoration(
                       border: Border(
-                        bottom: BorderSide(color: Color(0xfff7f7f7),width: 1),
+                        bottom: BorderSide(color: Color(0xffdddddd),width: 1),
                       )
                   ),
                   child: Row(
@@ -165,8 +165,8 @@ class _mypageState extends State<mypage> {
                         child: Row(
                           children: <Widget>[
                             Container(
-                              width: MediaQuery.of(context).size.width*0.15,
-                              height: MediaQuery.of(context).size.width*0.15,
+                              width: MediaQuery.of(context).size.width*0.12,
+                              height: MediaQuery.of(context).size.width*0.12,
                               decoration: BoxDecoration(
                                   color: Color(0xfff3f3f3),
                                   borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,)),
@@ -182,7 +182,7 @@ class _mypageState extends State<mypage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),),
+                                  Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: FontWeight.bold),),
                                   SizedBox(height: MediaQuery.of(context).size.height*0.005,),
                                   Text(widget.mb_2, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03,),),
                                 ],
@@ -194,7 +194,7 @@ class _mypageState extends State<mypage> {
                       InkWell(
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.23,
-                          height: MediaQuery.of(context).size.width*0.08,
+                          height: MediaQuery.of(context).size.width*0.06,
                           decoration: BoxDecoration(
                             color: Color(0xff444444),
                             borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,)),
@@ -217,7 +217,7 @@ class _mypageState extends State<mypage> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.width*0.3,
                   decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                      border: Border(bottom: BorderSide(width: 1,color: Color(0xffdddddd)))
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -227,15 +227,16 @@ class _mypageState extends State<mypage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Container(
-                                width: MediaQuery.of(context).size.width*0.15,
-                                height: MediaQuery.of(context).size.width*0.15,
+                                width: MediaQuery.of(context).size.width*0.13,
+                                height: MediaQuery.of(context).size.width*0.13,
                                 decoration: BoxDecoration(
                                   color: Color(0xffeeeeee),
                                   borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,),),
                                   ),
-                                child: Padding(padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01), child:Image.asset("images/my_icon01.png",)),
+                                 child:Image.asset("images/my_icon01.png",),
                                 ),
-                            Text("판매내역")
+                            SizedBox(height: MediaQuery.of(context).size.width*0.025,),
+                            Text("판매내역",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),)
                           ],
                         ),
                         onTap: (){
@@ -250,15 +251,16 @@ class _mypageState extends State<mypage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Container(
-                              width: MediaQuery.of(context).size.width*0.15,
-                              height: MediaQuery.of(context).size.width*0.15,
+                              width: MediaQuery.of(context).size.width*0.13,
+                              height: MediaQuery.of(context).size.width*0.13,
                               decoration: BoxDecoration(
                                 color: Color(0xffeeeeee),
                                 borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,),),
                               ),
                               child: Padding(padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01), child:Image.asset("images/my_icon02.png",)),
                             ),
-                            Text("나의광고")
+                            SizedBox(height: MediaQuery.of(context).size.width*0.025,),
+                            Text("나의광고",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),)
                           ],
                         ),
                         onTap: (){
@@ -273,10 +275,10 @@ class _mypageState extends State<mypage> {
                 InkWell(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.08,
+                    height: MediaQuery.of(context).size.height*0.085,
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
                     decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xffdddddd)))
                     ),
                     child: Row(
                       children: <Widget>[
@@ -286,7 +288,7 @@ class _mypageState extends State<mypage> {
                           child: Image.asset("images/myul_icon01.png"),
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                        Text("나의 위치 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                        Text("나의 위치 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),)
 
                       ],
                     ),
@@ -300,10 +302,10 @@ class _mypageState extends State<mypage> {
                 InkWell(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.08,
+                    height: MediaQuery.of(context).size.height*0.075,
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
                     decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xffdddddd)))
                     ),
                     child: Row(
                       children: <Widget>[
@@ -313,7 +315,7 @@ class _mypageState extends State<mypage> {
                           child: Image.asset("images/myul_icon02.png"),
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                        Text("숲마켓 공유",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                        Text("숲마켓 공유",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),)
 
                       ],
                     ),
@@ -322,10 +324,10 @@ class _mypageState extends State<mypage> {
                 InkWell(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.08,
+                    height: MediaQuery.of(context).size.height*0.075,
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
                     decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xffdddddd)))
                     ),
                     child: Row(
                       children: <Widget>[
@@ -335,7 +337,7 @@ class _mypageState extends State<mypage> {
                           child: Image.asset("images/myul_icon03.png"),
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                        Text("공지사항",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                        Text("공지사항",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),)
 
                       ],
                     ),
@@ -349,10 +351,10 @@ class _mypageState extends State<mypage> {
                 InkWell(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.08,
+                    height: MediaQuery.of(context).size.height*0.075,
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
                     decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xffdddddd)))
                     ),
                     child: Row(
                       children: <Widget>[
@@ -362,7 +364,7 @@ class _mypageState extends State<mypage> {
                           child: Image.asset("images/myul_icon04.png"),
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                        Text("고객 문의",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                        Text("고객 문의",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),)
 
                       ],
                     ),
@@ -376,10 +378,10 @@ class _mypageState extends State<mypage> {
                 InkWell(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.08,
+                    height: MediaQuery.of(context).size.height*0.075,
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
                     decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xffdddddd)))
                     ),
                     child: Row(
                       children: <Widget>[
@@ -389,7 +391,7 @@ class _mypageState extends State<mypage> {
                           child: Image.asset("images/myul_icon05.png"),
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                        Text("앱 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                        Text("앱 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),)
 
                       ],
                     ),
@@ -403,10 +405,10 @@ class _mypageState extends State<mypage> {
                 InkWell(
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.08,
+                    height: MediaQuery.of(context).size.height*0.075,
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
                     decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1,color: Color(0xfff7f7f7)))
+                        border: Border(bottom: BorderSide(width: 1,color: Color(0xffdddddd)))
                     ),
                     child: Row(
                       children: <Widget>[
@@ -416,7 +418,7 @@ class _mypageState extends State<mypage> {
                           child: Image.asset("images/myul_icon06.png"),
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width*0.01,),
-                        Text("로그 아웃",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                        Text("로그아웃",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),)
 
                       ],
                     ),

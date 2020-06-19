@@ -130,7 +130,7 @@ class _mysettingState extends State<mysetting> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text("로그아웃 하시겠습니까?"),
           ),
           actions: <Widget>[
@@ -165,7 +165,7 @@ class _mysettingState extends State<mysetting> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text(text),
           ),
           actions: <Widget>[

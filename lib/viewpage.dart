@@ -6,6 +6,7 @@ import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/comment_item.dart';
 import 'package:flutterforestmk/comment_reply.dart';
+import 'package:flutterforestmk/image_detail.dart';
 import 'package:flutterforestmk/member/loginpage.dart';
 import 'package:flutterforestmk/main_item.dart';
 import 'package:flutterforestmk/view_item.dart';
@@ -49,7 +50,7 @@ class _ViewpageState extends State<Viewpage>{
     )
   ];
   Widget  hero_content= Container();
-  double itmes_height=0,itmes_height2=0;
+  double itmes_height=0,itmes_height2=0,content_size=0;
   int flg_soldout=0,count_like=0,flg_opencomments=0;
   String txt_soldout = "완료하기",declare_cate="사기신고",uploadcomm_bt_txt="댓글게시",seleted_comm_wrid='';
   Color color_soldout = Color(0xff515151);
@@ -61,6 +62,7 @@ class _ViewpageState extends State<Viewpage>{
 
 
   void add_widget_comments(){
+
     widget_comments.clear();
 
     for(int i=0; i<comment_data.length;i++) {
@@ -73,7 +75,14 @@ class _ViewpageState extends State<Viewpage>{
         else
           before_tdata  = comment_item.fromJson(comment_data[comment_data.length-1]);
 
-      Widget temp = Container(
+
+
+        String temp_wrcontent = temp_data.wr_content.replaceAll('\n','              ');
+        //print(temp_wrcontent.length/24.2);
+        double comment_height = (temp_wrcontent.length/24.2) * MediaQuery.of(context).size.height*0.00004;
+       //print(comment_height);
+
+        Widget temp = Container(
         width: MediaQuery
             .of(context)
             .size
@@ -81,7 +90,7 @@ class _ViewpageState extends State<Viewpage>{
         height: MediaQuery
             .of(context)
             .size
-            .height * (0.085+(temp_data.wr_content.length/MediaQuery.of(context).size.width*0.135)),
+            .height * (0.085+comment_height)+13,
         margin: EdgeInsets.only(bottom: MediaQuery
             .of(context)
             .size
@@ -147,7 +156,7 @@ class _ViewpageState extends State<Viewpage>{
                 style: TextStyle(fontSize: MediaQuery
                     .of(context)
                     .size
-                    .width * 0.032)),
+                    .height * 0.016)),
             SizedBox(height: MediaQuery
                 .of(context)
                 .size
@@ -158,13 +167,13 @@ class _ViewpageState extends State<Viewpage>{
                     color: Color(0xffdddddd), fontSize: MediaQuery
                     .of(context)
                     .size
-                    .width * 0.03),),
+                    .height * 0.016),),
                 SizedBox(width: MediaQuery
                     .of(context)
                     .size
                     .width * 0.02,),
                 InkWell(
-                    child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd)),),
+                    child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd), fontSize:MediaQuery.of(context).size.height * 0.02),),
                     onTap: ()async{
                       var result = await Navigator.push(context, MaterialPageRoute(
                           builder: (context) => comment_reply(wr_comment: temp_data.wr_comment,wr_parent:temp_data.wr_parent, writer_id: widget.info.mb_id,)
@@ -181,7 +190,7 @@ class _ViewpageState extends State<Viewpage>{
                     .width * 0.02,):SizedBox(),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
                 InkWell(
-                    child: Text("수정", style: TextStyle(color: Color(0xffdddddd)),),
+                    child: Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),),
                     onTap: (){
                       setState(() {
                         seleted_comm_wrid = temp_data.wr_id;
@@ -200,7 +209,7 @@ class _ViewpageState extends State<Viewpage>{
                     .width * 0.02,):SizedBox(),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
                 InkWell(
-                    child: Text("삭제", style: TextStyle(color: Color(0xffdddddd)),
+                    child: Text("삭제", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),
                     ),
                   onTap: (){
                     show_deletecmmt(temp_data.wr_id);
@@ -224,7 +233,7 @@ class _ViewpageState extends State<Viewpage>{
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text("자신의 글입니다."),
           ),
           actions: <Widget>[
@@ -342,7 +351,7 @@ class _ViewpageState extends State<Viewpage>{
           ),
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text(text),
           ),
           actions: <Widget>[
@@ -374,7 +383,7 @@ class _ViewpageState extends State<Viewpage>{
         headers: {'Accept' : 'application/json'}
     );
     if(response.statusCode==200){
-      print(response.body);
+      //print(response.body);
       get_comment();
     }
   }
@@ -406,7 +415,7 @@ class _ViewpageState extends State<Viewpage>{
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context2).size.height*0.02,
+            height: MediaQuery.of(context2).size.height*0.03,
             child: Text("이 댓글을 삭제를 하시겠습니까?"),
           ),
           actions: <Widget>[
@@ -455,7 +464,7 @@ class _ViewpageState extends State<Viewpage>{
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text(temp_title),
           ),
           actions: <Widget>[
@@ -1026,6 +1035,12 @@ class _ViewpageState extends State<Viewpage>{
     });
   }
 
+  void move_imgdetail(int index){
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => image_detail(info: path,flg_view: 1,)
+    ));
+  }
+
   void set_herocontent(List <dynamic> path){
     if(path.length-1 > 0){
 
@@ -1041,10 +1056,21 @@ class _ViewpageState extends State<Viewpage>{
           child: Swiper(
             itemCount: path.length-1,
             itemBuilder: (BuildContext context, int index){
-              return Image.network(path[index+1]);
+              return  Container(
+                width: MediaQuery.of(context).size.width,
+                height:MediaQuery.of(context).size.height*0.33,
+                decoration: BoxDecoration(
+                    color: Color(0xfff3f3f3),
+                    image: DecorationImage(//이미지 꾸미기
+                      fit:BoxFit.cover,
+                      image:path[index+1]!=''?NetworkImage(path[index+1]):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
+                    )
+                ),
+              );
             },
             pagination: (path.length-1)>1?SwiperPagination():null,
             loop: (path.length-1)>1? true:false,
+            onTap: move_imgdetail,
           ),
         );
 
@@ -1185,6 +1211,7 @@ class _ViewpageState extends State<Viewpage>{
         flg_soldout = 1;
       });
     }
+
     super.initState();
 
   }
@@ -1192,6 +1219,7 @@ class _ViewpageState extends State<Viewpage>{
   @override
   Widget build(BuildContext context) {
     //print("Build!");
+    //print(widget.info.wr_content);
 
     set_herocontent(path);
     if(widget.info.ca_name =='업체'){
@@ -1242,6 +1270,11 @@ class _ViewpageState extends State<Viewpage>{
           );
         },
       );
+    }
+
+    if(widget.info.wr_content!='' && widget.info.wr_content!=null){
+      String temp_wrcontent = widget.info.wr_content.replaceAll('\n','              ');
+      content_size = (MediaQuery.of(context).size.width)*(temp_wrcontent.length/MediaQuery.of(context).size.height*0.5);
     }
 
     return WillPopScope(
@@ -1350,18 +1383,17 @@ class _ViewpageState extends State<Viewpage>{
                           widget.info.mb_id==real_mbid?
                           InkWell(
                             child: Container(
-                              width: MediaQuery.of(context).size.width*0.17,
+                              width: MediaQuery.of(context).size.width*0.16,
                               height: MediaQuery.of(context).size.height*0.06,
-                              padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(23)),
+                                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.1)),
                                   border: Border.all(color: Color(0xffcccccc)),
                                   color: color_soldout
                               ),
                               child: Column(
                                 children: <Widget>[
-                                  Image.asset("images/write_icon01.png",   width: MediaQuery.of(context).size.width*0.08, height: MediaQuery.of(context).size.height*0.027,),
-                                  Text(txt_soldout,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white),)
+                                  Image.asset("images/write_icon01.png",   width: MediaQuery.of(context).size.width*0.12, height: MediaQuery.of(context).size.height*0.035,),
+                                  Text(txt_soldout,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.028,color: Colors.white),)
                                 ],
                               ),
                             ),
@@ -1372,7 +1404,7 @@ class _ViewpageState extends State<Viewpage>{
                           SizedBox(width: 3,),
                           InkWell(
                             child: Container(
-                              width: MediaQuery.of(context).size.width*0.17,
+                              width: MediaQuery.of(context).size.width*0.16,
                               height: MediaQuery.of(context).size.height*0.06,
                               padding: EdgeInsets.all(3),
                               decoration: BoxDecoration(
@@ -1386,8 +1418,8 @@ class _ViewpageState extends State<Viewpage>{
                               ),
                               child: Column(
                                 children: <Widget>[
-                                  Image.asset("images/fa-siren-on.png",   width: MediaQuery.of(context).size.width*0.08, height: MediaQuery.of(context).size.height*0.027,),
-                                  Text("신고하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.025,color: Colors.white))
+                                  Image.asset("images/fa-siren-on.png",   width: MediaQuery.of(context).size.width*0.12, height: MediaQuery.of(context).size.height*0.028,),
+                                  Text("신고하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.028,color: Colors.white))
                                 ],
                               ),
                             ),
@@ -1468,9 +1500,9 @@ class _ViewpageState extends State<Viewpage>{
                   ),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height*0.2,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.032),
-                  child: Text(widget.info.wr_content==null?'test':widget.info.wr_content),
+                  height: MediaQuery.of(context).size.height*0.2+content_size,
+                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.032,right: MediaQuery.of(context).size.width*0.032),
+                  child: Text(widget.info.wr_content==null?'test':widget.info.wr_content.trimRight(),style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
 
                 ),
                 Container(
@@ -1493,7 +1525,7 @@ class _ViewpageState extends State<Viewpage>{
                 ),
                 Container(
                   padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
-                  height: MediaQuery.of(context).size.height*0.07,
+                  height: MediaQuery.of(context).size.height*0.06,
                   decoration: BoxDecoration(
                       border: Border(top: BorderSide(width: 1,color: Color(0xffefefef)), bottom: BorderSide(width: 1,color: Color(0xffefefef)),)
                   ),
@@ -1695,7 +1727,7 @@ class _ViewpageState extends State<Viewpage>{
                       Container(
                         height: MediaQuery.of(context).size.height*0.1,
                         padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                        child: Text(widget.info.mb_name==null?'test':widget.info.mb_name+"님의 판매상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                        child: Text(widget.info.mb_name==null?'test':widget.info.mb_name+"님의 판매상품",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width,

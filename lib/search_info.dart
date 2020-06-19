@@ -20,18 +20,22 @@ class _search_infoState extends State<search_info> {
   bool flg_searchbt = false, flg_searchsuccess=false;
   var info_data;
   TextEditingController input_hp = TextEditingController();
-  String id = 'test01';
+  TextEditingController input_schpwdid = TextEditingController();
+  TextEditingController input_schpwdhp = TextEditingController();
+  String id ='';
+
   Future<dynamic> get_searchinfo() async{
 
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/search_info.php'),
         body: {
             "mb_hp": input_hp.text,
+            "flg" : 1
         },
         headers: {'Accept' : 'application/json'}
     );
 
-    print(response.body);
+    //print(response.body);
 
     if(response.statusCode ==200) {
       setState(() {
@@ -48,6 +52,25 @@ class _search_infoState extends State<search_info> {
           flg_searchbt = true;
         }
       });
+    }
+  }
+
+  Future<dynamic> get_password() async{
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/search_info.php'),
+        body: {
+          "mb_hp": input_schpwdhp.text,
+          "id" : input_schpwdid.text,
+          "flg":2
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+
+    //print(response.body);
+
+    if(response.statusCode ==200) {
+
     }
   }
 
@@ -213,6 +236,7 @@ class _search_infoState extends State<search_info> {
                     Container(
                       height: MediaQuery.of(context).size.width*0.13,
                       child: TextFormField(
+                          controller: input_schpwdid,
                           cursorColor: Colors.forestmk,
                           keyboardType: TextInputType.text,
                           maxLines: 1,
@@ -236,6 +260,7 @@ class _search_infoState extends State<search_info> {
                     Container(
                       height: MediaQuery.of(context).size.width*0.13,
                       child: TextFormField(
+                          controller: input_schpwdhp,
                           cursorColor: Colors.forestmk,
                           keyboardType: TextInputType.number,
                           maxLines: 1,
@@ -257,16 +282,21 @@ class _search_infoState extends State<search_info> {
                       ),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height*0.02,),
-                    Center(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width*0.32,
-                        height:MediaQuery.of(context).size.height*0.08,
-                        decoration: BoxDecoration(
-                          color: Color(0xff555555),
-                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.02))
+                    InkWell(
+                      child: Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*0.32,
+                          height:MediaQuery.of(context).size.height*0.08,
+                          decoration: BoxDecoration(
+                            color: Color(0xff555555),
+                            borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.02))
+                          ),
+                          child: Center(child: Text("찾기", style: TextStyle(color: Colors.white,fontSize: MediaQuery.of(context).size.width*0.05,),)),
                         ),
-                        child: Center(child: Text("찾기", style: TextStyle(color: Colors.white,fontSize: MediaQuery.of(context).size.width*0.05,),)),
                       ),
+                      onTap: (){
+
+                      },
                     )
                   ],
                 ),

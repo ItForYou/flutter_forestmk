@@ -4,6 +4,7 @@ import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/comment_reply.dart';
+import 'package:flutterforestmk/image_detail.dart';
 import 'package:flutterforestmk/member/loginpage.dart';
 import 'package:flutterforestmk/view_item.dart';
 import 'package:flutterforestmk/write_normal.dart';
@@ -51,6 +52,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   TextEditingController delare_content = TextEditingController();
   TextEditingController input_comment = TextEditingController();
   ScrollController change_scroll = ScrollController(initialScrollOffset: 0);
+  double content_size=0;
 
   void load_myinfo()async{
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -119,6 +121,11 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       else
         before_tdata  = comment_item.fromJson(comment_data[comment_data.length-1]);
 
+      String temp_wrcontent = temp_data.wr_content.replaceAll('\n','              ');
+      //print(temp_wrcontent.length/24.2);
+      double comment_height = (temp_wrcontent.length/24.2) * MediaQuery.of(context).size.height*0.00004;
+      //print(comment_height);
+
       Widget temp = Container(
         width: MediaQuery
             .of(context)
@@ -127,7 +134,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         height: MediaQuery
             .of(context)
             .size
-            .height * (0.085+(temp_data.wr_content.length/MediaQuery.of(context).size.width*0.135)),
+            .height * (0.085+comment_height)+13,
         margin: EdgeInsets.only(bottom: MediaQuery
             .of(context)
             .size
@@ -193,7 +200,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                 style: TextStyle(fontSize: MediaQuery
                     .of(context)
                     .size
-                    .width * 0.032)),
+                    .height * 0.016)),
             SizedBox(height: MediaQuery
                 .of(context)
                 .size
@@ -210,7 +217,10 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     .size
                     .width * 0.02,),
                 InkWell(
-                  child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd)),),
+                  child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd), fontSize: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.02),),
                   onTap: ()async{
                     var result = await Navigator.push(context, MaterialPageRoute(
                         builder: (context) => comment_reply(wr_comment: temp_data.wr_comment,wr_parent:temp_data.wr_parent, writer_id: widget.mb_id,)
@@ -227,7 +237,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     .width * 0.02,):SizedBox(),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
                 InkWell(
-                  child: Text("수정", style: TextStyle(color: Color(0xffdddddd)),),
+                  child: Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),),
                   onTap: (){
                     setState(() {
                       seleted_comm_wrid = temp_data.wr_id;
@@ -246,7 +256,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     .width * 0.02,):SizedBox(),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
                 InkWell(
-                  child: Text("삭제", style: TextStyle(color: Color(0xffdddddd)),
+                  child: Text("삭제", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),
                   ),
                   onTap: (){
                     show_deletecmmt(temp_data.wr_id);
@@ -1001,7 +1011,23 @@ class _ViewpagemineState extends State<Viewpage_mine>{
     }
   }
 
+  void move_imgdetail(int index){
+    List <dynamic> list=[];
+    if(itemdata_now!=null && itemdata_now['files'].length>0){
+        for(int i=0; i<itemdata_now['files'].length; i++){
 
+          String temp_str = itemdata_now['files'][i];
+
+          list.add(temp_str);
+
+        }
+        if(list.length==itemdata_now['files'].length) {
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) => image_detail(info: list,flg_view: 2,)
+          ));
+        }
+    }
+  }
 
   Future<dynamic> get_data_now() async{
     final response = await http.post(
@@ -1033,12 +1059,24 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         Swiper_widget = Swiper(
           itemCount: itemdata_now['files'].length,
           itemBuilder: (BuildContext context, int index) {
-            return Image.network(itemdata_now['files'][index]);
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              height:MediaQuery.of(context).size.height*0.33,
+              decoration: BoxDecoration(
+                  color: Color(0xfff3f3f3),
+                  image: DecorationImage(//이미지 꾸미기
+                    fit:BoxFit.cover,
+                    image:itemdata_now['files'][index]!=''?NetworkImage(itemdata_now['files'][index]):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
+                  )
+              ),
+            );
+            //Image.network(itemdata_now['files'][index]);
           },
           pagination: (itemdata_now['files'].length) > 1
               ? SwiperPagination()
               : null,
           loop: (itemdata_now['files'].length) > 1 ? true : false,
+          onTap:move_imgdetail,
         );
         get_lkeflg();
         get_data();
@@ -1199,6 +1237,16 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
   @override
   Widget build(BuildContext context) {
+
+    if(itemdata!=null) {
+      if (itemdata_now['wr_content'] != '' &&
+          itemdata_now['wr_content'] != null) {
+        content_size = MediaQuery
+            .of(context)
+            .size
+            .height * (itemdata_now['wr_content'].length / 850);
+      }
+    }
 
     return WillPopScope(
       onWillPop: (){
@@ -1371,13 +1419,13 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(itemdata_now==null?'테스트':itemdata_now['wr_subject'],style: TextStyle(fontSize: 20),),
+                      Text(itemdata_now==null?'테스트':itemdata_now['wr_subject'],style:TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),),
                       SizedBox(height: 10,),
                       Row(
                           children:<Widget>[
-                            Text(itemdata_now==null?'테스트':itemdata_now['timegap'],style: TextStyle(fontSize: 10),),
+                            Text(itemdata_now==null?'테스트':itemdata_now['timegap'],style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.013),),
                             SizedBox(width: 2,),
-                            Text(itemdata_now==null?'테스트':itemdata_now['ca_name'],style: TextStyle(fontSize: 10),),
+                            Text(itemdata_now==null?'테스트':itemdata_now['ca_name'],style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.013),),
                           ]
                       )
 
@@ -1428,7 +1476,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height*0.2,
+              height: MediaQuery.of(context).size.height*0.2+content_size,
               child: Text(itemdata_now==null?'테스트':itemdata_now['wr_content']),
 
             ),

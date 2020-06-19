@@ -46,7 +46,7 @@ class _chk_writeadState extends State<chk_writead> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text("동의시 글작성이 가능합니다."),
           ),
           actions: <Widget>[

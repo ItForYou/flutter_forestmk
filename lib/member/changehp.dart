@@ -30,7 +30,7 @@ class _changehpState extends State<changehp> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text(text),
           ),
           actions: <Widget>[

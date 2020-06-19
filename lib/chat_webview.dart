@@ -19,6 +19,7 @@ class _chat_webviewState extends State<chat_webview> {
   final flutterWebViewPlugin = new FlutterWebviewPlugin();
   StreamSubscription<String> _onUrlChanged;
   String current_url ="test";
+
   //WebViewController _webViewController;
 
 
@@ -55,16 +56,19 @@ class _chat_webviewState extends State<chat_webview> {
   void initState() {
     // TODO: implement initState
     super.initState();
+   // print(widget.url);
     flutterWebViewPlugin.close();
     flutterWebViewPlugin.onBack.listen((_){
       presed_bak();
     });
     _onUrlChanged = flutterWebViewPlugin.onUrlChanged.listen((String url) {
       if (mounted) {
-        if(!url.contains("chatting")){
+        if(!url.contains("chatting") && !url.contains("mb_id") ){
             presed_bak();
+            //print("urlchange: "+url);
             flutterWebViewPlugin.close();
           }
+
         else {
           setState(() {
             current_url = url;
@@ -84,10 +88,15 @@ class _chat_webviewState extends State<chat_webview> {
       child:Scaffold(
         appBar: PreferredSize( child: Container(), preferredSize: Size.fromHeight(0.1),),
         body: WebviewScaffold(
+         /* initialChild: Container(
+            child: Text("Loadding....."),
+          ),*/
           url: widget.url,
           withJavascript: true,
+          withZoom: false,
+
           withLocalStorage: true,
-          appBar: null,
+         // hidden: true,
           javascriptChannels: Set.from([
             JavascriptChannel(
                 name: 'goback',
@@ -95,6 +104,7 @@ class _chat_webviewState extends State<chat_webview> {
                   presed_bak();
                 }
             ),
+
           ]),
         ),
       )

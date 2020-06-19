@@ -32,7 +32,7 @@ class _block_listState extends State<block_list> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text("차단을 해제하시겠습니까?"),
           ),
           actions: <Widget>[

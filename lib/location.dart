@@ -159,34 +159,44 @@ class location_State extends State<location> {
       body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height*0.07,
-                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05),
-                child: TextFormField(
-                    readOnly: true,
-                    controller: now_mylocation,
-                    onChanged: (value){
-                      get_data(value);
-                    },
-                    keyboardType: TextInputType.text,
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
-                      filled: true,
-                      fillColor: Color(0xfff5f5f5),
-                      border: null,
-                      enabledBorder:OutlineInputBorder(
-                        borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
-                        borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
-                        borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
-                      ),
-                    )
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
+                      child: Text("설정 위치 :")
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width*0.8,
+                    height: MediaQuery.of(context).size.height*0.07,
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.01, right: MediaQuery.of(context).size.width*0.05),
+                    child: TextFormField(
+                        readOnly: true,
+                        controller: now_mylocation,
+                        onChanged: (value){
+                          get_data(value);
+                        },
+                        keyboardType: TextInputType.text,
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                          contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                          filled: true,
+                          fillColor: Color(0xfff5f5f5),
+                          border: null,
+                          enabledBorder:OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                            borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                            borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                          ),
+                        )
+                    ),
+                  ),
+                ],
               ),
+              SizedBox(height:MediaQuery.of(context).size.height*0.05),
               Padding(
                 padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right:  MediaQuery.of(context).size.width*0.05,),
                 child: TextFormField(
@@ -203,7 +213,6 @@ class location_State extends State<location> {
                       ),
                     prefixIcon: Icon(Icons.search),
                     hintText: "내 동네 이름(동,읍,면)으로 검색"
-
                   ),
                 ),
                 ),

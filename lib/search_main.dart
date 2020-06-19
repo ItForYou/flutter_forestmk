@@ -34,7 +34,7 @@ class _search_mainState extends State<search_main> {
 
   static double scrollbar_height=1;
   double list_height;
-  int start_height=1;
+  int start_height=1,flg_floatbt=0;
   PreferredSize appbar;
   List <bool> checkbox_values;
   bool checkbox_soldout = false;
@@ -339,14 +339,14 @@ class _search_mainState extends State<search_main> {
                       child:
                       temp_data.wr_9!='거래완료'?
                       Container(
-                        width: MediaQuery.of(context).size.width*0.27,
-                        height: MediaQuery.of(context).size.height*0.2,
-
+                        width: MediaQuery.of(context).size.width*0.24,
+                        height: MediaQuery.of(context).size.height*0.24,
+                        margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
                         decoration: BoxDecoration(
                             border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
                             borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
                             image: DecorationImage(//이미지 꾸미기
-                                fit:BoxFit.fitWidth,
+                                fit:BoxFit.cover,
                                 image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
                             )
                         ),
@@ -391,7 +391,7 @@ class _search_mainState extends State<search_main> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(height: 5,),
-                        Text(temp_data.wr_subject, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                         SizedBox(height: 5,),
                         Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
                         SizedBox(height: 8,),
@@ -462,7 +462,7 @@ class _search_mainState extends State<search_main> {
                     ),
                   ),
                   SizedBox(height: 6,),
-                  Text(temp_data.mb_name,style: TextStyle(fontSize: 12),)
+                  Text(temp_data.mb_name.length<5?temp_data.mb_name:temp_data.mb_name.substring(0,3)+"···",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.028),)
                 ],
               ),
             ],
@@ -553,7 +553,7 @@ class _search_mainState extends State<search_main> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text("체크된 항목을 모두 삭제 하시겠습니까?"),
           ),
           actions: <Widget>[
@@ -572,6 +572,25 @@ class _search_mainState extends State<search_main> {
           ],
         );
       },
+    );
+  }
+
+  Widget float_button(){
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.18,),
+      child: InkWell(
+        child: Container(
+          width: MediaQuery.of(context).size.width*0.1,
+          height: MediaQuery.of(context).size.width*0.1,
+          child: FloatingActionButton(
+            backgroundColor: Colors.black,
+            child:Icon(Icons.arrow_upward,color: Colors.white,),
+          ),
+        ),
+        onTap: (){
+          change_appbar.jumpTo(change_appbar.position.minScrollExtent);
+        },
+      ),
     );
   }
 
@@ -686,8 +705,8 @@ class _search_mainState extends State<search_main> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: MediaQuery.of(context).size.height*0.015,),
-          Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.05),),
-          Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03)),
+          Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032, fontWeight: FontWeight.bold),),
+          Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032)),
         ],
       );
     }
@@ -1085,7 +1104,7 @@ class _search_mainState extends State<search_main> {
                       ],
                     )),
                 Container(
-                    height: MediaQuery.of(context).size.height*0.08,
+                    height: MediaQuery.of(context).size.height*0.06,
                     decoration: BoxDecoration(color: Colors.white),
                     padding:EdgeInsets.only(left: 22,right: 22),
                     margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
@@ -1096,8 +1115,8 @@ class _search_mainState extends State<search_main> {
                           children: <Widget>[
                             InkWell(
                               child: Container(
-                                width: MediaQuery.of(context).size.width*0.15,
-                                height: MediaQuery.of(context).size.width*0.15,
+                                width: MediaQuery.of(context).size.width*0.12,
+                                height: MediaQuery.of(context).size.width*0.12,
                                 padding: EdgeInsets.all(3),
                                 decoration: BoxDecoration(
                                     color: Color(0xfff3f3f3),
@@ -1134,7 +1153,10 @@ class _search_mainState extends State<search_main> {
                             ),
                             SizedBox(width: 10,),
                             InkWell(
-                              child: mb_infowidget,
+                              child: Container(
+                                  height: MediaQuery.of(context).size.height*0.08,
+                                  child: mb_infowidget
+                              ),
                               onTap: (){
                                 if(widget.mb_id==null) {
                                   Navigator.push(context, MaterialPageRoute(
@@ -1157,8 +1179,8 @@ class _search_mainState extends State<search_main> {
                         ),
                         InkWell(
                           child: Container(
-                            width: 100,
-                            height: 30,
+                            width: MediaQuery.of(context).size.width*0.25,
+                            height: MediaQuery.of(context).size.height*0.035,
                             padding: EdgeInsets.all(3),
                             decoration: BoxDecoration(
                                 color: Color(0xff444444),
@@ -1267,6 +1289,7 @@ class _search_mainState extends State<search_main> {
           ),
         ],
       ),
+      floatingActionButton: flg_floatbt==1?float_button():Container(),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

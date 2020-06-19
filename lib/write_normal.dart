@@ -171,7 +171,7 @@ class writenormal_State extends State<write_normal> {
         path_img  = "0"+(i+1).toString();
       }
       else{
-        path_img  = i.toString();
+        path_img  = (i+1).toString();
       }
       InkWell temp =
           InkWell(
@@ -675,8 +675,17 @@ class writenormal_State extends State<write_normal> {
                         )
                   ),
                     onTap: (){
-                      uploaddata();
-                      click_upload=1;
+                      if(input_subject.text!='' && input_subject.text!=null
+                          && input_content.text!=null && input_content.text!=''
+                          && input_wr_1.text!='' && input_wr_1.text!=null
+                          && cate_value!='카테고리를 선택해주세요'
+                      ) {
+                        uploaddata();
+                        click_upload = 1;
+                      }
+                      else{
+                        show_Alert("작성된 내용이 올바르지 않습니다. ", 1);
+                      }
                     },
                   ),
           ],

@@ -4,9 +4,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterforestmk/main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class register extends StatefulWidget {
   @override
@@ -31,7 +33,7 @@ class _registerState extends State<register> {
   TextEditingController input_ph = new TextEditingController();
   TextEditingController input_ph_chk = new TextEditingController();
   TextEditingController input_address = new TextEditingController();
-
+  SharedPreferences sharedPreferences;
   int flg_noticeid=0,flg_noticepwd=0,flg_noticename=0,flg_noticehp=0,flg_noticepwdre=0, flg_certihp=0;
   String notice_id="",notice_pwd="",notice_pwd_re="", notice_name="",notice_hp="", sended_number="";
   bool flg_readonly_hp = false;
@@ -75,16 +77,34 @@ class _registerState extends State<register> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text(text),
           ),
           actions: <Widget>[
             new FlatButton(
               child: new Text("확인"),
-              onPressed: (){
-                if(flg ==2)
+              onPressed: ()async{
+
+                if(flg ==2){
+                  Navigator.of(context).pop(true);
                   Navigator.of(context2).pop(true);
-                Navigator.of(context).pop(true);
+                }
+                else if(flg ==3){
+
+                  Navigator.of(context2).pop(true);
+
+                  sharedPreferences =await SharedPreferences.getInstance();
+                  sharedPreferences.setString('id',  input_id.text);
+                  sharedPreferences.setString('pwd', input_pwd.text);
+
+                  // will be null if never previously saved
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => MyApp()),
+                          (Route<dynamic> route) => false);
+                }
+                else{
+                  Navigator.of(context2).pop(true);
+                }
               },
             ),
           ],
@@ -494,7 +514,7 @@ void change_search(context){
       }
     }
 
-    void show_Alert(text,flg) {
+    /*void show_Alert(text,flg) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -502,7 +522,7 @@ void change_search(context){
           return AlertDialog(
             title:null,
             content: Container(
-              height: MediaQuery.of(context).size.height*0.02,
+              height: MediaQuery.of(context).size.height*0.03,
               child: Text(text),
             ),
             actions: <Widget>[
@@ -518,7 +538,7 @@ void change_search(context){
           );
         },
       );
-    }
+    }*/
 
     Future<String> uploadImage() async {
 
@@ -575,7 +595,8 @@ void change_search(context){
 
         var res = await request.send();
         if (res.statusCode == 200) {
-          show_Alert("회원 가입이 완료되었습니다.",2);
+          show_Alert("회원 가입이 완료되었습니다.",3);
+
         }
     }
 

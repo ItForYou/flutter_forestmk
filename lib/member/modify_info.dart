@@ -50,7 +50,7 @@ class _modify_infoState extends State<modify_info> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context).size.height*0.03,
             child: Text(text),
           ),
           actions: <Widget>[
@@ -343,7 +343,7 @@ class _modify_infoState extends State<modify_info> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height*0.05,
           padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
-          child: Text("$format_modify 로 부터 1달 후, $format_addmonth이후로 변경이 가능합니다.")
+          child: Text("$format_modify 로 부터 1달 후, $format_addmonth이후로 변경이 가능합니다.", style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.016))
         );
         flg_namereadonly = true;
       }
@@ -411,7 +411,7 @@ class _modify_infoState extends State<modify_info> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.05,
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.005),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: TextFormField(
                   controller:  modify_id,
@@ -436,7 +436,8 @@ class _modify_infoState extends State<modify_info> {
             ),
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*0.05,
+              height: MediaQuery.of(context).size.height*0.02,
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.005,),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: Row(
                 children: <Widget>[
@@ -444,7 +445,7 @@ class _modify_infoState extends State<modify_info> {
                       width: MediaQuery.of(context).size.width*0.05,
                       height: MediaQuery.of(context).size.width*0.05,
                       child: Image.asset("images/fa-exclamation-circle.png")),
-                  Align(alignment: Alignment.centerLeft,child: Text("아이디는 수정할 수 없습니다.")),
+                  Align(alignment: Alignment.centerLeft,child: Text("아이디는 수정할 수 없습니다.",style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.014),)),
                 ],
               ),
             ),
@@ -530,7 +531,7 @@ class _modify_infoState extends State<modify_info> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.05,
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.002),
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: Row(
                 children: <Widget>[
@@ -573,6 +574,7 @@ class _modify_infoState extends State<modify_info> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height*0.05,
+
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.1, right: MediaQuery.of(context).size.width*0.1),
               child: Row(
                 children: <Widget>[
@@ -580,7 +582,7 @@ class _modify_infoState extends State<modify_info> {
                       width: MediaQuery.of(context).size.width*0.05,
                       height: MediaQuery.of(context).size.width*0.05,
                       child: Image.asset("images/fa-exclamation-circle.png")),
-                  Align(alignment: Alignment.centerLeft,child: Text("휴대번호 변경시 앱설정에서 변경바랍니다.")),
+                  Align(alignment: Alignment.centerLeft,child: Text("휴대번호 변경시 앱설정에서 변경바랍니다.",style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.016),)),
                 ],
               ),
             ),
@@ -637,13 +639,13 @@ class _modify_infoState extends State<modify_info> {
                   InkWell(
                     child: Container(
                       width: MediaQuery.of(context).size.width*0.3,
-                      height:MediaQuery.of(context).size.height*0.08,
+                      height:MediaQuery.of(context).size.height*0.07,
                       margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02,),
                       decoration: BoxDecoration(
-                          color: Color(0xff777777),
-                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.025,))
+                          color: Color(0xff444444),
+                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.01,))
                       ),
-                      child: Center(child: Text("정보수정",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),)),
+                      child: Center(child: Text("정보수정",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: FontWeight.bold),)),
                     ),
                     onTap:()async{
                       var result = await uploadImage();
@@ -653,13 +655,13 @@ class _modify_infoState extends State<modify_info> {
                   InkWell(
                     child: Container(
                       width: MediaQuery.of(context).size.width*0.3,
-                      height:MediaQuery.of(context).size.height*0.08,
+                      height:MediaQuery.of(context).size.height*0.07,
                       margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02,),
                       decoration: BoxDecoration(
-                          color: Color(0xff777777),
-                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.025,))
+                          color: Color(0xff444444),
+                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.01,))
                       ),
-                      child: Center(child: Text("로그아웃",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.04,fontWeight: FontWeight.bold),)),
+                      child: Center(child: Text("로그아웃",style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: FontWeight.bold),)),
                     ),
                     onTap: ()async{
                       SharedPreferences sp = await SharedPreferences.getInstance();

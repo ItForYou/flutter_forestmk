@@ -29,7 +29,7 @@ class _comment_replyState extends State<comment_reply> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context2).size.height*0.02,
+            height: MediaQuery.of(context2).size.height*0.03,
             child: Text("이 댓글을 삭제를 하시겠습니가?"),
           ),
           actions: <Widget>[
@@ -92,6 +92,11 @@ class _comment_replyState extends State<comment_reply> {
 //        else
 //          before_tdata  = comment_item.fromJson(comment_data[comment_data.length-1]);
 
+        String temp_wrcontent = temp_data.wr_content.replaceAll('\n','              ');
+        //print(temp_wrcontent.length/24.2);
+        double comment_height = (temp_wrcontent.length/24.2) * MediaQuery.of(context).size.height*0.00004;
+        //print(comment_height);
+
         Widget temp = Container(
           width: MediaQuery
               .of(context)
@@ -100,7 +105,7 @@ class _comment_replyState extends State<comment_reply> {
           height: MediaQuery
               .of(context)
               .size
-              .height * (0.085+(temp_data.wr_content.length/MediaQuery.of(context).size.width*0.135)),
+              .height * (0.085+comment_height)+13,
           margin: EdgeInsets.only(top: MediaQuery
               .of(context)
               .size
@@ -167,7 +172,7 @@ class _comment_replyState extends State<comment_reply> {
                   style: TextStyle(fontSize: MediaQuery
                       .of(context)
                       .size
-                      .width * 0.032)),
+                      .height * 0.016)),
               SizedBox(height: MediaQuery
                   .of(context)
                   .size
@@ -185,15 +190,15 @@ class _comment_replyState extends State<comment_reply> {
                       .size
                       .width * 0.02,):SizedBox(),
                   (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
-                  Text("수정", style: TextStyle(color: Color(0xffdddddd)),):SizedBox(),
+                  Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),):SizedBox(),
                   (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
                   SizedBox(width: MediaQuery
-                      .of(context)
+                       .of(context)
                       .size
                       .width * 0.02,):SizedBox(),
                   (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
                   InkWell(
-                    child: Text("삭제", style: TextStyle(color: Color(0xffdddddd)),
+                    child: Text("삭제", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),
                     ),
                     onTap: (){
                       show_deletecmmt(temp_data.wr_id);
