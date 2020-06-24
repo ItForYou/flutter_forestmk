@@ -30,7 +30,7 @@ class _search_infoState extends State<search_info> {
         Uri.encodeFull('http://14.48.175.177/search_info.php'),
         body: {
             "mb_hp": input_hp.text,
-            "flg" : 1
+            "flg" : 1.toString()
         },
         headers: {'Accept' : 'application/json'}
     );
@@ -61,8 +61,8 @@ class _search_infoState extends State<search_info> {
         Uri.encodeFull('http://14.48.175.177/search_info.php'),
         body: {
           "mb_hp": input_schpwdhp.text,
-          "id" : input_schpwdid.text,
-          "flg":2
+          "mb_id" : input_schpwdid.text,
+          "flg":2.toString()
         },
         headers: {'Accept' : 'application/json'}
     );
@@ -70,6 +70,14 @@ class _search_infoState extends State<search_info> {
     //print(response.body);
 
     if(response.statusCode ==200) {
+
+       print(response.body);
+       if(response.body.toString()=='hpnone'){
+         print("핸드폰 불일치 ");
+       }
+       else if (response.body.toString()=='none'){
+         print("아이디 존재하지않음 ");
+       }
 
     }
   }
@@ -295,7 +303,7 @@ class _search_infoState extends State<search_info> {
                         ),
                       ),
                       onTap: (){
-
+                        get_password();
                       },
                     )
                   ],

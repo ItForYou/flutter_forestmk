@@ -485,8 +485,8 @@ class writead_State extends State<write_ad> {
                   children: <Widget>[
                     InkWell(
                       child: Container(
-                        width: MediaQuery.of(context).size.height*0.1,
-                        height: MediaQuery.of(context).size.height*0.053,
+                        width: MediaQuery.of(context).size.height*0.11,
+                        height: MediaQuery.of(context).size.height*0.05,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.02)),
                             color: select_bgcolors[0],
@@ -500,8 +500,8 @@ class writead_State extends State<write_ad> {
                     ),
                     InkWell(
                       child: Container(
-                        width: MediaQuery.of(context).size.height*0.1,
-                        height: MediaQuery.of(context).size.height*0.053,
+                        width: MediaQuery.of(context).size.height*0.11,
+                        height: MediaQuery.of(context).size.height*0.05,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.02)),
                             color: select_bgcolors[1],
@@ -515,8 +515,8 @@ class writead_State extends State<write_ad> {
                     ),
                     InkWell(
                       child: Container(
-                        width: MediaQuery.of(context).size.height*0.1,
-                        height: MediaQuery.of(context).size.height*0.053,
+                        width: MediaQuery.of(context).size.height*0.11,
+                        height: MediaQuery.of(context).size.height*0.05,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.02)),
                             color: select_bgcolors[2],
@@ -530,8 +530,8 @@ class writead_State extends State<write_ad> {
                     ),
                     InkWell(
                       child: Container(
-                        width: MediaQuery.of(context).size.height*0.1,
-                        height: MediaQuery.of(context).size.height*0.053,
+                        width: MediaQuery.of(context).size.height*0.11,
+                        height: MediaQuery.of(context).size.height*0.05,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.02)),
                             color: select_bgcolors[3],
