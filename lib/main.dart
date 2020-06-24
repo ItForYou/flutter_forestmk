@@ -9,6 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutterforestmk/categorypage.dart';
 import 'package:flutterforestmk/chat_webview.dart';
@@ -55,11 +56,18 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
   runApp(MyApp());
 
 }*/
-void main() => runApp(MyApp());
+
+void main(){
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(MyApp());
+}
+
 
 class MyApp extends StatefulWidget {
 
   // This widget is the root of your application.
+
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -101,9 +109,10 @@ class _MyAppState extends State<MyApp> {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
+        primarySwatch: Colors.forestmk,
 
-        primarySwatch: Colors.forestmk
       ),
+
       home: MyHomePage(title: '숲마켓', ),
     );
   }
@@ -141,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
    double list_height;
   static double scrollbar_height=1;
   PreferredSize appbar;
-  Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black));
+  Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(fontSize:12,color: Color(0xff888888)));
   bool flg_search = false, flg_pushchat=false;
   String sort_value = "최근순", mb_id,mb_pwd,mb_2="test",mb_1="test",mb_name="test",mb_hp,mb_3,mb_4,mb_5='',mb_6='';
   var itemdata;
@@ -191,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   });
 }
 
-  _changeappbar() {
+  _changeappbar(){
 
     double scrollposition = change_appbar.position.pixels;
 
@@ -205,8 +214,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
         flg_floatbt=0;
       });
     }
-
-
 
     if (scrollposition > 100) {
       setState(() {
@@ -344,11 +351,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     }
       InkWell temp = InkWell(
         child: Container(
-          height: 110,
+          height: 100,
           decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
-                bottom: BorderSide(color: Color(0xffdddddd), width: 2)
+                bottom: BorderSide(color: Color(0xffdddddd), width: 1)
               )
           ),
           padding: EdgeInsets.only(left: 10,right: 20,top:10,bottom: 10),
@@ -361,8 +368,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                 Hero(
                   tag: "hero"+id.toString(),
                   child: temp_data.wr_9!='거래완료'?Container(
-                    width: MediaQuery.of(context).size.width*0.24,
-                    height: MediaQuery.of(context).size.width*0.24,
+                    width: MediaQuery.of(context).size.width*0.225,
+                    height: MediaQuery.of(context).size.width*0.2,
                     margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
                     decoration: BoxDecoration(
                       border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
@@ -375,7 +382,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                   ):Stack(
                     children: <Widget>[
                      Container(
-                      width: MediaQuery.of(context).size.width*0.24,
+                      width: MediaQuery.of(context).size.width*0.225,
                       height: MediaQuery.of(context).size.height*0.2,
 
                       decoration: BoxDecoration(
@@ -388,14 +395,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                       ),
                     ),
                       Container(
-                          width: MediaQuery.of(context).size.width*0.24,
+                          width: MediaQuery.of(context).size.width*0.225,
                           height: MediaQuery.of(context).size.height*0.2,
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.8)
                           ),
                         child: Center(
                           child: Container(
-                            width: MediaQuery.of(context).size.width*0.24,
+                            width: MediaQuery.of(context).size.width*0.225,
                             height: MediaQuery.of(context).size.height*0.04,
                             decoration: BoxDecoration(
                               color: Colors.white
@@ -413,14 +420,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                   mainAxisAlignment: temp_data.ca_name!='업체'? MainAxisAlignment.start: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(height: 5,),
-                    Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032),),
-                    SizedBox(height: 5,),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.003,),
+                    Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.003,),
                     temp_data.ca_name!='업체'? Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, fontWeight:FontWeight.bold)): Container(),
-                    temp_data.ca_name!='업체'? SizedBox(height: 8,): Container(),
+                    temp_data.ca_name!='업체'? SizedBox(height: MediaQuery.of(context).size.height*0.005,): Container(),
                     Row(
                       children: <Widget>[
-                        Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                        Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
                         SizedBox(width: MediaQuery.of(context).size.width*0.005,),
                         Container(
                           width: MediaQuery.of(context).size.width*0.01,
@@ -436,7 +443,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                       ],
 
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height*0.006,),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
                     Row(
                       children: <Widget>[
                         temp_data.ca_name!='업체'? Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)):Container(),
@@ -486,7 +493,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                       ),
                     ),
                     SizedBox(height: 6,),
-                    Text(temp_data.mb_name.length<5?temp_data.mb_name:temp_data.mb_name.substring(0,3)+"···",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.028),)
+                    Text(temp_data.mb_name.length<5?temp_data.mb_name:temp_data.mb_name.substring(0,3)+"···",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),)
                   ],
                 ),
               ],
@@ -550,6 +557,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
         },
       );
   }
+
   void _searchdialog(){
     showDialog(
       context: context,
@@ -718,20 +726,24 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       //print(jsonDecode(response.body));
 
       var temp_mbdata = jsonDecode(response.body);
-          mb_hp = temp_mbdata['mb_hp'];
-          mb_name = temp_mbdata['mb_name'];
-          if(temp_mbdata['mb_1']!='') {
-            mb_1 = "http://14.48.175.177/data/member/" + temp_mbdata['mb_1'];
-          }
-          else{
-            mb_1='test';
-          }
 
-          mb_2 = temp_mbdata['mb_2'];
-          mb_3 = temp_mbdata['mb_3'];
-          mb_4 = temp_mbdata['mb_4'];
-          mb_5 = temp_mbdata['mb_5'];
-          mb_6 = temp_mbdata['mb_6'];
+      setState(() {
+        mb_hp = temp_mbdata['mb_hp'];
+        mb_name = temp_mbdata['mb_name'];
+        if(temp_mbdata['mb_1']!='') {
+          mb_1 = "http://14.48.175.177/data/member/" + temp_mbdata['mb_1'];
+        }
+        else{
+          mb_1='test';
+        }
+
+        mb_2 = temp_mbdata['mb_2'];
+        mb_3 = temp_mbdata['mb_3'];
+        mb_4 = temp_mbdata['mb_4'];
+        mb_5 = temp_mbdata['mb_5'];
+        mb_6 = temp_mbdata['mb_6'];
+      });
+
 
   }
 
@@ -908,17 +920,19 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
   @override
   Widget build(BuildContext context) {
-    load_myinfo();
+
     if(mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: MediaQuery.of(context).size.height*0.015,),
-          Text(mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032, fontWeight: FontWeight.bold),),
-          Text(mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032)),
+          SizedBox(height: MediaQuery.of(context).size.height*0.013,),
+          Text(mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.033, fontWeight: FontWeight.bold),),
+          SizedBox(height: MediaQuery.of(context).size.height*0.0028,),
+          Text(mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03, color: Color(0xff666666))),
         ],
       );
     }
+
     if(start_height == 1){
         list_height = MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.15).floor();
         scrollbar_height = MediaQuery.of(context).size.height*0.08;
@@ -1010,6 +1024,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                                 builder: (context) => mypage(mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                             ));
                             if(result == 'back'){
+                              get_mbdata();
                               get_data();
                             }
                           }
@@ -1330,6 +1345,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                                   builder: (context) => mypage(mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                               ));
                               if(result == 'back'){
+                                get_mbdata();
                                 get_data();
                               }
                             }
@@ -1360,7 +1376,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                                 decoration: BoxDecoration(
                                     color: Color(0xfff3f3f3),
                                     borderRadius: BorderRadius.all(Radius.circular(50)),
-                                    border: Border.all(color: Color(0xffcccccc)),
+                                   // border: Border.all(color: Color(0xffcccccc)),
                                     image: DecorationImage(//이미지 꾸미기
                                         fit:BoxFit.cover,
                                         //image:  AssetImage("images/wing_mb_noimg2.png"),
@@ -1381,7 +1397,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                                   height: MediaQuery.of(context).size.height*0.08,
                                   child: Center(child: mb_infowidget)
                               ),
-                              onTap: () {
+                              onTap: () async{
                                 if(mb_id==null) {
                                       Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => loginpage()
@@ -1393,9 +1409,16 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                                   }*/
                                 }
                                 else{
-                                  Navigator.push(context, MaterialPageRoute(
+                                  var result = await Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => mypage(mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
                                   ));
+                                  if(result == 'back'){
+                                    get_mbdata();
+                                    get_data();
+                                  }
+                                /*  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => mypage(mb_id:mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,)
+                                  ));*/
                                 }
                               },
                             ),
@@ -1440,8 +1463,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                     decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border(
-                          top: BorderSide(color: Color(0xfff7f7f7), width: 2),
-                          bottom: BorderSide(color: Color(0xfff7f7f7), width: 2),
+                          top: BorderSide(color: Color(0xffdddddd), width: 1),
+                          bottom: BorderSide(color: Color(0xffdddddd), width: 1),
                         )
 
                     ),
@@ -1464,32 +1487,49 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                           children: <Widget>[
                             Container(
                               width: 20,
-                              child: Checkbox(
-                                value: checkbox_soldout,
-                                activeColor: Colors.black12,
-                                onChanged :(bool value){
-                                  setState(() {
-                                    checkbox_soldout = value;
-                                    get_data();
-                                  });
-
-                              }
-
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color:Color(0xffeeeeee),
+                                borderRadius: BorderRadius.all(Radius.circular(5))
+                              ),
+                              child: Theme(
+                                data: ThemeData(
+                                    unselectedWidgetColor: Color(0xffeeeeee),),
+                                child: Checkbox(
+                                  value: checkbox_soldout,
+                                  activeColor: Color(0xffeeeeee),
+                                  checkColor: Colors.black,
+                                  onChanged :(bool value){
+                                    setState(() {
+                                      checkbox_soldout = value;
+                                      get_data();
+                                    });
+                                }
+                                ),
                               ),
                             ),
                             Text("거래완료",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
-                            SizedBox(width: MediaQuery.of(context).size.width*0.01,),
+                            SizedBox(width: MediaQuery.of(context).size.width*0.016,),
                             Container(
                               width: 20,
-                              child: Checkbox(
-                                value: checkbox_adv,
-                                activeColor: Colors.black12,
-                                onChanged: (bool value){
-                                  setState(() {
-                                    checkbox_adv = value;
-                                    get_data();
-                                  });
-                                },
+                              height: 20,
+                              decoration: BoxDecoration(
+                                  color:Color(0xffeeeeee),
+                                  borderRadius: BorderRadius.all(Radius.circular(5))
+                              ),
+                              child: Theme(
+                                data: ThemeData(unselectedWidgetColor: Color(0xffeeeeee),),
+                                child: Checkbox(
+                                  value: checkbox_adv,
+                                  activeColor: Color(0xffeeeeee),
+                                  checkColor: Colors.black,
+                                  onChanged: (bool value){
+                                    setState(() {
+                                      checkbox_adv = value;
+                                      get_data();
+                                    });
+                                  },
+                                ),
                               ),
                             ),
                             Text("업체안보기", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03)),

@@ -319,11 +319,11 @@ class _search_mainState extends State<search_main> {
 
     InkWell temp = InkWell(
       child: Container(
-        height: 110,
+        height: 100,
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
-                bottom: BorderSide(color: Color(0xfff7f7f7), width: 2)
+                bottom: BorderSide(color: Color(0xffdddddd), width: 1)
             )
         ),
         padding: EdgeInsets.only(left: 10,right: 20,top:10,bottom: 10),
@@ -339,12 +339,12 @@ class _search_mainState extends State<search_main> {
                       child:
                       temp_data.wr_9!='거래완료'?
                       Container(
-                        width: MediaQuery.of(context).size.width*0.24,
-                        height: MediaQuery.of(context).size.height*0.24,
+                        width: MediaQuery.of(context).size.width*0.225,
+                        height: MediaQuery.of(context).size.height*0.2,
                         margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
                         decoration: BoxDecoration(
                             border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
-                            borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
+                            borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.015)),
                             image: DecorationImage(//이미지 꾸미기
                                 fit:BoxFit.cover,
                                 image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
@@ -353,7 +353,7 @@ class _search_mainState extends State<search_main> {
                       ):Stack(
                           children: <Widget>[
                             Container(
-                              width: MediaQuery.of(context).size.width*0.27,
+                              width: MediaQuery.of(context).size.width*0.225,
                               height: MediaQuery.of(context).size.height*0.2,
 
                               decoration: BoxDecoration(
@@ -366,14 +366,14 @@ class _search_mainState extends State<search_main> {
                               ),
                             ),
                             Container(
-                              width: MediaQuery.of(context).size.width*0.27,
+                              width: MediaQuery.of(context).size.width*0.225,
                               height: MediaQuery.of(context).size.height*0.2,
                               decoration: BoxDecoration(
                                   color: Colors.white.withOpacity(0.8)
                               ),
                               child: Center(
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width*0.27,
+                                  width: MediaQuery.of(context).size.width*0.225,
                                   height: MediaQuery.of(context).size.height*0.04,
                                   decoration: BoxDecoration(
                                       color: Colors.white
@@ -390,14 +390,14 @@ class _search_mainState extends State<search_main> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 5,),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
                         Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
-                        SizedBox(height: 5,),
-                        Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
-                        SizedBox(height: 8,),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
+                        Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: FontWeight.bold),),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.005,),
                         Row(
                           children: <Widget>[
-                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444)),),
                             SizedBox(width: MediaQuery.of(context).size.width*0.005,),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
@@ -413,7 +413,7 @@ class _search_mainState extends State<search_main> {
                           ],
 
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height*0.006,),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
                         Row(
                           children: <Widget>[
                             Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
@@ -454,7 +454,8 @@ class _search_mainState extends State<search_main> {
                     padding: EdgeInsets.all(3),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(50)),
-                        border: Border.all(color: Color(0xffcccccc)),
+                        //border: Border.all(color: Color(0xfff3f3f3)),
+                        color: Color(0xfff3f3f3),
                         image: DecorationImage(//이미지 꾸미기
                             fit:BoxFit.cover,
                             image:temp_data.profile_img!=''? NetworkImage(temp_data.profile_img): AssetImage("images/wing_mb_noimg2.png")//이미지 가져오기
@@ -462,7 +463,7 @@ class _search_mainState extends State<search_main> {
                     ),
                   ),
                   SizedBox(height: 6,),
-                  Text(temp_data.mb_name.length<5?temp_data.mb_name:temp_data.mb_name.substring(0,3)+"···",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.028),)
+                  Text(temp_data.mb_name.length<5?temp_data.mb_name:temp_data.mb_name.substring(0,3)+"···",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),)
                 ],
               ),
             ],
@@ -704,9 +705,10 @@ class _search_mainState extends State<search_main> {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SizedBox(height: MediaQuery.of(context).size.height*0.015,),
-          Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032, fontWeight: FontWeight.bold),),
-          Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032)),
+          SizedBox(height: MediaQuery.of(context).size.height*0.013,),
+          Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.033, fontWeight: FontWeight.bold),),
+          SizedBox(height: MediaQuery.of(context).size.height*0.0028,),
+          Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03,color: Color(0xff666666))),
         ],
       );
     }
@@ -930,7 +932,7 @@ class _search_mainState extends State<search_main> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => MyApp()
+                            builder:(context) => MyHomePage()
                         ));
                       },
                     ),
@@ -1037,7 +1039,7 @@ class _search_mainState extends State<search_main> {
                           ),
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => MyApp()
+                                builder:(context) => MyHomePage()
                             ));
                           },
                         ),
@@ -1075,7 +1077,6 @@ class _search_mainState extends State<search_main> {
                             width: 40,
                             height: 40,
                             padding: EdgeInsets.all(3),
-
                             child: Image.asset("images/hd_cate04.png"),
                           ),
                           onTap: (){
@@ -1084,7 +1085,6 @@ class _search_mainState extends State<search_main> {
                             ));
                           },
                         ),
-
                         InkWell(
                           child: Container(
                             width: 40,
@@ -1099,8 +1099,6 @@ class _search_mainState extends State<search_main> {
                             ));
                           },
                         ),
-
-
                       ],
                     )),
                 Container(
@@ -1217,8 +1215,8 @@ class _search_mainState extends State<search_main> {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border(
-                          top: BorderSide(color: Color(0xfff7f7f7), width: 2),
-                          bottom: BorderSide(color: Color(0xfff7f7f7), width: 2),
+                          top: BorderSide(color: Color(0xffdddddd), width: 1),
+                          bottom: BorderSide(color: Color(0xffdddddd), width: 1),
                         )
 
                     ),
@@ -1242,40 +1240,60 @@ class _search_mainState extends State<search_main> {
                           children: <Widget>[
                             Container(
                               width: 20,
-                              child: Checkbox(
-                                value: checkbox_soldout,
-                                activeColor: Colors.black12,
-                                onChanged: (bool value){
-                                  setState(() {
-                                      checkbox_soldout = value;
-                                      if(value==true)
-                                      widget.sch_flgsold = '1';
-                                      else
-                                        widget.sch_flgsold = null;
-                                      get_data();
-                                  });
-                                },
+                              height:20,
+                              decoration: BoxDecoration(
+                                  color:Color(0xffeeeeee),
+                                  borderRadius: BorderRadius.all(Radius.circular(5))
+                              ),
+                              child: Theme(
+                                data:ThemeData(
+                                  unselectedWidgetColor: Color(0xffeeeeee),),
+                                child: Checkbox(
+                                  value: checkbox_soldout,
+                                  activeColor: Color(0xffeeeeee),
+                                  checkColor: Colors.black,
+                                  onChanged: (bool value){
+                                    setState(() {
+                                        checkbox_soldout = value;
+                                        if(value==true)
+                                        widget.sch_flgsold = '1';
+                                        else
+                                          widget.sch_flgsold = null;
+                                        get_data();
+                                    });
+                                  },
+                                ),
                               ),
                             ),
-                            Text("거래완료"),
+                            Text("거래완료",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
+                            SizedBox(width: MediaQuery.of(context).size.width*0.016,),
                             Container(
                               width: 20,
-                              child: Checkbox(
-                                value: checkbox_adv,
-                                activeColor: Colors.black12,
-                                onChanged: (bool value){
-                                  setState(() {
-                                    checkbox_adv = value;
-                                    if(value==true)
-                                    widget.sch_flghide = '1';
-                                    else
-                                    widget.sch_flghide = null;
-                                    get_data();
-                                  });
-                                },
+                              height: 20,
+                              decoration: BoxDecoration(
+                                  color:Color(0xffeeeeee),
+                                  borderRadius: BorderRadius.all(Radius.circular(5))
+                              ),
+                              child: Theme(
+                                data: ThemeData(
+                                  unselectedWidgetColor: Color(0xffeeeeee),),
+                                child: Checkbox(
+                                  value: checkbox_adv,
+                                  activeColor: Colors.black12,
+                                  onChanged: (bool value){
+                                    setState(() {
+                                      checkbox_adv = value;
+                                      if(value==true)
+                                      widget.sch_flghide = '1';
+                                      else
+                                      widget.sch_flghide = null;
+                                      get_data();
+                                    });
+                                  },
+                                ),
                               ),
                             ),
-                            Text("업체안보기"),
+                            Text("업체안보기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
                           ],
                         ):Container(),
                       ],

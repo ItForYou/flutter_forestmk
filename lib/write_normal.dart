@@ -25,7 +25,7 @@ class writenormal_State extends State<write_normal> {
   TextEditingController input_wr_1 = new TextEditingController();
 
   String cate_value ="카테고리를 선택해주세요";
-  Color color_cate = Color(0xff888888);
+  Color color_cate = Color(0xffdddddd);
   List<Widget> image_boxes = List<Widget>();
   List<File> Images = [];
   List<String> modify_imges= [];
@@ -89,13 +89,13 @@ class writenormal_State extends State<write_normal> {
 
 
                       if(image_boxes.length >3 && image_boxes.length <=7){
-                        grid_height = MediaQuery.of(context).size.height*0.25;
+                        grid_height = MediaQuery.of(context).size.height*0.21;
                       }
                       else if(image_boxes.length >7){
-                        grid_height = MediaQuery.of(context).size.height*0.35;
+                        grid_height = MediaQuery.of(context).size.height*0.31;
                       }
                       else{
-                        grid_height = MediaQuery.of(context).size.height*0.14;
+                        grid_height = MediaQuery.of(context).size.height*0.1;
                       }
                     });
                   },
@@ -139,13 +139,13 @@ class writenormal_State extends State<write_normal> {
                       image_boxes.add(get_addbox());
 
                       if(image_boxes.length >3 && image_boxes.length <=7){
-                        grid_height = MediaQuery.of(context).size.height*0.25;
+                        grid_height = MediaQuery.of(context).size.height*0.21;
                       }
                       else if(image_boxes.length >7){
-                        grid_height = MediaQuery.of(context).size.height*0.35;
+                        grid_height = MediaQuery.of(context).size.height*0.31;
                       }
                       else{
-                        grid_height = MediaQuery.of(context).size.height*0.14;
+                        grid_height = MediaQuery.of(context).size.height*0.1;
                       }
                     });
                   },
@@ -261,7 +261,7 @@ class writenormal_State extends State<write_normal> {
               left: MediaQuery
                   .of(context)
                   .size
-                  .width * 0.065,
+                  .width * 0.04,
               child: Text(
                 "("+(image_boxes.length+1).toString()+"/10)",
                 style: TextStyle(
@@ -394,10 +394,10 @@ class writenormal_State extends State<write_normal> {
          image_boxes.add(get_addbox());
 
        if(image_boxes.length >3 && image_boxes.length <=7){
-         grid_height = MediaQuery.of(context).size.height*0.25;
+         grid_height = MediaQuery.of(context).size.height*0.21;
        }
        else if(image_boxes.length >7){
-         grid_height = MediaQuery.of(context).size.height*0.35;
+         grid_height = MediaQuery.of(context).size.height*0.31;
        }
      }
    });
@@ -430,13 +430,13 @@ class writenormal_State extends State<write_normal> {
         modify_imges.clear();
       for(int i=1; i<widget.info.file.length; i++) {
         if(widget.info.file.length-1 >3 && widget.info.file.length-1 <=7){
-          grid_height = MediaQuery.of(context).size.height*0.25;
+          grid_height = MediaQuery.of(context).size.height*0.21;
         }
         else if(widget.info.file.length-1 >7){
-          grid_height = MediaQuery.of(context).size.height*0.35;
+          grid_height = MediaQuery.of(context).size.height*0.31;
         }
         else{
-          grid_height = MediaQuery.of(context).size.height*0.14;
+          grid_height = MediaQuery.of(context).size.height*0.1;
         }
         modify_imges.add(widget.info.file[i]);
         image_boxes.add(get_Imagebox2(modify_imges[i-1]));        
@@ -449,13 +449,13 @@ class writenormal_State extends State<write_normal> {
       image_boxes.clear();
       for(int i=0; i<itemdata_now['files'].length; i++) {
         if(itemdata_now['files'].length-1 >3 && itemdata_now['files'].length-1 <=7){
-          grid_height = MediaQuery.of(context).size.height*0.25;
+          grid_height = MediaQuery.of(context).size.height*0.21;
         }
         else if(itemdata_now['files'].length-1 >7){
-          grid_height = MediaQuery.of(context).size.height*0.35;
+          grid_height = MediaQuery.of(context).size.height*0.31;
         }
         else{
-          grid_height = MediaQuery.of(context).size.height*0.14;
+          grid_height = MediaQuery.of(context).size.height*0.1;
         }
         modify_imges.add(itemdata_now['files'][i]);
         image_boxes.add(get_Imagebox2(itemdata_now['files'][i]));
@@ -464,7 +464,7 @@ class writenormal_State extends State<write_normal> {
     }
 
     if(first_build ==1 && image_boxes.length <=0){
-      grid_height = MediaQuery.of(context).size.height*0.14;
+      grid_height = MediaQuery.of(context).size.height*0.1;
       image_boxes.add(get_addbox());
     }
     /*if(image_boxes.length < 10) {
@@ -473,18 +473,21 @@ class writenormal_State extends State<write_normal> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("중고거래 글쓰기" ,style: TextStyle(color: Colors.black),),
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        leading: InkWell(
-          child:Padding(
-              padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02, bottom: MediaQuery.of(context).size.height*0.02, left: MediaQuery.of(context).size.width*0.05),
-              child:Image.asset("images/hd_back.png")
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.07),
+        child: AppBar(
+          title: Text("중고거래 글쓰기" ,style: TextStyle(color: Colors.black87, fontSize: MediaQuery.of(context).size.width*0.045),),
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          leading: InkWell(
+            child:Padding(
+                padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.018, bottom: MediaQuery.of(context).size.height*0.018, left: MediaQuery.of(context).size.width*0.05),
+                child:Image.asset("images/hd_back.png")
+            ),
+            onTap: (){
+              Navigator.of(context).pop(true);
+            },
           ),
-          onTap: (){
-            Navigator.of(context).pop(true);
-          },
         ),
       ),
       body: SingleChildScrollView(
@@ -492,42 +495,46 @@ class writenormal_State extends State<write_normal> {
           children: <Widget>[
                   Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.08,
+                  height: MediaQuery.of(context).size.height*0.05,
                   padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
                   color: Colors.white,
                   child: Row(
                       children: <Widget>[
-                        Text("제품 사진 첨부", style: TextStyle(fontWeight:FontWeight.bold,fontSize: MediaQuery.of(context).size.width*0.04,),),
+                        Text("제품 사진 첨부", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,),),
                       ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.85,
+                      height: grid_height,
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
+                      color: Colors.white,
+                      child:GridView.builder(
+
+                          itemCount: image_boxes.length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 5.0,
+                            mainAxisSpacing: 5.0,
+                          ),
+                          itemBuilder: (BuildContext context, int index){
+                              return image_boxes[index];
+                          }
+                      )
                     ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: grid_height,
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
-                    color: Colors.white,
-                    child:GridView.builder(
-
-                        itemCount: image_boxes.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4,
-                          crossAxisSpacing: 5.0,
-                          mainAxisSpacing: 5.0,
-                        ),
-                        itemBuilder: (BuildContext context, int index){
-                            return image_boxes[index];
-                        }
-                    )
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.05,
+                    height: MediaQuery.of(context).size.height*0.06,
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
                     color: Colors.white,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("카테고리",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
+                        Text("카테고리",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                         InkWell(
                             child: Container(
                               width: MediaQuery.of(context).size.width*0.7,
@@ -543,7 +550,7 @@ class writenormal_State extends State<write_normal> {
                              child: Center(
                                child: Container(
                                    width: MediaQuery.of(context).size.width*0.7,
-                                   child:Text(cate_value,style: TextStyle(color: color_cate,fontSize: MediaQuery.of(context).size.width*0.04,),textAlign: TextAlign.start,)
+                                   child:Text(cate_value,style: TextStyle(color: color_cate,fontSize: MediaQuery.of(context).size.width*0.035,),textAlign: TextAlign.start,)
                             ),
                              )
                           ),
@@ -563,7 +570,7 @@ class writenormal_State extends State<write_normal> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("금액",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
+                        Text("금액",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                         Container(
                               width: MediaQuery.of(context).size.width*0.7,
                               height: MediaQuery.of(context).size.height*0.05,
@@ -586,6 +593,8 @@ class writenormal_State extends State<write_normal> {
                                       cursorColor: Colors.black,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
+                                        hintText: "금액을 입력해주세요",
+                                        hintStyle: TextStyle(color:Color(0xffdddddd)),
                                       ),
                                       ),
                                     )
@@ -603,7 +612,7 @@ class writenormal_State extends State<write_normal> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("제목",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
+                        Text("제목",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                         Container(
                             width: MediaQuery.of(context).size.width*0.7,
                             height: MediaQuery.of(context).size.height*0.05,
@@ -622,6 +631,9 @@ class writenormal_State extends State<write_normal> {
                                 cursorColor: Colors.black,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
+                                    hintText: "제목을 입력해주세요",
+                                    hintStyle: TextStyle(color: Color(0xffdddddd)),
+
                                 ),
                               ),
                             )
@@ -640,7 +652,7 @@ class writenormal_State extends State<write_normal> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("내용",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
+                        Text("내용",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                       ],
                     ),
                   ),
@@ -653,7 +665,7 @@ class writenormal_State extends State<write_normal> {
                       border: Border.all(width: 1, color: Color(0xfff7f7f7))
                     ),
                     margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05,
-                                            top: MediaQuery.of(context).size.width*0.05,bottom: MediaQuery.of(context).size.width*0.05,),
+                                            top: MediaQuery.of(context).size.width*0.01,bottom: MediaQuery.of(context).size.width*0.095,),
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.01),
                     child: TextField(
                         controller:  input_content,
@@ -662,7 +674,7 @@ class writenormal_State extends State<write_normal> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "내용을 입력해주세요",
-                          hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04)
+                          hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,color: Color(0xffdddddd))
                       ),
                       ),
                   ),

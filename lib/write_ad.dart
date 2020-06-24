@@ -19,7 +19,7 @@ class writead_State extends State<write_ad> {
   TextEditingController input_content = new TextEditingController();
   TextEditingController input_wr_5 = new TextEditingController();
 
-  Color color_cate = Color(0xff888888);
+  Color color_cate = Color(0xffdddddd);
   List<Widget> image_boxes = List<Widget>();
   List<File> Images = [];
   int first_build =1;
@@ -56,13 +56,13 @@ class writead_State extends State<write_ad> {
 
 
                               if(Images.length >3 && Images.length <=7){
-                                grid_height = MediaQuery.of(context).size.height*0.25;
+                                grid_height = MediaQuery.of(context).size.height*0.21;
                               }
                               else if(Images.length >7){
-                              grid_height = MediaQuery.of(context).size.height*0.35;
+                              grid_height = MediaQuery.of(context).size.height*0.31;
                               }
                               else{
-                                grid_height = MediaQuery.of(context).size.height*0.14;
+                                grid_height = MediaQuery.of(context).size.height*0.1;
                               }
                         });
                   },
@@ -105,7 +105,7 @@ class writead_State extends State<write_ad> {
               left: MediaQuery
                   .of(context)
                   .size
-                  .width * 0.065,
+                  .width * 0.045,
               child: Text(
                 "("+(Images.length+1).toString()+"/10)",
                 style: TextStyle(
@@ -226,10 +226,10 @@ class writead_State extends State<write_ad> {
           image_boxes.add(get_addbox());
 
         if(Images.length >3 && Images.length <=7){
-          grid_height = MediaQuery.of(context).size.height*0.25;
+          grid_height = MediaQuery.of(context).size.height*0.21;
         }
         else if(Images.length >7){
-          grid_height = MediaQuery.of(context).size.height*0.35;
+          grid_height = MediaQuery.of(context).size.height*0.31;
         }
       }
     });
@@ -246,7 +246,7 @@ class writead_State extends State<write_ad> {
   Widget build(BuildContext context) {
 
     if(first_build ==1 && image_boxes.length <=0){
-      grid_height = MediaQuery.of(context).size.height*0.14;
+      grid_height = MediaQuery.of(context).size.height*0.1;
       image_boxes.add(get_addbox());
     }
     /*if(image_boxes.length < 10) {
@@ -255,18 +255,21 @@ class writead_State extends State<write_ad> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("광고문의 글쓰기" ,style: TextStyle(color: Colors.black),),
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        leading: InkWell(
-          child:Padding(
-              padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02, bottom: MediaQuery.of(context).size.height*0.02, left: MediaQuery.of(context).size.width*0.05),
-              child:Image.asset("images/hd_back.png")
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.07),
+        child: AppBar(
+          title: Text("광고문의 글쓰기" ,style: TextStyle(color: Colors.black),),
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          leading: InkWell(
+            child:Padding(
+                padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02, bottom: MediaQuery.of(context).size.height*0.02, left: MediaQuery.of(context).size.width*0.05),
+                child:Image.asset("images/hd_back.png")
+            ),
+            onTap: (){
+              Navigator.of(context).pop(true);
+            },
           ),
-          onTap: (){
-            Navigator.of(context).pop(true);
-          },
         ),
       ),
       body: SingleChildScrollView(
@@ -274,32 +277,35 @@ class writead_State extends State<write_ad> {
           children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.08,
+                    height: MediaQuery.of(context).size.height*0.06,
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
                     color: Colors.white,
                     child: Row(
                       children: <Widget>[
-                        Text("홍보 사진 첨부", style: TextStyle(fontWeight:FontWeight.bold,fontSize: MediaQuery.of(context).size.width*0.04,),),
+                        Text("홍보 사진 첨부", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,),),
                       ],
                     ),
                   ),
-                  Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: grid_height,
-                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
-                      color: Colors.white,
-                      child:GridView.builder(
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                        width: MediaQuery.of(context).size.width*0.85,
+                        height: grid_height,
+                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
+                        color: Colors.white,
+                        child:GridView.builder(
 
-                          itemCount: image_boxes.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 5.0,
-                            mainAxisSpacing: 5.0,
-                          ),
-                          itemBuilder: (BuildContext context, int index){
-                            return image_boxes[index];
-                          }
-                      )
+                            itemCount: image_boxes.length,
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              crossAxisSpacing: 5.0,
+                              mainAxisSpacing: 5.0,
+                            ),
+                            itemBuilder: (BuildContext context, int index){
+                              return image_boxes[index];
+                            }
+                        )
+                    ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -309,7 +315,7 @@ class writead_State extends State<write_ad> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("주소",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
+                        Text("주소",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                          InkWell(
                            child: Container(
                                 width: MediaQuery.of(context).size.width*0.7,
@@ -325,7 +331,7 @@ class writead_State extends State<write_ad> {
                                 child: Center(
                                   child: Container(
                                       width: MediaQuery.of(context).size.width*0.7,
-                                      child:Text(str_address,style: TextStyle(color: color_cate,fontSize: MediaQuery.of(context).size.width*0.04,),textAlign: TextAlign.start,)
+                                      child:Text(str_address,style: TextStyle(color: color_cate,fontSize: MediaQuery.of(context).size.width*0.038,),textAlign: TextAlign.start,)
                                   ),
                                 )
                             ),
@@ -352,7 +358,7 @@ class writead_State extends State<write_ad> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("전화번호",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
+                        Text("전화번호",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                         Container(
                             width: MediaQuery.of(context).size.width*0.7,
                             height: MediaQuery.of(context).size.height*0.05,
@@ -371,7 +377,8 @@ class writead_State extends State<write_ad> {
                                 cursorColor: Colors.black,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: "전화번호를 입력하세요"
+                                  hintText: "전화번호를 입력하세요",
+                                  hintStyle: TextStyle(color: Color(0xffdddddd),fontSize: MediaQuery.of(context).size.width*0.038)
                                 ),
                               ),
                             )
@@ -387,7 +394,7 @@ class writead_State extends State<write_ad> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("업체이름",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
+                        Text("업체이름",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                         Container(
                             width: MediaQuery.of(context).size.width*0.7,
                             height: MediaQuery.of(context).size.height*0.05,
@@ -406,7 +413,8 @@ class writead_State extends State<write_ad> {
                                 cursorColor: Colors.black,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: "업체이름을 입력하세요"
+                                  hintText: "업체이름을 입력하세요",
+                                  hintStyle: TextStyle(color: Color(0xffdddddd), fontSize: MediaQuery.of(context).size.width*0.038)
                                 ),
                               ),
                             )
@@ -425,7 +433,7 @@ class writead_State extends State<write_ad> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("내용",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
+                        Text("내용",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                       ],
                     ),
                   ),
@@ -438,7 +446,7 @@ class writead_State extends State<write_ad> {
                         border: Border.all(width: 1, color: Color(0xfff7f7f7))
                     ),
                     margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05,
-                      top: MediaQuery.of(context).size.width*0.05,bottom: MediaQuery.of(context).size.width*0.05,),
+                      top: MediaQuery.of(context).size.width*0.01,bottom: MediaQuery.of(context).size.width*0.01,),
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.01),
                     child: TextField(
                       controller: input_content,
@@ -446,8 +454,8 @@ class writead_State extends State<write_ad> {
                       cursorColor: Color(0xff9dc543),
                       decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: "내용을 입력해주세요",
-                          hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04)
+                          hintText: "홍보 내용을 입력해주세요",
+                          hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.width*0.038,color:Color(0xffdddddd) )
                       ),
                     ),
                   ),
@@ -462,7 +470,7 @@ class writead_State extends State<write_ad> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text("광고게제 일수",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,)),
+                  Text("광고게제 일수",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                 ],
               ),
             ),

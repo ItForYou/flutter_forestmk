@@ -1,8 +1,11 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class location  extends StatefulWidget {
@@ -74,6 +77,8 @@ class location_State extends State<location> {
   }
 
   Future<dynamic> update_location(value) async {
+
+
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/update_location.php'),
         body: {
@@ -86,7 +91,6 @@ class location_State extends State<location> {
     if(response.statusCode==200){
       Navigator.pop(context,"change");
     }
-
 }
 
   Widget get_locatoinwidget(){
@@ -126,8 +130,44 @@ class location_State extends State<location> {
 
   }
 
+  void get_location() async{
 
+    ProgressDialog pr = ProgressDialog(context);
+    //pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+    pr.style(
+        message: '잠시만 기다려주세요...',
+        borderRadius: 5.0,
+        backgroundColor: Colors.white,
+        progressWidget: Container(padding:EdgeInsets.all(MediaQuery.of(context).size.height * 0.014),child: CircularProgressIndicator()),
+        elevation: 5.0,
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: MediaQuery.of(context).size.height * 0.018,),
+        insetAnimCurve: Curves.easeInOut,
+    );
+    pr.show();
 
+    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_current.php'),
+        body: {
+          "x": position.longitude.toString(),
+          'y':position.latitude.toString()
+        },
+        headers: {'Accept': 'application/json'}
+    );
+
+    if(response.statusCode==200){
+      Navigator.pop(context);
+     // print(jsonDecode(response.body));
+      var json_address = jsonDecode(response.body);
+      String address = json_address['documents'][0]['address']['region_1depth_name']+" "+json_address['documents'][0]['address']['region_2depth_name']+" "+json_address['documents'][0]['address']['region_3depth_name'];
+      //print(address);
+      update_location(address);
+
+    }
+
+  }
 
   @override
   void initState() {
@@ -167,7 +207,7 @@ class location_State extends State<location> {
                       child: Text("설정 위치 :")
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width*0.8,
+                    width: MediaQuery.of(context).size.width*0.78,
                     height: MediaQuery.of(context).size.height*0.07,
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.01, right: MediaQuery.of(context).size.width*0.05),
                     child: TextFormField(
@@ -216,15 +256,20 @@ class location_State extends State<location> {
                   ),
                 ),
                 ),
-              Container(
-                width: MediaQuery.of(context).size.width*0.9,
-                height: MediaQuery.of(context).size.height*0.05,
-                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.015,),
-                decoration: BoxDecoration(
-                    color: Colors.forestmk,
-                    borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.07))
+              InkWell(
+                child: Container(
+                  width: MediaQuery.of(context).size.width*0.9,
+                  height: MediaQuery.of(context).size.height*0.05,
+                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.015,),
+                  decoration: BoxDecoration(
+                      color: Colors.forestmk,
+                      borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.07))
+                  ),
+                  child: Center(child: Text("현재위치로 찾기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,color: Colors.white))),
                 ),
-                child: Center(child: Text("현재위치로 찾기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045,color: Colors.white))),
+                onTap: (){
+                  get_location();
+                },
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,

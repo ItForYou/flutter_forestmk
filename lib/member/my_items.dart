@@ -208,11 +208,11 @@ class _my_itemsState extends State<my_items> {
 
     Container temp =
     Container(
-        height: 110,
+        height: 100,
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
-                bottom: BorderSide(color: Color(0xfff7f7f7), width: 2)
+                bottom: BorderSide(color: Color(0xffdddddd), width: 2)
             )
         ),
         padding: EdgeInsets.only(left: 10,right: 20,top:10,bottom: 10),
@@ -226,19 +226,36 @@ class _my_itemsState extends State<my_items> {
 
                     InkWell(
                       child: Container(
-                        width: MediaQuery.of(context).size.width*0.04,
-                        height: 110,
+                        width: MediaQuery.of(context).size.width*0.055,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.white
+                        ),
                         margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.03),
-                        child: Checkbox(
-                          value: checkbox_values[id],
-                          activeColor: Colors.black12,
-                          onChanged: (bool value){
-                            setState(() {
-                              checkbox_values[id] = value;
-                              _getWidget();
+                        alignment: Alignment.center,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                         decoration: BoxDecoration(
+                             color:Color(0xffeeeeee),
+                             borderRadius: BorderRadius.all(Radius.circular(5))
+                         ),
 
-                            });
-                          },
+                          child: Theme(
+                            data: ThemeData(
+                                unselectedWidgetColor: Color(0xffeeeeee),
+                            ),
+                            child: Checkbox(
+                              value: checkbox_values[id],
+                              activeColor: Colors.black12,
+                              onChanged: (bool value){
+                                setState(() {
+                                  checkbox_values[id] = value;
+                                  _getWidget();
+                                });
+                              },
+                            ),
+                          ),
                         ),
                       ),
                       onTap: (){
@@ -256,12 +273,12 @@ class _my_itemsState extends State<my_items> {
                         child:
                         temp_data.wr_9!='거래완료'?
                         Container(
-                          width: MediaQuery.of(context).size.width*0.24,
-                          height: MediaQuery.of(context).size.width*0.24,
+                          width: MediaQuery.of(context).size.width*0.225,
+                          height: MediaQuery.of(context).size.width*0.2,
 
                           decoration: BoxDecoration(
                               border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
-                              borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
+                              borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.015)),
                               image: DecorationImage(//이미지 꾸미기
                                   fit:BoxFit.cover,
                                   image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
@@ -270,7 +287,7 @@ class _my_itemsState extends State<my_items> {
                         ):Stack(
                             children: <Widget>[
                               Container(
-                                width: MediaQuery.of(context).size.width*0.27,
+                                width: MediaQuery.of(context).size.width*0.225,
                                 height: MediaQuery.of(context).size.height*0.2,
 
                                 decoration: BoxDecoration(
@@ -283,14 +300,14 @@ class _my_itemsState extends State<my_items> {
                                 ),
                               ),
                               Container(
-                                width: MediaQuery.of(context).size.width*0.27,
+                                width: MediaQuery.of(context).size.width*0.225,
                                 height: MediaQuery.of(context).size.height*0.2,
                                 decoration: BoxDecoration(
                                     color: Colors.white.withOpacity(0.8)
                                 ),
                                 child: Center(
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width*0.27,
+                                    width: MediaQuery.of(context).size.width*0.225,
                                     height: MediaQuery.of(context).size.height*0.04,
                                     decoration: BoxDecoration(
                                         color: Colors.white
@@ -321,17 +338,17 @@ class _my_itemsState extends State<my_items> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 5,),
-                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032),),
-                        SizedBox(height: 5,),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
+                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
                         Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: FontWeight.bold),),
-                        SizedBox(height: 8,),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.005,),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
 
+                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025,color:Color(0xff444444))),
                             SizedBox(width: MediaQuery.of(context).size.width*0.005,),
-                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
                               height: MediaQuery.of(context).size.width*0.01,
@@ -345,7 +362,7 @@ class _my_itemsState extends State<my_items> {
 
                           ],
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height*0.006,),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
                         Row(
                           children: <Widget>[
                             Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
@@ -386,7 +403,7 @@ class _my_itemsState extends State<my_items> {
                     padding: EdgeInsets.all(3),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(50)),
-                        border: Border.all(color: Color(0xffcccccc)),
+                        //border: Border.all(color: Color(0xffcccccc)),
                         color: Color(0xfff3f3f3),
                         image: DecorationImage(//이미지 꾸미기
                             fit:BoxFit.cover,
@@ -395,7 +412,7 @@ class _my_itemsState extends State<my_items> {
                     ),
                   ),
                   SizedBox(height: 6,),
-                  Text(temp_data.mb_name,style: TextStyle(fontSize: 12),)
+                  Text(temp_data.mb_name.length<5?temp_data.mb_name:temp_data.mb_name.substring(0,3)+"···",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),)
                 ],
               ),
             ],
@@ -783,7 +800,7 @@ class _my_itemsState extends State<my_items> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => MyApp()
+                            builder:(context) => MyHomePage()
                         ));
                       },
                     ),
@@ -910,7 +927,7 @@ class _my_itemsState extends State<my_items> {
                           ),
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => MyApp()
+                                builder:(context) => MyHomePage()
                             ));
                           },
                         ),

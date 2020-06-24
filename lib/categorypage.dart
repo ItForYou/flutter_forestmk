@@ -47,7 +47,7 @@ class _categorypageState extends State<categorypage> {
       onTap: (){
           if(id ==0)
             Navigator.push(context,MaterialPageRoute(
-                builder:(context) => MyApp()
+                builder:(context) => MyHomePage()
             ));
           else {
             Navigator.push(context, MaterialPageRoute(

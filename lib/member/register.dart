@@ -5,9 +5,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterforestmk/main.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class register extends StatefulWidget {
@@ -146,6 +148,46 @@ class _registerState extends State<register> {
     }
   }
 
+  void get_location(popcontext) async{
+
+    ProgressDialog pr = ProgressDialog(context);
+    //pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+    pr.style(
+      message: '잠시만 기다려주세요...',
+      borderRadius: 5.0,
+      backgroundColor: Colors.white,
+      progressWidget: Container(padding:EdgeInsets.all(MediaQuery.of(context).size.height * 0.014),child: CircularProgressIndicator()),
+      elevation: 5.0,
+      insetAnimCurve: Curves.easeInOut,
+    );
+    pr.show();
+
+    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_current.php'),
+        body: {
+          "x": position.longitude.toString(),
+          'y':position.latitude.toString()
+        },
+        headers: {'Accept': 'application/json'}
+    );
+
+    if(response.statusCode==200){
+      // print(jsonDecode(response.body));
+      var json_address = jsonDecode(response.body);
+      String address = json_address['documents'][0]['address']['region_1depth_name']+" "+json_address['documents'][0]['address']['region_2depth_name']+" "+json_address['documents'][0]['address']['region_3depth_name'];
+      input_address.text = address;
+      Navigator.pop(popcontext);
+      Navigator.pop(context);
+
+      //print(address);
+
+
+    }
+
+  }
+
 void change_search(context){
 
         if(temp_addrs['data'].length>0) {
@@ -250,32 +292,37 @@ void change_search(context){
                         }
                       ),
                     ),
-                    Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.9,
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.04,
-                      margin: EdgeInsets.only(top: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.015,),
-                      decoration: BoxDecoration(
-                          color: Colors.forestmk,
-                          borderRadius: BorderRadius.all(Radius.circular(
-                              MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width * 0.07))
+                     InkWell(
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.9,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.04,
+                        margin: EdgeInsets.only(top: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.015,),
+                        decoration: BoxDecoration(
+                            color: Colors.forestmk,
+                            borderRadius: BorderRadius.all(Radius.circular(
+                                MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width * 0.07))
+                        ),
+                        child: Center(child: Text("현재위치로 찾기", style: TextStyle(
+                            fontSize: MediaQuery
+                                .of(context)
+                                .size
+                                .width * 0.035, color: Colors.white))),
                       ),
-                      child: Center(child: Text("현재위치로 찾기", style: TextStyle(
-                          fontSize: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.035, color: Colors.white))),
+                       onTap: (){
+                        get_location(context);
+                       },
                     ),
                     Container(
                       height: MediaQuery

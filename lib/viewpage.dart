@@ -183,12 +183,12 @@ class _ViewpageState extends State<Viewpage>{
                       }
                     },
                 ),
-                (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                (temp_data.mb_id==real_mbid) || real_mbid == "admin"?
                 SizedBox(width: MediaQuery
                     .of(context)
                     .size
                     .width * 0.02,):SizedBox(),
-                (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                (temp_data.mb_id==real_mbid) || (real_mbid=="admin")?
                 InkWell(
                     child: Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),),
                     onTap: (){
@@ -1194,6 +1194,45 @@ class _ViewpageState extends State<Viewpage>{
     }
   }
 
+  void request_logindialog(){
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.03))
+
+            ),
+            content: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height*0.03,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("로그인이 필요합니다.", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04),)
+                ],
+              ),
+            ),
+            actions:  <Widget>[
+              new FlatButton(
+                child: new Text("확인"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(context,MaterialPageRoute(
+                      builder:(context) => loginpage()
+                  ));
+                },
+              ),
+            ]
+        );
+      },
+    );
+  }
+
 @override
   void initState() {
     // TODO: implement initState
@@ -1233,49 +1272,15 @@ class _ViewpageState extends State<Viewpage>{
       price='금액 ' + fmf.withoutFractionDigits.toString()+'원';
     }
 
-    void request_logindialog(){
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          // return object of type Dialog
-          return AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.03))
-
-              ),
-              content: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height*0.03,
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("로그인이 필요합니다.", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04),)
-                  ],
-                ),
-              ),
-              actions:  <Widget>[
-                new FlatButton(
-                  child: new Text("확인"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.push(context,MaterialPageRoute(
-                        builder:(context) => loginpage()
-                    ));
-                  },
-                ),
-              ]
-          );
-        },
-      );
-    }
 
     if(widget.info.wr_content!='' && widget.info.wr_content!=null){
       String temp_wrcontent = widget.info.wr_content.replaceAll('\n','              ');
       content_size = (MediaQuery.of(context).size.width)*(temp_wrcontent.length/MediaQuery.of(context).size.height*0.5);
     }
+
+    print(real_mbid);
+
 
     return WillPopScope(
       onWillPop: (){
@@ -1457,7 +1462,7 @@ class _ViewpageState extends State<Viewpage>{
                           )
                         ],
                       ),
-                      real_mbid==widget.info.mb_id?
+                      (real_mbid==widget.info.mb_id) || (real_mbid=='admin')?
                       Row(
                         children: <Widget>[
                           InkWell(
