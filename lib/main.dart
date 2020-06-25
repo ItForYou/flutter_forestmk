@@ -91,9 +91,6 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
 
 class _MyAppState extends State<MyApp> {
 
-
-
-
   @override
   Widget build(BuildContext context) {
 
