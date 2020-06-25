@@ -32,7 +32,7 @@ class search_main extends StatefulWidget {
 }
 
 class _search_mainState extends State<search_main> {
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   static double scrollbar_height=1;
   double list_height;
   int start_height=1,flg_floatbt=0;
@@ -514,10 +514,16 @@ class _search_mainState extends State<search_main> {
                       ],
                     ),
                   ),
-                  onTap: (){
-                    Navigator.push(context,MaterialPageRoute(
+                  onTap: ()async{
+                    var result = await  Navigator.push(context,MaterialPageRoute(
                         builder:(context) => write_normal()
                     ));
+                    if(result == 'success'){
+                      // print(result);
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
+                      Navigator.pop(bc);
+                      get_data();
+                    }
                   },
                 ),
                 InkWell(
@@ -528,14 +534,21 @@ class _search_mainState extends State<search_main> {
                       children: <Widget>[
                         Image.asset("images/write_icon02.png"),
                         SizedBox(width: MediaQuery.of(context).size.width*0.02,),
-                        Text("광고문의 글쓰기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                        Text("광고업체 글쓰기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
                       ],
                     ),
                   ),
-                  onTap: (){
-                    Navigator.push(context,MaterialPageRoute(
+                  onTap: ()async{
+                    var result = await   Navigator.push(context,MaterialPageRoute(
                         builder:(context) => chk_writead()
                     ));
+                    if(result == 'success'){
+                      // print(result);
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
+                      Navigator.pop(bc);
+                      get_data();
+                    }
+
                   },
                 ),
 
@@ -1015,6 +1028,7 @@ class _search_mainState extends State<search_main> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+        key: _scaffoldKey,
         resizeToAvoidBottomPadding: false,
         appBar: appbar,
 //      decoration: BoxDecoration(

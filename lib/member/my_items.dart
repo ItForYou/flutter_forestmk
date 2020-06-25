@@ -471,7 +471,7 @@ class _my_itemsState extends State<my_items> {
                       children: <Widget>[
                         Image.asset("images/write_icon02.png"),
                         SizedBox(width: MediaQuery.of(context).size.width*0.02,),
-                        Text("광고문의 글쓰기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                        Text("광고업체 글쓰기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
                       ],
                     ),
                   ),

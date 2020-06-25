@@ -91,6 +91,8 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
 
 class _MyAppState extends State<MyApp> {
 
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -136,7 +138,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   bool checkbox_soldout = false;
   bool checkbox_adv = false;
@@ -245,8 +247,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           width: MediaQuery.of(context).size.width*0.1,
           height: MediaQuery.of(context).size.width*0.1,
           child: FloatingActionButton(
-            backgroundColor: Colors.black,
-            child:Icon(Icons.arrow_upward,color: Colors.white,),
+            backgroundColor: Colors.white,
+            child:Icon(Icons.arrow_upward,color: Colors.black,),
           ),
         ),
         onTap: (){
@@ -301,6 +303,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                         builder: (context) =>  write_normal()
                     ));
                     if(result == 'success'){
+                     // print(result);
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
                       Navigator.pop(bc);
                       get_data();
                     }
@@ -314,14 +318,20 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                       children: <Widget>[
                         Image.asset("images/write_icon02.png"),
                         SizedBox(width: MediaQuery.of(context).size.width*0.02,),
-                        Text("광고문의 글쓰기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
+                        Text("광고업체 글쓰기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
                       ],
                     ),
                   ),
-                  onTap: (){
-                    Navigator.push(context,MaterialPageRoute(
+                  onTap: ()async{
+                    var result = await   Navigator.push(context,MaterialPageRoute(
                         builder:(context) => chk_writead()
                     ));
+                    if(result == 'success'){
+                      // print(result);
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
+                      Navigator.pop(bc);
+                      get_data();
+                    }
                   },
                 ),
               ],
@@ -443,9 +453,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                     SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
                     Row(
                       children: <Widget>[
-                        temp_data.ca_name!='업체'? Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)):Container(),
-                        temp_data.ca_name!='업체'? Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,):Container(),
-                        temp_data.ca_name!='업체'?Container(
+                       Text( temp_data.ca_name!='업체'? temp_data.ca_name:'광고', style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                        Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
+                        Container(
                           width: MediaQuery.of(context).size.width*0.01,
                           height: MediaQuery.of(context).size.width*0.01,
                           margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
@@ -453,7 +463,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                               borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
                               color: Colors.forestmk
                           ),
-                        ):Container(),
+                        ),
                         Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
                         Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
                         Container(
@@ -1239,6 +1249,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      key:_scaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: appbar,
 //      decoration: BoxDecoration(
@@ -1465,7 +1476,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                           top: BorderSide(color: Color(0xffdddddd), width: 1),
                           bottom: BorderSide(color: Color(0xffdddddd), width: 1),
                         )
-
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -107,10 +107,10 @@ class _chk_writeadState extends State<chk_writead> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(height: MediaQuery.of(context).size.height*0.02,),
-                    get_textbox("안녕하십니까? 숲마켓입니다.\n저희 광고문의를 이용해주셔서 대단히 감사드립니다.\n저희는 광고를 게재해드리기전 이용약관의 동의를 받고있습니다."),
+                    get_textbox("안녕하십니까? 숲마켓입니다.\n저희는 숲마켓은 광고 게시 서비스를 완전 무료로 자유롭게 이용할 수 있으며,\n사업을 하시는 자영업자 분들에게 조금이나마 매출 올리는 데에 있어 도움을 드리고 싶습니다.\n자유롭게 서비스를 제공하는 만큼 매너 있고 건전하게 사용함에 간곡히 부탁드리겠습니다."),
                     SizedBox(height: MediaQuery.of(context).size.height*0.06,),
                     Text(
-                      "숲마켓 광고문의 서비스",
+                      "숲마켓 광고 게시글 규칙",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize:MediaQuery.of(context).size.width*0.04,
@@ -125,84 +125,75 @@ class _chk_writeadState extends State<chk_writead> {
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
-                          get_textbox("저희 숲마켓 에서는 회원수 대비의 광고료를 받고 게재를 해드"),
+                          get_textbox("광고업체 게시글 등록은 도배방지를 위해 한 아이디에 게시글"),
                         ),
 
                       ],
                     ),
-                    get_textbox("리고 있습니다."),
+                    get_textbox("한 게시물로 제한을 두고 있습니다."),
                     Row(
                       children: <Widget>[
                         get_number("2"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
-                          get_textbox("불건전한 광고는 확인검수후 게시 불가합니다. (아래 항목참조)"),
+                          get_textbox("저희 숲마켓 에서는 일체의 광고료를 받지 않고 무료로 게시글"),
                         ),
-
                       ],
                     ),
+                    get_textbox("을 게재를 해드리고있습니다."),
                     Row(
                       children: <Widget>[
                         get_number("3"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
-                          get_textbox("광고게재는 게시글 등록된후 다음날로부터 체크하신 7일, 14일,"),
+                          get_textbox("광고게재는 게시글 등록후 관리자가 직접 검토하여 차례대로"),
                         ),
 
                       ],
                     ),
-                    get_textbox("21일, 28일 게재하고 있습니다.  (계약날이 지나면 게시물은 자동삭제 됩니다)"),
+                    get_textbox("게재하고 있습니다."),
                     Row(
                       children: <Widget>[
                         get_number("4"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
-                          get_textbox("게시글 등록후로부터 숲마켓 관리자가 직접 검수후 24시간이내"),
+                          get_textbox("게시물의 최신 글 업데이트 즉, 맨 위로 글을 자유롭게 최신화"),
                         ),
 
                       ],
                     ),
-                    get_textbox("로 업체 표기번호로 유선상으로 협의후 게재합니다."),
+                    get_textbox("할 수 있는 기능이 있습니다."),
                     Row(
                       children: <Widget>[
                         get_number("5"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
-                          get_textbox("게시글 업로드후 수정 및 연장은 불가합니다."),
+                          get_textbox("저희 숲마켓은 법적인 책임을 질수 없으며 당사자들의 사건"),
                         ),
 
                       ],
                     ),
+                    get_textbox("사고는 관여하지 아니하겠습니다."),
                     Row(
                       children: <Widget>[
                         get_number("6"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
-                          get_textbox("부가가치세는 별도입니다."),
+                          get_textbox("불건전한 광고는 확인 검수 후 게시 불가합니다."),
                         ),
 
                       ],
                     ),
-                    Row(
-                      children: <Widget>[
-                        get_number("7"),
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.8,
-                          child:
-                          get_textbox("광고 게시물을 최신 글 업데이트 방법은 나의 메뉴의 '나의 광"),
-                        ),
+                    get_textbox("(아래 항목 참조)"),
 
-                      ],
-                    ),
-                    get_textbox("고'에서 맨 위로 올릴 수 있으며, 기간내에만 사용하실 수 있습니다."),
                     SizedBox(height: MediaQuery.of(context).size.height*0.06,),
                     Text(
-                      "광고 게재제한",
+                      "광고 게재제한 게시물",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize:MediaQuery.of(context).size.width*0.04,
@@ -217,12 +208,12 @@ class _chk_writeadState extends State<chk_writead> {
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
-                          get_textbox("광고 미승인 및 게재제한 사유 : 회사에 법률적 또는 재산적 위험"),
+                          get_textbox("광고 미승인 및 게재제한 사유 : 회사에 법률적 또는 재산적"),
                         ),
 
                       ],
                     ),
-                    get_textbox("을 발생시키거나 발생시킬 우려가 있는 경우"),
+                    get_textbox("위험을 발생시키거나 발생시킬우려가 있는 경우"),
 
                     Row(
                       children: <Widget>[
@@ -273,7 +264,9 @@ class _chk_writeadState extends State<chk_writead> {
                     get_textbox("- 다단계 업체의 구인광고를 하는 사례"),
                     SizedBox(height: MediaQuery.of(context).size.height*0.01,),
                     get_textbox("- 해피벌론, 전자담배, 본드(마약류) 를 판매하는 사례"),
-                    SizedBox(height: MediaQuery.of(context).size.height*0.06,),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.01,),
+                    get_textbox("등등 관련법규에 어긋나는 사례들"),
+                   /* SizedBox(height: MediaQuery.of(context).size.height*0.06,),
                     Text(
                       "광고료의 대한 안내",
                       textAlign: TextAlign.start,
@@ -486,7 +479,7 @@ class _chk_writeadState extends State<chk_writead> {
                           ),
                         ],
                       ),
-                    ),
+                    ),*/
                   ],
                 ),
               ),
