@@ -7,6 +7,7 @@ import 'package:flutterforestmk/categorypage.dart';
 import 'package:flutterforestmk/chat_webview.dart';
 import 'package:flutterforestmk/chk_writead.dart';
 import 'package:flutterforestmk/location.dart';
+import 'package:flutterforestmk/main_home.dart';
 import 'package:flutterforestmk/member/loginpage.dart';
 import 'package:flutterforestmk/main.dart';
 import 'package:flutterforestmk/main_item.dart';
@@ -75,18 +76,22 @@ class _my_itemsState extends State<my_items> {
     //print(jsonDecode(response.body));
 
     var temp_mbdata = jsonDecode(response.body);
-    widget.mb_hp = temp_mbdata['mb_hp'];
-    widget.mb_name = temp_mbdata['mb_name'];
-    if(temp_mbdata['mb_1']!='')
-      widget.mb_1 = "http://14.48.175.177/data/member/"+temp_mbdata['mb_1'];
-    else
-      widget.mb_1 = "test";
-    widget.mb_2 = temp_mbdata['mb_2'];
-    widget.mb_3 = temp_mbdata['mb_3'];
-    widget.mb_4 = temp_mbdata['mb_4'];
-    widget.mb_5 = temp_mbdata['mb_5'];
-    widget.mb_6 = temp_mbdata['mb_6'];
 
+    setState(() {
+
+      widget.mb_hp = temp_mbdata['mb_hp'];
+      widget.mb_name = temp_mbdata['mb_name'];
+      if(temp_mbdata['mb_1']!='')
+        widget.mb_1 = "http://14.48.175.177/data/member/"+temp_mbdata['mb_1'];
+      else
+        widget.mb_1 = "test";
+      widget.mb_2 = temp_mbdata['mb_2'];
+      widget.mb_3 = temp_mbdata['mb_3'];
+      widget.mb_4 = temp_mbdata['mb_4'];
+      widget.mb_5 = temp_mbdata['mb_5'];
+      widget.mb_6 = temp_mbdata['mb_6'];
+
+    });
   }
 
   void request_logindialog(){
@@ -568,7 +573,8 @@ class _my_itemsState extends State<my_items> {
 
   @override
   Widget build(BuildContext context) {
-    load_myinfo();
+    //load_myinfo();
+
     if(widget.mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -660,6 +666,7 @@ class _my_itemsState extends State<my_items> {
                               builder: (context) => location(mb_2:widget.mb_2, mb_id:widget.mb_id)
                           ));
                           if(result == 'change'){
+                            get_mbdata();
                             get_data();
                           }
                         }
@@ -800,7 +807,7 @@ class _my_itemsState extends State<my_items> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => MyHomePage()
+                            builder:(context) => main_home()
                         ));
                       },
                     ),
@@ -876,6 +883,7 @@ class _my_itemsState extends State<my_items> {
                             builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                         ));
                         if(result == 'back'){
+                          get_mbdata();
                           get_data();
                         }
                       },
@@ -927,7 +935,7 @@ class _my_itemsState extends State<my_items> {
                           ),
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => MyHomePage()
+                                builder:(context) => main_home()
                             ));
                           },
                         ),
@@ -1005,6 +1013,7 @@ class _my_itemsState extends State<my_items> {
                                 builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                             ));
                             if(result == 'back'){
+                              get_mbdata();
                               get_data();
                             }
                           },
@@ -1044,7 +1053,7 @@ class _my_itemsState extends State<my_items> {
                             SizedBox(width: 10,),
                             InkWell(
                               child: mb_infowidget,
-                              onTap: (){
+                              onTap: ()async{
                                 if(widget.mb_id==null) {
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => loginpage()
@@ -1056,9 +1065,16 @@ class _my_itemsState extends State<my_items> {
                                   }*/
                                 }
                                 else{
-                                  Navigator.push(context, MaterialPageRoute(
+                                  var result = await   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                                   ));
+                                  if(result == 'back'){
+                                    get_mbdata();
+                                    get_data();
+                                  }
+                                /*  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                  ));*/
                                 }
                               },
                             ),

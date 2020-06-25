@@ -294,10 +294,13 @@ class _mypageState extends State<mypage> {
                       ],
                     ),
                   ),
-                  onTap: (){
-                    Navigator.push(context,MaterialPageRoute(
+                  onTap: ()async{
+                    var result = await    Navigator.push(context,MaterialPageRoute(
                         builder:(context) => location(mb_2: widget.mb_2,)
                     ));
+                    if(result == 'change'){
+                      get_mbdata();
+                    }
                   },
                 ),
                 InkWell(

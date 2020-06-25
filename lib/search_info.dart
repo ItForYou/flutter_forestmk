@@ -55,6 +55,37 @@ class _search_infoState extends State<search_info> {
     }
   }
 
+  void show_Alert(text,flg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.03,
+            child: Text(text),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: ()async{
+
+                if(flg ==2){
+                  Navigator.of(context).pop(true);
+                  Navigator.of(context2).pop(true);
+                }
+                else{
+                  Navigator.of(context2).pop(true);
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<dynamic> get_password() async{
 
     final response = await http.post(
@@ -73,10 +104,10 @@ class _search_infoState extends State<search_info> {
 
        print(response.body);
        if(response.body.toString()=='hpnone'){
-         print("핸드폰 불일치 ");
+         show_Alert("핸드폰 번호가 일치하지 않습니다." ,1);
        }
        else if (response.body.toString()=='none'){
-         print("아이디 존재하지않음 ");
+         show_Alert("아이디가 존재하지 않습니다.", 1);
        }
 
     }

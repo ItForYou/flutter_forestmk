@@ -788,6 +788,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     var platform = NotificationDetails(android, iOS);
 
     await FlutterLocalNotificationsPlugin().show(0, title, body, platform,payload: link);
+
   }
 
 
@@ -1122,6 +1123,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                               builder: (context) => location(mb_2:mb_2, mb_id:mb_id)
                           ));
                           if(result == 'change'){
+                            get_mbdata();
                             get_data();
                           }
                         }
