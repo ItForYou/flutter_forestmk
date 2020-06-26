@@ -34,6 +34,7 @@ class writenormal_State extends State<write_normal> {
   String mb_id,mb_name,mb_5,mb_6;
   int click_upload =0;
   var itemdata_now;
+
   void load_myinfo()async{
     SharedPreferences sp = await SharedPreferences.getInstance();
     if(sp.getString('id')!=null) {
@@ -349,12 +350,12 @@ class writenormal_State extends State<write_normal> {
   void show_Alert(text,flg) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext context2) {
         // return object of type Dialog
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.02,
+            height: MediaQuery.of(context2).size.height*0.02,
             child: Text(text),
           ),
           actions: <Widget>[
@@ -363,7 +364,38 @@ class writenormal_State extends State<write_normal> {
               onPressed: (){
                 if(flg ==2)
                   Navigator.of(context).pop(true);
+                Navigator.of(context2).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void show_exit() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context2).size.height*0.03,
+            child: Text("글쓰기를 종료 하시겠습니까?"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: (){
                 Navigator.of(context).pop(true);
+                Navigator.of(context2).pop(true);
+              },
+            ),
+            new FlatButton(
+              child: new Text("취소"),
+              onPressed: (){
+                Navigator.of(context2).pop(true);
               },
             ),
           ],
@@ -426,7 +458,8 @@ class writenormal_State extends State<write_normal> {
   @override
   Widget build(BuildContext context) {
 
-    if(widget.info!=null && first_build ==1){
+    if(widget.info!=null && first_build ==1&&widget.info.file[0]!='nullimage'){
+
         modify_imges.clear();
       for(int i=1; i<widget.info.file.length; i++) {
         if(widget.info.file.length-1 >3 && widget.info.file.length-1 <=7){
@@ -445,6 +478,7 @@ class writenormal_State extends State<write_normal> {
     }
 
     else if(widget.info==null && first_build ==1 && widget.wr_id !=null && itemdata_now!=null){
+
       modify_imges.clear();
       image_boxes.clear();
       for(int i=0; i<itemdata_now['files'].length; i++) {
@@ -461,117 +495,163 @@ class writenormal_State extends State<write_normal> {
         image_boxes.add(get_Imagebox2(itemdata_now['files'][i]));
       }
       image_boxes.add(get_addbox());
+
     }
 
     if(first_build ==1 && image_boxes.length <=0){
+
       grid_height = MediaQuery.of(context).size.height*0.1;
       image_boxes.add(get_addbox());
+
     }
     /*if(image_boxes.length < 10) {
       image_boxes.add(get_addbox());
     }*/
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.07),
-        child: AppBar(
-          title: Text("중고거래 글쓰기" ,style: TextStyle(color: Colors.black87, fontSize: MediaQuery.of(context).size.width*0.045),),
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          leading: InkWell(
-            child:Padding(
-                padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.018, bottom: MediaQuery.of(context).size.height*0.018, left: MediaQuery.of(context).size.width*0.05),
-                child:Image.asset("images/hd_back.png")
+    return WillPopScope(
+      onWillPop: (){
+        show_exit();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.07),
+          child: AppBar(
+            title: Text("중고거래 글쓰기" ,style: TextStyle(color: Colors.black87, fontSize: MediaQuery.of(context).size.width*0.045),),
+            backgroundColor: Colors.white,
+            elevation: 0.0,
+            leading: InkWell(
+              child:Padding(
+                  padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.018, bottom: MediaQuery.of(context).size.height*0.018, left: MediaQuery.of(context).size.width*0.05),
+                  child:Image.asset("images/hd_back.png")
+              ),
+              onTap: (){
+                show_exit();
+              },
             ),
-            onTap: (){
-              Navigator.of(context).pop(true);
-            },
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-                  Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.05,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
-                  color: Colors.white,
-                  child: Row(
-                      children: <Widget>[
-                        Text("제품 사진 첨부", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,),),
-                      ],
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width*0.85,
-                      height: grid_height,
-                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
-                      color: Colors.white,
-                      child:GridView.builder(
-
-                          itemCount: image_boxes.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 5.0,
-                            mainAxisSpacing: 5.0,
-                          ),
-                          itemBuilder: (BuildContext context, int index){
-                              return image_boxes[index];
-                          }
-                      )
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.06,
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("카테고리",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
-                        InkWell(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width*0.7,
-                              height: MediaQuery.of(context).size.height*0.05,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    width: 1.5,
-                                    color: Color(0xfff7f7f7)
-                                  )
-                                )
-                              ),
-                             child: Center(
-                               child: Container(
-                                   width: MediaQuery.of(context).size.width*0.7,
-                                   child:Text(cate_value,style: TextStyle(color: color_cate,fontSize: MediaQuery.of(context).size.width*0.035,),textAlign: TextAlign.start,)
-                            ),
-                             )
-                          ),
-                          onTap: (){
-                            show_catemd();
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-
-                  Container(
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+                    Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height*0.05,
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
                     color: Colors.white,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("금액",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
-                        Container(
+                        children: <Widget>[
+                          Text("제품 사진 첨부", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,),),
+                        ],
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*0.85,
+                        height: grid_height,
+                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05),
+                        color: Colors.white,
+                        child:GridView.builder(
+                            itemCount: image_boxes.length,
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              crossAxisSpacing: 5.0,
+                              mainAxisSpacing: 5.0,
+                            ),
+                            itemBuilder: (BuildContext context, int index){
+                                return image_boxes[index];
+                            }
+                        )
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.06,
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("카테고리",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
+                          InkWell(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width*0.7,
+                                height: MediaQuery.of(context).size.height*0.05,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      width: 1.5,
+                                      color: Color(0xfff7f7f7)
+                                    )
+                                  )
+                                ),
+                               child: Center(
+                                 child: Container(
+                                     width: MediaQuery.of(context).size.width*0.7,
+                                     child:Text(cate_value,style: TextStyle(color: color_cate,fontSize: MediaQuery.of(context).size.width*0.035,),textAlign: TextAlign.start,)
+                              ),
+                               )
+                            ),
+                            onTap: (){
+                              show_catemd();
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.05,
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("금액",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
+                          Container(
+                                width: MediaQuery.of(context).size.width*0.7,
+                                height: MediaQuery.of(context).size.height*0.05,
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            width: 1.5,
+                                            color: Color(0xfff7f7f7)
+                                        )
+                                    )
+                                ),
+                                child: Container(
+                                      margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.15,),
+                                      child:TextField(
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: <TextInputFormatter>[
+                                          WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                                        ],
+                                        controller: input_wr_1,
+                                        cursorColor: Colors.black,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: "금액을 입력해주세요",
+                                          hintStyle: TextStyle(color:Color(0xffdddddd)),
+                                        ),
+                                        ),
+                                      )
+                                  ),
+
+
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.05,
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("제목",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
+                          Container(
                               width: MediaQuery.of(context).size.width*0.7,
                               height: MediaQuery.of(context).size.height*0.05,
                               decoration: BoxDecoration(
@@ -583,124 +663,83 @@ class writenormal_State extends State<write_normal> {
                                   )
                               ),
                               child: Container(
-                                    margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.15,),
-                                    child:TextField(
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[
-                                        WhitelistingTextInputFormatter(RegExp("[0-9]")),
-                                      ],
-                                      controller: input_wr_1,
-                                      cursorColor: Colors.black,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "금액을 입력해주세요",
-                                        hintStyle: TextStyle(color:Color(0xffdddddd)),
-                                      ),
-                                      ),
-                                    )
+                                margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.15,),
+                                child:TextField(
+                                  controller: input_subject,
+                                  cursorColor: Colors.black,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                      hintText: "제목을 입력해주세요",
+                                      hintStyle: TextStyle(color: Color(0xffdddddd)),
+
+                                  ),
                                 ),
-
-
-                      ],
+                              )
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.05,
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("제목",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
-                        Container(
-                            width: MediaQuery.of(context).size.width*0.7,
-                            height: MediaQuery.of(context).size.height*0.05,
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        width: 1.5,
-                                        color: Color(0xfff7f7f7)
-                                    )
-                                )
-                            ),
-                            child: Container(
-                              margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.15,),
-                              child:TextField(
-                                controller: input_subject,
-                                cursorColor: Colors.black,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                    hintText: "제목을 입력해주세요",
-                                    hintStyle: TextStyle(color: Color(0xffdddddd)),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.05,
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
 
-                                ),
-                              ),
-                            )
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("내용",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width*0.98,
+                      height: MediaQuery.of(context).size.height*0.4,
+
+                      decoration: BoxDecoration(
+                         color: Colors.white,
+                        border: Border.all(width: 1, color: Color(0xfff7f7f7))
+                      ),
+                      margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05,
+                                              top: MediaQuery.of(context).size.width*0.01,bottom: MediaQuery.of(context).size.width*0.095,),
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.01),
+                      child: TextField(
+                          controller:  input_content,
+                          maxLines: null,
+                          cursorColor: Color(0xff9dc543),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "내용을 입력해주세요",
+                            hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,color: Color(0xffdddddd))
                         ),
-                      ],
+                        ),
                     ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.05,
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
+                    InkWell(
+                      child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height*0.075,
+                          color: Colors.grey,
+                          child: Center(child: Text("등록하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.055, color: Colors.white,)),
+                          )
                     ),
-
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("내용",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
-                      ],
+                      onTap: (){
+                        if(input_subject.text!='' && input_subject.text!=null
+                            && input_content.text!=null && input_content.text!=''
+                            && input_wr_1.text!='' && input_wr_1.text!=null
+                            && cate_value!='카테고리를 선택해주세요'
+                        ) {
+                          uploaddata();
+                          click_upload = 1;
+                        }
+                        else{
+                          show_Alert("작성된 내용이 올바르지 않습니다. ", 1);
+                        }
+                      },
                     ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width*0.98,
-                    height: MediaQuery.of(context).size.height*0.4,
-
-                    decoration: BoxDecoration(
-                       color: Colors.white,
-                      border: Border.all(width: 1, color: Color(0xfff7f7f7))
-                    ),
-                    margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,right: MediaQuery.of(context).size.width*0.05,
-                                            top: MediaQuery.of(context).size.width*0.01,bottom: MediaQuery.of(context).size.width*0.095,),
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.01),
-                    child: TextField(
-                        controller:  input_content,
-                        maxLines: null,
-                        cursorColor: Color(0xff9dc543),
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "내용을 입력해주세요",
-                          hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.width*0.04,color: Color(0xffdddddd))
-                      ),
-                      ),
-                  ),
-                  InkWell(
-                    child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height*0.075,
-                        color: Colors.grey,
-                        child: Center(child: Text("등록하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.055, color: Colors.white,)),
-                        )
-                  ),
-                    onTap: (){
-                      if(input_subject.text!='' && input_subject.text!=null
-                          && input_content.text!=null && input_content.text!=''
-                          && input_wr_1.text!='' && input_wr_1.text!=null
-                          && cate_value!='카테고리를 선택해주세요'
-                      ) {
-                        uploaddata();
-                        click_upload = 1;
-                      }
-                      else{
-                        show_Alert("작성된 내용이 올바르지 않습니다. ", 1);
-                      }
-                    },
-                  ),
-          ],
+            ],
+          ),
         ),
       ),
     );

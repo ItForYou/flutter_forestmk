@@ -11,6 +11,7 @@ import 'package:flutterforestmk/member/loginpage.dart';
 import 'package:flutterforestmk/main_item.dart';
 import 'package:flutterforestmk/view_item.dart';
 import 'package:flutterforestmk/viewpage_mine.dart';
+import 'package:flutterforestmk/write_ad.dart';
 import 'package:flutterforestmk/write_normal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -1477,7 +1478,7 @@ class _ViewpageState extends State<Viewpage>{
                               ),
                             onTap: ()async{
                               var result = await Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => write_normal(info: widget.info)
+                                  builder: (context) => widget.info.ca_name=='업체'?write_ad(info: widget.info,):write_normal(info: widget.info)
                               ));
                               if(result == 'success'){
                                 Navigator.pop(context,"delete");

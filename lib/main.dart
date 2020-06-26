@@ -241,7 +241,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
   Widget float_button(){
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.18,),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.3,),
       child: InkWell(
         child: Container(
           width: MediaQuery.of(context).size.width*0.1,
@@ -526,6 +526,89 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       return temp;
   }
 
+  void show_quit(){
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        return AlertDialog(
+            contentPadding: EdgeInsets.all(0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context2).size.width*0.03))
+            ),
+            content: Container(
+              width: MediaQuery.of(context2).size.width,
+              height: MediaQuery.of(context2).size.height*0.42,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context2).size.width,
+                    height: MediaQuery.of(context2).size.height*0.25,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(//이미지 꾸미기
+                          fit:BoxFit.cover,
+                          //image:  AssetImage("images/wing_mb_noimg2.png"),
+                          image:AssetImage("images/NISI20190410_0000306205_web.jpg")
+                        )
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context2).size.width,
+                    height: MediaQuery.of(context2).size.height*0.075,
+                    child: Center(child: Text("서비스를 종료 하시겠습니까?",style: TextStyle(fontSize: MediaQuery.of(context2).size.width*0.04),)),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context2).size.width,
+                    height: MediaQuery.of(context2).size.height*0.075,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          child: Container(
+                            width: MediaQuery.of(context2).size.width*0.3,
+                            height: MediaQuery.of(context2).size.height*0.06,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                              border: Border.all(color: Colors.forestmk,width: 1)
+                            ),
+                            child: Center(child: Text("아니오")),
+                          ),
+                          onTap: (){
+                            Navigator.pop(context2);
+                          },
+                        ),
+                        SizedBox(width: MediaQuery.of(context2).size.width*0.02,),
+                        InkWell(
+                          child: Container(
+                            width: MediaQuery.of(context2).size.width*0.3,
+                            height: MediaQuery.of(context2).size.height*0.06,
+                            decoration: BoxDecoration(
+                              color: Colors.forestmk,
+                              borderRadius: BorderRadius.all(Radius.circular(30))
+                            ),
+                            child: Center(child: Text("예")),
+                          ),
+                          onTap: (){
+                            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                        },
+                        ),
+                      ],
+                    ),
+                  ),
+
+
+                ],
+              ),
+            ),
+            actions:null
+        );
+      },
+    );
+  }
+
   void request_logindialog(){
 
       showDialog(
@@ -750,8 +833,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
         mb_5 = temp_mbdata['mb_5'];
         mb_6 = temp_mbdata['mb_6'];
       });
-
-
   }
 
  Future<dynamic> get_data() async{
@@ -1256,8 +1337,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 //          borderRadius: BorderRadius.all(Radius.circular(50)),
 //          border: Border.all(color: Color(0xffcccccc))
 //      ),
-        body:DoubleBackToCloseApp(
-          snackBar: const SnackBar(content: Text("한번 더 뒤로가기시 종료됩니다.")),
+        body:WillPopScope(
+         onWillPop: (){
+            show_quit();
+         },
         child:
         Column(
         children: <Widget>[

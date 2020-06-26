@@ -507,7 +507,6 @@ class _search_mainState extends State<search_main> {
                     padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.05),
                     child: Row(
                       children: <Widget>[
-
                         Image.asset("images/write_icon01.png"),
                         SizedBox(width: MediaQuery.of(context).size.width*0.02,),
                         Text("중고거래 글쓰기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)
@@ -548,10 +547,8 @@ class _search_mainState extends State<search_main> {
                       Navigator.pop(bc);
                       get_data();
                     }
-
                   },
                 ),
-
               ],
             ),
           );
@@ -559,39 +556,9 @@ class _search_mainState extends State<search_main> {
     );
   }
 
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title:null,
-          content: Container(
-            height: MediaQuery.of(context).size.height*0.03,
-            child: Text("체크된 항목을 모두 삭제 하시겠습니까?"),
-          ),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("확인"),
-              onPressed: ()async {
-
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Widget float_button(){
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.18,),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.3,),
       child: InkWell(
         child: Container(
           width: MediaQuery.of(context).size.width*0.1,
