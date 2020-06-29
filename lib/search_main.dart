@@ -44,6 +44,7 @@ class _search_mainState extends State<search_main> {
   bool flg_search = false;
   List <Widget> items_content=[];
   String sort_value = "최근순";
+  String ad_textcontent="";
   Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black));
   var itemdata;
   ScrollController change_appbar = ScrollController();
@@ -77,7 +78,7 @@ class _search_mainState extends State<search_main> {
             ),
             content: Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*0.26,
+              height: widget.title!='광고'?MediaQuery.of(context).size.height*0.26:MediaQuery.of(context).size.height*0.2,
               color: Colors.white,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,20 +118,16 @@ class _search_mainState extends State<search_main> {
                       });
                       Navigator.pop(context);
                     },
-                  ),
-                  InkWell(
+                  ),  InkWell(
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height*0.07,
-                      decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
-                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text("조회수순"),
+                          Text("거리순"),
                           Radio(
-                            value: "조회수순",
+                            value: "거리순",
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
@@ -144,16 +141,17 @@ class _search_mainState extends State<search_main> {
                         ],
                       ),
                     ),
-                    onTap: (){
+                    onTap:(){
                       setState(() {
-                        sort_value = '조회수순';
-                        widget.sch_order = '조회수순';
+                        sort_value = '거리순';
+                        widget.sch_order = '거리순';
                         get_data();
                       });
                       Navigator.pop(context);
                     },
                   ),
-                  InkWell(
+
+                  widget.title!='광고'?InkWell(
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height*0.07,
@@ -187,17 +185,20 @@ class _search_mainState extends State<search_main> {
                       });
                       Navigator.pop(context);
                     },
-                  ),
+                  ):SizedBox(),
                   InkWell(
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height*0.07,
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text("거리순"),
+                          Text("조회수순"),
                           Radio(
-                            value: "거리순",
+                            value: "조회수순",
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
@@ -211,10 +212,10 @@ class _search_mainState extends State<search_main> {
                         ],
                       ),
                     ),
-                    onTap:(){
+                    onTap: (){
                       setState(() {
-                        sort_value = '거리순';
-                        widget.sch_order = '거리순';
+                        sort_value = '조회수순';
+                        widget.sch_order = '조회수순';
                         get_data();
                       });
                       Navigator.pop(context);
@@ -305,6 +306,7 @@ class _search_mainState extends State<search_main> {
     var temp_data = main_item.fromJson(itemdata['data'][id]);
     //print(temp_data.file[0]);
     String temp_price;
+    String temp_wrcontent="";
     if(temp_data.ca_name =='업체'){
       temp_price=temp_data.wr_subject;
     }
@@ -315,6 +317,16 @@ class _search_mainState extends State<search_main> {
       MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
       temp_price=fmf.withoutFractionDigits.toString()+'원';
       //temp_price=temp_data.wr_1+'원';
+    }
+
+    if(widget.title=='광고'){
+      temp_wrcontent = temp_data.wr_content.replaceAll('\n','              ');
+      if(temp_wrcontent.length<15){
+
+      }
+      else{
+        temp_wrcontent = temp_wrcontent.substring(0,12)+"···";
+      }
     }
 
     InkWell temp = InkWell(
@@ -391,9 +403,9 @@ class _search_mainState extends State<search_main> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: widget.title=='광고'?FontWeight.bold:null),),
                         SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                        Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: FontWeight.bold),),
+                        Text(widget.title=='광고'?temp_wrcontent:temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: widget.title!='광고'?FontWeight.bold:null),),
                         SizedBox(height: MediaQuery.of(context).size.height*0.005,),
                         Row(
                           children: <Widget>[
@@ -597,6 +609,7 @@ class _search_mainState extends State<search_main> {
 
     if(itemdata['data'].length<=0){
       setState(() {
+        items_content.clear();
         items_content.add(
             Container(
                 margin: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.02),
@@ -676,6 +689,8 @@ class _search_mainState extends State<search_main> {
       sort_value  = widget.sch_order;
     }
     super.initState();
+
+
   }
 
 
@@ -927,7 +942,9 @@ class _search_mainState extends State<search_main> {
                         child: Image.asset("images/hd_cate02.png"),
                       ),
                       onTap: (){
-
+                        Navigator.push(context,MaterialPageRoute(
+                            builder:(context) => search_main(title:'광고' ,sch_flgadv: "1", mb_id :widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                        ));
                       },
                     ),
 
@@ -1043,7 +1060,9 @@ class _search_mainState extends State<search_main> {
                               child: Image.asset("images/hd_cate02.png"),
                             ),
                             onTap: (){
-
+                              Navigator.push(context,MaterialPageRoute(
+                                  builder:(context) => search_main(title:'광고' ,sch_flgadv: "1", mb_id :widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                              ));
                             },
                           ),
 
@@ -1238,7 +1257,7 @@ class _search_mainState extends State<search_main> {
                           InkWell(
                             child: Row(
                               children: <Widget>[
-                                Text(sort_value),
+                                Text(sort_value,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032),),
                                 Image.asset("images/arrow_filter.png"),
                               ],
                             ),

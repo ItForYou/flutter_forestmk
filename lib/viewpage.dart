@@ -407,6 +407,46 @@ class _ViewpageState extends State<Viewpage>{
     }
   }
 
+  void show_pushupwr(id) async{
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context2).size.height*0.032,
+            child: Text("글을 멘위로 업데이트 하시겠습니까?"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: ()async{
+                final response = await http.post(
+                    Uri.encodeFull('http://14.48.175.177/update_wrdatetime.php'),
+                    body: {
+                      "wr_id":widget.info.wr_id,
+                    },
+                    headers: {'Accept' : 'application/json'}
+                );
+                if(response.statusCode ==200){
+                  Navigator.pop(context2);
+                  Navigator.pop(context,"delete");
+                }
+              },
+            ),
+            new FlatButton(
+              child: new Text("취소"),
+              onPressed: () {
+                Navigator.pop(context2);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void show_deletecmmt(id) {
 
     showDialog(
@@ -453,10 +493,10 @@ class _ViewpageState extends State<Viewpage>{
   void show_soldout() {
     String temp_title = "";
     if(flg_soldout ==1){
-      temp_title = "거래완료를 취소 하시겠습니가?";
+      temp_title = "거래완료를 취소 하시겠습니까?";
     }
     else{
-      temp_title = "거래를 완료 하시겠습니가?";
+      temp_title = "거래를 완료 하시겠습니까?";
     }
     showDialog(
       context: context,
@@ -1386,7 +1426,7 @@ class _ViewpageState extends State<Viewpage>{
 
                       Row(
                         children: <Widget>[
-                          widget.info.mb_id==real_mbid?
+                          (widget.info.mb_id==real_mbid || real_mbid =='admin' || real_mbid=='lets080')&&(widget.info.ca_name!='업체')?
                           InkWell(
                             child: Container(
                               width: MediaQuery.of(context).size.width*0.16,
@@ -1405,6 +1445,27 @@ class _ViewpageState extends State<Viewpage>{
                             ),
                             onTap: (){
                               show_soldout();
+                            },
+                          ):Container(),
+                          (widget.info.ca_name=='업체') && (widget.info.mb_id == real_mbid || real_mbid =='admin' || real_mbid =='lets080')?
+                          InkWell(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*0.16,
+                              height: MediaQuery.of(context).size.height*0.06,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.1)),
+                                  border: Border.all(color: Color(0xffcccccc)),
+                                  color: color_soldout
+                              ),
+                              child: Column(
+                                children: <Widget>[
+                                  Image.asset("images/gotop.png",   width: MediaQuery.of(context).size.width*0.12, height: MediaQuery.of(context).size.height*0.035,),
+                                  Text('글맨위로',style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.028,color: Colors.white),)
+                                ],
+                              ),
+                            ),
+                            onTap: (){
+                              show_pushupwr(widget.info.wr_id);
                             },
                           ):Container(),
                           SizedBox(width: 3,),
@@ -1509,7 +1570,6 @@ class _ViewpageState extends State<Viewpage>{
                   height: MediaQuery.of(context).size.height*0.2+content_size,
                   padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.032,right: MediaQuery.of(context).size.width*0.032),
                   child: Text(widget.info.wr_content==null?'test':widget.info.wr_content.trimRight(),style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
-
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height*0.05,

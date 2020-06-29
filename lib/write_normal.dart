@@ -125,8 +125,7 @@ class writenormal_State extends State<write_normal> {
                 child:InkWell(
                   child:Image.asset("images/fa-times-circle.png"),
                   onTap: (){
-
-                    setState(() {
+                    setState((){
 
                       Images.removeAt(flg_int);
                       image_boxes.clear();
@@ -263,10 +262,16 @@ class writenormal_State extends State<write_normal> {
                   .of(context)
                   .size
                   .width * 0.04,
-              child: Text(
-                "("+(image_boxes.length+1).toString()+"/10)",
-                style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width*0.03),
+              child: RichText(
+                text: TextSpan(
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03,
+                        color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(text: "("),
+                      TextSpan(text:(image_boxes.length+1).toString(), style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03, color:Colors.forestmk)),
+                      TextSpan(text: "/10)")
+                    ]
+                ),
               ),
             )
           ],
@@ -276,7 +281,6 @@ class writenormal_State extends State<write_normal> {
         getGalleryImage();
       },
     );
-
     return temp;
   }
 
@@ -381,20 +385,21 @@ class writenormal_State extends State<write_normal> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context2).size.height*0.03,
-            child: Text("글쓰기를 종료 하시겠습니까?"),
+            height: MediaQuery.of(context2).size.height*0.032,
+            child: Text(widget.info!=null?"수정을 종료 하시겠습니까?":"글쓰기를 종료 하시겠습니까?"),
           ),
           actions: <Widget>[
+
             new FlatButton(
-              child: new Text("확인"),
+              child: new Text("취소",style: TextStyle(color: Colors.red),),
               onPressed: (){
-                Navigator.of(context).pop(true);
                 Navigator.of(context2).pop(true);
               },
             ),
             new FlatButton(
-              child: new Text("취소"),
+              child: new Text("확인", style: TextStyle(color: Colors.forestmk)),
               onPressed: (){
+                Navigator.of(context).pop(true);
                 Navigator.of(context2).pop(true);
               },
             ),
@@ -442,10 +447,13 @@ class writenormal_State extends State<write_normal> {
     super.initState();
     load_myinfo();
 
+
+
     if(widget.info!=null){
       input_content.text = widget.info.wr_content;
       input_subject.text = widget.info.wr_subject;
       cate_value = widget.info.ca_name;
+      color_cate = Colors.black;
       input_wr_1.text = widget.info.wr_1;
     }
     else if(widget.info==null && widget.wr_id!=null){
@@ -516,7 +524,7 @@ class writenormal_State extends State<write_normal> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.07),
           child: AppBar(
-            title: Text("중고거래 글쓰기" ,style: TextStyle(color: Colors.black87, fontSize: MediaQuery.of(context).size.width*0.045),),
+            title: Text(widget.info==null?"중고거래 글쓰기":"중고거래 글쓰기 수" ,style: TextStyle(color: Colors.black87, fontSize: MediaQuery.of(context).size.width*0.045),),
             backgroundColor: Colors.white,
             elevation: 0.0,
             leading: InkWell(

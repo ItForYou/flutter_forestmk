@@ -268,7 +268,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
             "mb_id": mb_id,
             "token": token,
           },
-          headers: {'Accept': 'application/json'}
+          headers: {'Accept': 'applicatio n/json'}
       );
       if (response.statusCode == 200) {
 
@@ -346,6 +346,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     var temp_data = main_item.fromJson(itemdata['data'][id]);
 
     String temp_price;
+
     if(temp_data.ca_name =='업체'){
       temp_price=temp_data.wr_subject;
     }
@@ -356,7 +357,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
       temp_price=fmf.withoutFractionDigits.toString()+'원';
     }
-      InkWell temp = InkWell(
+    InkWell temp = InkWell(
         child: Container(
           height: 100,
           decoration: BoxDecoration(
@@ -434,7 +435,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                     temp_data.ca_name!='업체'? SizedBox(height: MediaQuery.of(context).size.height*0.005,): Container(),
                     Row(
                       children: <Widget>[
-                        Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
+                        Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
                         SizedBox(width: MediaQuery.of(context).size.width*0.005,),
                         Container(
                           width: MediaQuery.of(context).size.width*0.01,
@@ -703,15 +704,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height*0.07,
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
-                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("조회수순"),
+                        Text("거리순"),
                         Radio(
-                          value: "조회수순",
+                          value: "거리순",
                           groupValue: sort_value,
                           onChanged: (T){
                             setState(() {
@@ -726,7 +724,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                   ),
                   onTap: (){
                     setState(() {
-                      sort_value = '조회수순';
+                      sort_value = '거리순';
                       get_data();
                     });
                     Navigator.pop(context);
@@ -769,12 +767,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height*0.07,
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("거리순"),
+                        Text("조회수순"),
                         Radio(
-                          value: "거리순",
+                          value: "조회수순",
                           groupValue: sort_value,
                           onChanged: (T){
                             setState(() {
@@ -789,12 +790,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                   ),
                   onTap: (){
                     setState(() {
-                      sort_value = '거리순';
+                      sort_value = '조회수순';
                       get_data();
                     });
                     Navigator.pop(context);
                   },
                 ),
+
               ],
             ),
           ),
@@ -1567,7 +1569,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                         InkWell(
                           child: Row(
                             children: <Widget>[
-                              Text(sort_value),
+                              Text(sort_value,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032),),
                               Image.asset("images/arrow_filter.png"),
                             ],
                           ),

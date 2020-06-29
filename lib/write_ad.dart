@@ -115,10 +115,16 @@ class writead_State extends State<write_ad> {
                   .of(context)
                   .size
                   .width * 0.045,
-              child: Text(
-                "("+(Images.length+1).toString()+"/10)",
-                style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width*0.03),
+              child: RichText(
+                      text: TextSpan(
+                      style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03,
+                          color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(text: "("),
+                          TextSpan(text:(image_boxes.length+1).toString(), style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03, color:Colors.forestmk)),
+                          TextSpan(text: "/10)")
+                        ]
+                ),
               ),
             )
           ],
@@ -318,22 +324,23 @@ class writead_State extends State<write_ad> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context2).size.height*0.03,
-            child: Text("글쓰기를 종료 하시겠습니까?"),
+            height: MediaQuery.of(context2).size.height*0.032,
+            child: Text(widget.info==null?"글쓰기를 종료 하시겠습니까?":"수정을 종료 하시겠습니까?"),
           ),
           actions: <Widget>[
+
             new FlatButton(
-              child: new Text("확인"),
+              child: new Text("취소", style: TextStyle(color: Colors.red),),
               onPressed: (){
-                if(widget.info!=null)
-                Navigator.of(context).pop(true);
-                Navigator.of(context).pop(true);
                 Navigator.of(context2).pop(true);
               },
             ),
             new FlatButton(
-              child: new Text("취소"),
+              child: new Text("확인", style: TextStyle(color: Colors.forestmk),),
               onPressed: (){
+                if(widget.info!=null)
+                  Navigator.of(context).pop(true);
+                Navigator.of(context).pop(true);
                 Navigator.of(context2).pop(true);
               },
             ),
@@ -354,6 +361,7 @@ class writead_State extends State<write_ad> {
       input_content.text = widget.info.wr_content;
       input_subject.text = widget.info.wr_subject;
       input_wr_5.text = widget.info.wr_5;
+      color_cate = Colors.black;
       str_address = widget.info.wr_11;
 
     }
@@ -427,7 +435,7 @@ class writead_State extends State<write_ad> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.07),
           child: AppBar(
-            title: Text("광고업체 글쓰기" ,style: TextStyle(color: Colors.black),),
+            title: Text(widget.info==null?"광고업체 글쓰기":"광고업체 글쓰기 수정" ,style: TextStyle(color: Colors.black),),
             backgroundColor: Colors.white,
             elevation: 0.0,
             leading: InkWell(
@@ -512,7 +520,8 @@ class writead_State extends State<write_ad> {
                                  ),
                                );
                                setState(() {
-                                 str_address = '${model.address}';//'${model.sido} ${model.sigungu} ${model.bname}';
+                                 color_cate=Colors.black;
+                                 str_address = '${model.sido} ${model.sigungu} ${model.bname}';//'${model.address}';
                                });
                              },
                            )
