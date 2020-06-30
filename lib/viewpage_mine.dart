@@ -425,6 +425,46 @@ class _ViewpagemineState extends State<Viewpage_mine>{
     );
   }
 
+  void show_pushupwr(id) async{
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context2).size.height*0.032,
+            child: Text("글을 멘위로 업데이트 하시겠습니까?"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: ()async{
+                final response = await http.post(
+                    Uri.encodeFull('http://14.48.175.177/update_wrdatetime.php'),
+                    body: {
+                      "wr_id":widget.wr_id,
+                    },
+                    headers: {'Accept' : 'application/json'}
+                );
+                if(response.statusCode ==200){
+                  Navigator.pop(context2);
+                  Navigator.pop(context,"delete");
+                }
+              },
+            ),
+            new FlatButton(
+              child: new Text("취소"),
+              onPressed: () {
+                Navigator.pop(context2);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void show_declare() {
 
     showDialog(
@@ -1056,28 +1096,42 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         mb_id = itemdata_now['mb_id'];
         ca_name = itemdata_now['ca_name'];
         count_like = int.parse(itemdata_now['wr_10']);
-        Swiper_widget = Swiper(
-          itemCount: itemdata_now['files'].length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              height:MediaQuery.of(context).size.height*0.33,
-              decoration: BoxDecoration(
-                  color: Color(0xfff3f3f3),
-                  image: DecorationImage(//이미지 꾸미기
-                    fit:BoxFit.cover,
-                    image:itemdata_now['files'][index]!=''?NetworkImage(itemdata_now['files'][index]):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
-                  )
-              ),
-            );
-            //Image.network(itemdata_now['files'][index]);
-          },
-          pagination: (itemdata_now['files'].length) > 1
-              ? SwiperPagination()
-              : null,
-          loop: (itemdata_now['files'].length) > 1 ? true : false,
-          onTap:move_imgdetail,
-        );
+        if(itemdata_now['files'].length>0 && itemdata_now['files'][0]!='nullimage') {
+          Swiper_widget = Container(
+            height: MediaQuery.of(context).size.height*0.35,
+            width: MediaQuery.of(context).size.width,
+            child: Swiper(
+              itemCount: itemdata_now['files'].length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.35,
+                  decoration: BoxDecoration(
+                      color: Color(0xfff3f3f3),
+                      image: DecorationImage( //이미지 꾸미기
+                        fit: BoxFit.cover,
+                        image: itemdata_now['files'][index] != '' ? NetworkImage(
+                            itemdata_now['files'][index]) : AssetImage(
+                            "images/wing_mb_noimg2.png"), //이미지 가져오기
+                      )
+                  ),
+                );
+                //Image.network(itemdata_now['files'][index]);
+              },
+              pagination: (itemdata_now['files'].length) > 1
+                  ? SwiperPagination()
+                  : null,
+              loop: (itemdata_now['files'].length) > 1 ? true : false,
+              onTap: move_imgdetail,
+            ),
+          );
+        }
         get_lkeflg();
         get_data();
       });
@@ -1302,14 +1356,10 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         ListView(
           controller: change_scroll,
           children: <Widget>[
-              Container(
-                  height: MediaQuery.of(context).size.height*0.33,
-                  width: MediaQuery.of(context).size.width,
-                  child:Swiper_widget,
-                ),
+            Swiper_widget,
             Container(
-              height: MediaQuery.of(context).size.height*0.13,
-              padding: EdgeInsets.all(10),
+              height: MediaQuery.of(context).size.height*0.1,
+              padding:EdgeInsets.only(left: 10,right: 10,top: 5,bottom: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -1344,7 +1394,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                         children: <Widget>[
                           Text(itemdata_now==null?"테스트":itemdata_now['mb_name'],style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
                           SizedBox(height: 8,),
-                          Text(itemdata_now==null?"테스트":itemdata_now['mb_2'],style: TextStyle(fontSize: 12)),
+                          Text(itemdata_now==null?"테스트":itemdata_now['ca_name']=='업체'?itemdata_now['wr_11']:itemdata_now['mb_2'],style: TextStyle(fontSize: 12)),
                         ],
                       ),
                     ],

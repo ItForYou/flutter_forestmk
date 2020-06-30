@@ -28,7 +28,7 @@ import 'package:flutterforestmk/viewpage.dart';
 import 'package:flutterforestmk/member/mypage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+//import 'package:flutter_localizations/flutter_localizations.dart';
 
 
 /*Future <void> main() async{
@@ -111,6 +111,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.forestmk,
 
       ),
+
 
       home: MyHomePage(title: '숲마켓', ),
     );
@@ -346,6 +347,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     var temp_data = main_item.fromJson(itemdata['data'][id]);
 
     String temp_price;
+    String temp_wrcontent="";
 
     if(temp_data.ca_name =='업체'){
       temp_price=temp_data.wr_subject;
@@ -357,6 +359,17 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
       temp_price=fmf.withoutFractionDigits.toString()+'원';
     }
+
+    if(temp_data.ca_name=='업체'){
+      temp_wrcontent = temp_data.wr_content.replaceAll('\n','              ');
+      if(temp_wrcontent.length<15){
+
+      }
+      else{
+        temp_wrcontent = temp_wrcontent.substring(0,12)+"···";
+      }
+    }
+
     InkWell temp = InkWell(
         child: Container(
           height: 100,
@@ -429,9 +442,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                    Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
-                    SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                    temp_data.ca_name!='업체'? Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, fontWeight:FontWeight.bold)): Container(),
+                    Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, fontWeight: temp_data.ca_name=='업체'?FontWeight.bold:null),),
+                    SizedBox(height: temp_data.ca_name=='업체'?MediaQuery.of(context).size.height*0.005:MediaQuery.of(context).size.height*0.003,),
+                    Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name=='업체'?MediaQuery.of(context).size.width*0.028:MediaQuery.of(context).size.width*0.035, fontWeight:temp_data.ca_name=='업체'?null:FontWeight.bold)),
                     temp_data.ca_name!='업체'? SizedBox(height: MediaQuery.of(context).size.height*0.005,): Container(),
                     Row(
                       children: <Widget>[
@@ -512,7 +525,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
         onTap: ()async{
           var result = await Navigator.push(context, PageRouteBuilder(
-            transitionDuration: Duration(milliseconds: 400),
+            transitionDuration: Duration(milliseconds: 800),
             pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
           ));
           if(result == 'delete'){
@@ -939,7 +952,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: "+message.toString());
+        //print("onMessage: "+message.toString());
         if(Platform.isIOS){
          /* showNotification(
               message['aps']['alert']['title'].toString(),
@@ -975,7 +988,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           if (result == 'change') {
             get_data();
           }
-        print("onLaunch: "+message.toString());
+        //print("onLaunch: "+message.toString());
       },
       onResume: (Map<String, dynamic> message) async {
           var result = await Navigator.push(
@@ -996,7 +1009,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           if (result == 'change') {
             get_data();
           }
-        print("onResume: "+message.toString());
+       // print("onResume: "+message.toString());
       },
     );
 

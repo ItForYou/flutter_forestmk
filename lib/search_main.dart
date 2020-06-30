@@ -405,11 +405,11 @@ class _search_mainState extends State<search_main> {
                         SizedBox(height: MediaQuery.of(context).size.height*0.003,),
                         Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: widget.title=='광고'?FontWeight.bold:null),),
                         SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                        Text(widget.title=='광고'?temp_wrcontent:temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: widget.title!='광고'?FontWeight.bold:null),),
+                        Text(widget.title=='광고'?temp_wrcontent:temp_price, style: TextStyle(fontSize: widget.title!='광고'?MediaQuery.of(context).size.width*0.035:MediaQuery.of(context).size.width*0.03,fontWeight: widget.title!='광고'?FontWeight.bold:null),),
                         SizedBox(height: MediaQuery.of(context).size.height*0.005,),
                         Row(
                           children: <Widget>[
-                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444)),),
+                            Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
                             SizedBox(width: MediaQuery.of(context).size.width*0.005,),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,

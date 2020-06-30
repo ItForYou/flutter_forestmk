@@ -6,6 +6,7 @@ import 'package:flutterforestmk/main_item.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -33,6 +34,7 @@ class writenormal_State extends State<write_normal> {
   double grid_height;
   String mb_id,mb_name,mb_5,mb_6;
   int click_upload =0;
+  bool click_free=false,flg_enablewr1=true;
   var itemdata_now;
 
   void load_myinfo()async{
@@ -303,6 +305,20 @@ class writenormal_State extends State<write_normal> {
 
   Future<String> uploaddata() async {
 
+    ProgressDialog pr = ProgressDialog(context);
+    //pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+    pr.style(
+      message: '잠시만 기다려주세요...',
+      borderRadius: 5.0,
+      backgroundColor: Colors.white,
+      progressWidget: Container(padding:EdgeInsets.all(MediaQuery.of(context).size.height * 0.014),child: CircularProgressIndicator()),
+      elevation: 5.0,
+      messageTextStyle: TextStyle(
+        color: Colors.black, fontSize: MediaQuery.of(context).size.height * 0.018,),
+      insetAnimCurve: Curves.easeInOut,
+    );
+    pr.show();
+
     if(click_upload==1){
       return '';
     }
@@ -346,6 +362,7 @@ class writenormal_State extends State<write_normal> {
     var res = await request.send();
     if (res.statusCode == 200) {
       //return res.stream.bytesToString();
+        Navigator.pop(context);
         Navigator.pop(context,"success");
     }
 
@@ -629,18 +646,50 @@ class writenormal_State extends State<write_normal> {
                                     )
                                 ),
                                 child: Container(
-                                      margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.15,),
+
                                       child:TextField(
                                         keyboardType: TextInputType.number,
                                         inputFormatters: <TextInputFormatter>[
                                           WhitelistingTextInputFormatter(RegExp("[0-9]")),
                                         ],
                                         controller: input_wr_1,
+                                        enabled: flg_enablewr1,
                                         cursorColor: Colors.black,
                                         decoration: InputDecoration(
                                           border: InputBorder.none,
                                           hintText: "금액을 입력해주세요",
                                           hintStyle: TextStyle(color:Color(0xffdddddd)),
+                                        suffixIcon: Container(
+                                          width: MediaQuery.of(context).size.width*0.2,
+                                          height: MediaQuery.of(context).size.height*0.04,
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context).size.width*0.1,
+                                                height: MediaQuery.of(context).size.height*0.04,
+                                                child: Checkbox(
+                                                  value: click_free,
+                                                  onChanged: (bool value){
+                                                    setState(() {
+                                                      //print("Check"+click_free.toString());
+                                                      if(value==true)
+                                                        input_wr_1.text="무료나눔";
+                                                      else
+                                                        input_wr_1.text="";
+
+                                                      click_free=value;
+                                                     // flg_enablewr1 = !value;
+
+                                                    });
+                                                },
+                                                ),
+                                              ),
+                                              Text(
+                                                "무료"
+                                              )
+                                            ],
+                                          ),
+                                        )
                                         ),
                                         ),
                                       )

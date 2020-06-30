@@ -1089,7 +1089,7 @@ class _ViewpageState extends State<Viewpage>{
           height: MediaQuery
               .of(context)
               .size
-              .height * 0.33,
+              .height * 0.35,
           width: MediaQuery
               .of(context)
               .size
@@ -1313,14 +1313,12 @@ class _ViewpageState extends State<Viewpage>{
       price='금액 ' + fmf.withoutFractionDigits.toString()+'원';
     }
 
-
-
     if(widget.info.wr_content!='' && widget.info.wr_content!=null){
       String temp_wrcontent = widget.info.wr_content.replaceAll('\n','              ');
       content_size = (MediaQuery.of(context).size.width)*(temp_wrcontent.length/MediaQuery.of(context).size.height*0.5);
     }
 
-    print(real_mbid);
+    //print(real_mbid);
 
 
     return WillPopScope(
@@ -1382,8 +1380,8 @@ class _ViewpageState extends State<Viewpage>{
                       child:hero_content
             ),
                 Container(
-                  height: MediaQuery.of(context).size.height*0.13,
-                  padding: EdgeInsets.all(10),
+                  height: MediaQuery.of(context).size.height*0.1,
+                  padding: EdgeInsets.only(left: 10,right: 10,top: 5,bottom: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -1418,7 +1416,7 @@ class _ViewpageState extends State<Viewpage>{
                             children: <Widget>[
                               Text(widget.info.mb_name==null?'test':widget.info.mb_name,style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
                               SizedBox(height: 8,),
-                              Text(widget.info.mb_2==null?'test':widget.info.mb_2,style: TextStyle(fontSize: 12)),
+                              Text(widget.info==null?'test':widget.info.ca_name=='업체'?widget.info.wr_11:widget.info.mb_2,style: TextStyle(fontSize: 12)),
                             ],
                           ),
                         ],
@@ -1503,6 +1501,10 @@ class _ViewpageState extends State<Viewpage>{
                     ],
                   ),
                 ),
+                widget.info.ca_name=='업체'?
+                Container(
+
+                ):Container(),
                 Container(
                   padding: EdgeInsets.only(left: 15,right: 15,top: 10, bottom: 10),
                   height: MediaQuery.of(context).size.height*0.1,

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kopo/kopo.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class write_ad extends StatefulWidget {
@@ -214,6 +215,20 @@ class writead_State extends State<write_ad> {
 
   Future<String> uploaddata() async {
 
+    ProgressDialog pr = ProgressDialog(context);
+    //pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+    pr.style(
+      message: '잠시만 기다려주세요...',
+      borderRadius: 5.0,
+      backgroundColor: Colors.white,
+      progressWidget: Container(padding:EdgeInsets.all(MediaQuery.of(context).size.height * 0.014),child: CircularProgressIndicator()),
+      elevation: 5.0,
+      messageTextStyle: TextStyle(
+        color: Colors.black, fontSize: MediaQuery.of(context).size.height * 0.018,),
+      insetAnimCurve: Curves.easeInOut,
+    );
+    pr.show();
+
     var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/insert_writedeal.php"));
 
     request.fields['wr_subject'] = input_subject.text;
@@ -234,13 +249,14 @@ class writead_State extends State<write_ad> {
     if (Images.length >0) {
 
       for(int i=0; i<Images.length; i++) {
-        print("upload"+ i.toString());
+        //print("upload"+ i.toString());
         request.files.add(await http.MultipartFile.fromPath('bf_file['+i.toString()+']', Images[i].path));
       }
     }
 
     var res = await request.send();
     if (res.statusCode == 200) {
+      Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context,"success");
     }
