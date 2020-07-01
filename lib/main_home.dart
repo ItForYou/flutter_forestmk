@@ -479,7 +479,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
             ),
             content: Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*0.26,
+              height: MediaQuery.of(context).size.height*0.35,
               color: Colors.white,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -528,9 +528,9 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text("조회수순"),
+                          Text("거리순"),
                           Radio(
-                            value: "조회수순",
+                            value: "거리순",
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
@@ -545,7 +545,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ),
                     onTap: (){
                       setState(() {
-                        sort_value = '조회수순';
+                        sort_value = '거리순';
                         get_data();
                       });
                       Navigator.pop(context);
@@ -588,12 +588,15 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height*0.07,
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text("거리순"),
+                          Text("높은가격순"),
                           Radio(
-                            value: "거리순",
+                            value: "높은가격순",
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
@@ -608,12 +611,44 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ),
                     onTap: (){
                       setState(() {
-                        sort_value = '거리순';
+                        sort_value = '높은가격순';
                         get_data();
                       });
                       Navigator.pop(context);
                     },
                   ),
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.07,
+
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("조회수순"),
+                          Radio(
+                            value: "조회수순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                sort_value = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: (){
+                      setState(() {
+                        sort_value = '조회수순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
+                  ),
+
                 ],
               ),
             ),

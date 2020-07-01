@@ -17,7 +17,7 @@ class _chk_writeadState extends State<chk_writead> {
       msg,
       textAlign: TextAlign.start,
       style: TextStyle(
-        fontSize:MediaQuery.of(context).size.width*0.032,
+        fontSize:MediaQuery.of(context).size.width*0.03,
 
       ),
     );

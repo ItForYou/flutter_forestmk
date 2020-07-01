@@ -210,7 +210,6 @@ class _my_itemsState extends State<my_items> {
       temp_price=fmf.withoutFractionDigits.toString()+'원';
     }
 
-
     Container temp =
     Container(
         height: 100,
@@ -326,9 +325,8 @@ class _my_itemsState extends State<my_items> {
                       ),
                       onTap: ()async{
                         var result = await Navigator.push(context, PageRouteBuilder(
-                          transitionDuration: Duration(milliseconds: 400),
+                          transitionDuration: Duration(milliseconds: 800),
                           pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
-
                         ));
                         if(result == 'delete'){
                           get_data();

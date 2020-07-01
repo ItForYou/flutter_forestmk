@@ -5,6 +5,7 @@ class view_item{
   final String mb_id;
   final String file;
   final String wr_subject;
+  final String wr_content;
   final String ca_name;
 
 
@@ -12,6 +13,7 @@ class view_item{
   view_item({
     this.wr_1,
     this.wr_id,
+    this.wr_content,
     this.wr_subject,
     this.file,
     this.mb_id,
@@ -23,6 +25,7 @@ class view_item{
       wr_id: json['wr_id'],
       mb_id: json['mb_id'],
       wr_subject: json['wr_subject'],
+      wr_content: json['wr_content'],
       wr_1: json['wr_1'],
       file: json['file'],
       ca_name: json['ca_name'],

@@ -675,7 +675,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           ),
           content: Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height*0.26,
+            height: MediaQuery.of(context).size.height*0.35,
             color: Colors.white,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -718,6 +718,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height*0.07,
+                    decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -784,6 +787,37 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                     decoration: BoxDecoration(
                         border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
                     ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("높은가격순"),
+                        Radio(
+                          value: "높은가격순",
+                          groupValue: sort_value,
+                          onChanged: (T){
+                            setState(() {
+                              sort_value = T;
+                              get_data();
+                            });
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  onTap: (){
+                    setState(() {
+                      sort_value = '높은가격순';
+                      get_data();
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                InkWell(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height*0.07,
+
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -1186,7 +1220,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon01.png"),
                       ),
@@ -1217,7 +1251,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon02.png"),
                       ),
@@ -1253,7 +1287,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon03.png"),
                       ),

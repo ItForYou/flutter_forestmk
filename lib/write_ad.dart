@@ -31,7 +31,7 @@ class writead_State extends State<write_ad> {
   List<File> Images = [];
   int first_build =1;
   double grid_height;
-  String str_address ="주소를 입력해주세요";
+  String str_address ="업체주소를 입력해주세요";
   String mb_id,mb_name,mb_5,mb_6,wr_6='미승인';
   List <int> select_days=[7,14,21,28];
   List<String> modify_imges= [];
@@ -310,6 +310,32 @@ class writead_State extends State<write_ad> {
 
   }
 
+  void show_Alert(text,flg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context2).size.height*0.03,
+            child: Text(text),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: (){
+                if(flg ==2)
+                  Navigator.of(context).pop(true);
+                Navigator.of(context2).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   getGalleryImage() async {
 
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -534,7 +560,7 @@ class writead_State extends State<write_ad> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text("주소",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
+                          Text("업체주소",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                            InkWell(
                              child: Container(
                                   width: MediaQuery.of(context).size.width*0.7,
@@ -597,7 +623,7 @@ class writead_State extends State<write_ad> {
                                   cursorColor: Colors.black,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: "전화번호를 입력하세요",
+                                    hintText: "전화번호를 입력해주세요",
                                     hintStyle: TextStyle(color: Color(0xffdddddd),fontSize: MediaQuery.of(context).size.width*0.038)
                                   ),
                                 ),
@@ -633,7 +659,7 @@ class writead_State extends State<write_ad> {
                                   cursorColor: Colors.black,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: "업체이름을 입력하세요",
+                                    hintText: "업체이름을 입력해주세요",
                                     hintStyle: TextStyle(color: Color(0xffdddddd), fontSize: MediaQuery.of(context).size.width*0.038)
                                   ),
                                 ),
@@ -776,8 +802,18 @@ class writead_State extends State<write_ad> {
                     )
                 ),
                 onTap: ()async{
-                  var result  =  await uploaddata();
-                  print(result);
+
+                  if(input_subject.text!='' && input_subject.text!=null
+                      && input_wr_5.text!=null && input_wr_5.text!=''
+                      && input_content.text!='' && input_content.text!=null
+                      && str_address!='업체주소를 입력해주세요'
+                  ) {
+                    var result = await uploaddata();
+                    print(result);
+                  }
+                  else{
+                    show_Alert("빈칸 모두 입력해주세요!", 1);
+                  }
                 },
               )
             ],
