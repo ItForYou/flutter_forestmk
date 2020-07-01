@@ -1544,6 +1544,7 @@ class _ViewpageState extends State<Viewpage>{
                                   builder: (context) => widget.info.ca_name=='업체'?write_ad(info: widget.info,):write_normal(info: widget.info)
                               ));
                               if(result == 'success'){
+                                print(result);
                                 Navigator.pop(context,"delete");
                               }
                             },

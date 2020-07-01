@@ -529,6 +529,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
             pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
           ));
           if(result == 'delete'){
+            print("test"+result);
             get_data();
           }
        /*   Navigator.push(context,MaterialPageRoute(

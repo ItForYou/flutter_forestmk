@@ -32,7 +32,7 @@ class writead_State extends State<write_ad> {
   int first_build =1;
   double grid_height;
   String str_address ="주소를 입력해주세요";
-  String mb_id,mb_name,mb_5,mb_6;
+  String mb_id,mb_name,mb_5,mb_6,wr_6='미승인';
   List <int> select_days=[7,14,21,28];
   List<String> modify_imges= [];
   List <Color> select_bgcolors=[Colors.forestmk,Colors.white,Colors.white,Colors.white];
@@ -215,7 +215,10 @@ class writead_State extends State<write_ad> {
 
   Future<String> uploaddata() async {
 
-    ProgressDialog pr = ProgressDialog(context);
+    ProgressDialog pr = ProgressDialog(
+        context,
+        isDismissible: false,
+    );
     //pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
     pr.style(
       message: '잠시만 기다려주세요...',
@@ -229,21 +232,40 @@ class writead_State extends State<write_ad> {
     );
     pr.show();
 
+
+
     var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/insert_writedeal.php"));
 
     request.fields['wr_subject'] = input_subject.text;
     request.fields['wr_content'] = input_content.text;
+
+    if(modify_imges.length>0) {
+      for (int i = 0; i < modify_imges.length; i++) {
+        request.fields['before_files[' + i.toString() + ']'] =
+            modify_imges[i].substring(36);
+      }
+    }
+    else{
+      request.fields['before_files[0]'] ='';
+    }
+    if(widget.info!=null){
+      request.fields['wr_id'] = widget.info.wr_id;
+      request.fields['w'] = 'u';
+    }
+    else if(widget.wr_id!=null){
+      request.fields['wr_id'] = widget.wr_id;
+      request.fields['w'] = 'u';
+    }
+
     request.fields['ca_name'] = '업체';
     request.fields['mb_id'] = mb_id;
     request.fields['mb_name'] = mb_name;
     request.fields['wr_11'] = str_address;
     request.fields['wr_5'] = input_wr_5.text;
-    request.fields['wr_6'] = '미승인';
+    request.fields['wr_6'] = wr_6;
     request.fields['wr_7'] = selected_day.toString();
     request.fields['wr_2'] = '업체';
-    request.fields['wr_3'] = mb_5;
-    request.fields['wr_4'] = mb_6;
-    request.fields['wr_file'] = Images.length.toString();
+    request.fields['wr_file'] = (Images.length+modify_imges.length).toString();
 
 
     if (Images.length >0) {
@@ -256,7 +278,10 @@ class writead_State extends State<write_ad> {
 
     var res = await request.send();
     if (res.statusCode == 200) {
+      //return res.stream.bytesToString();
+      if(widget.info==null)
       Navigator.pop(context);
+
       Navigator.pop(context);
       Navigator.pop(context,"success");
     }
@@ -379,6 +404,7 @@ class writead_State extends State<write_ad> {
       input_wr_5.text = widget.info.wr_5;
       color_cate = Colors.black;
       str_address = widget.info.wr_11;
+      wr_6 = widget.info.wr_6;
 
     }
 
@@ -749,8 +775,9 @@ class writead_State extends State<write_ad> {
                     child: Center(child: Text("등록하기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.055, color: Colors.white,)),
                     )
                 ),
-                onTap: (){
-                  uploaddata();
+                onTap: ()async{
+                  var result  =  await uploaddata();
+                  print(result);
                 },
               )
             ],

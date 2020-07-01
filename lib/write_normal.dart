@@ -305,7 +305,10 @@ class writenormal_State extends State<write_normal> {
 
   Future<String> uploaddata() async {
 
-    ProgressDialog pr = ProgressDialog(context);
+    ProgressDialog pr = ProgressDialog(
+        context,
+        isDismissible: false,
+    );
     //pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
     pr.style(
       message: '잠시만 기다려주세요...',
@@ -365,7 +368,6 @@ class writenormal_State extends State<write_normal> {
         Navigator.pop(context);
         Navigator.pop(context,"success");
     }
-
   }
 
   void show_Alert(text,flg) {
