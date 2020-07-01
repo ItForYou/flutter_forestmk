@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterforestmk/basic_item.dart';
-import 'package:flutterforestmk/write_basic.dart';
+import 'package:flutterforestmk/border/basic_item.dart';
+import 'package:flutterforestmk/border/write_basic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 

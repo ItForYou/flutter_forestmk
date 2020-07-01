@@ -103,6 +103,7 @@ class _categorypageState extends State<categorypage> {
 
   @override
   Widget build(BuildContext context) {
+
    // load_myinfo();
     return Scaffold(
       appBar: AppBar(

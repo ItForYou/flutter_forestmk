@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutterforestmk/basicboard.dart';
+import 'package:flutterforestmk/border/basicboard.dart';
 import 'package:flutterforestmk/location.dart';
 import 'package:flutterforestmk/main.dart';
 import 'package:flutterforestmk/member/modify_info.dart';

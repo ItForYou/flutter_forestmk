@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutterforestmk/basic_item.dart';
-import 'package:flutterforestmk/basicview.dart';
+import 'package:flutterforestmk/border/basic_item.dart';
+import 'package:flutterforestmk/border/basicview.dart';
 import 'package:flutterforestmk/member/my_items.dart';
-import 'package:flutterforestmk/write_basic.dart';
+import 'package:flutterforestmk/border/write_basic.dart';
 import 'package:http/http.dart' as http;
 
 class basicboard extends StatefulWidget {

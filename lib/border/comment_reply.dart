@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterforestmk/comment_item.dart';
+import 'package:flutterforestmk/border/comment_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutterforestmk/write_ad.dart';
-import 'package:flutterforestmk/write_normal.dart';
+import 'package:flutterforestmk/border/write_ad.dart';
+import 'package:flutterforestmk/border/write_normal.dart';
 
 class chk_writead extends StatefulWidget {
   @override

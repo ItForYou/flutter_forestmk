@@ -37,17 +37,18 @@ class _block_listState extends State<block_list> {
           ),
           actions: <Widget>[
             new FlatButton(
+              child: new Text("취소",style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            new FlatButton(
               child: new Text("확인"),
               onPressed: (){
                   update_unblock(block_id, context);
               },
             ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+
           ],
         );
       },
@@ -55,7 +56,7 @@ class _block_listState extends State<block_list> {
   }
 
   Future<dynamic> update_unblock(value,popcontext) async{
-  print(value);
+ // print(value);
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/update_block.php'),
         body: {
@@ -67,6 +68,7 @@ class _block_listState extends State<block_list> {
     );
     if(response.statusCode==200){
       setState(() {
+          itemdata=null;
           get_data();
           Navigator.pop(popcontext);
       });

@@ -21,10 +21,10 @@ import 'package:flutterforestmk/member/my_items.dart';
 import 'package:flutterforestmk/member/register.dart';
 import 'package:flutterforestmk/search_main.dart';
 import 'package:flutterforestmk/splash.dart';
-import 'package:flutterforestmk/write_normal.dart';
+import 'package:flutterforestmk/border/write_normal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
-import 'package:flutterforestmk/viewpage.dart';
+import 'package:flutterforestmk/border/viewpage.dart';
 import 'package:flutterforestmk/member/mypage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -329,7 +329,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                     ));
                     if(result == 'success'){
                       // print(result);
-                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
                       Navigator.pop(bc);
                       get_data();
                     }

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutterforestmk/chat_webview.dart';
-import 'package:flutterforestmk/comment_reply.dart';
+import 'package:flutterforestmk/border/comment_reply.dart';
 import 'package:flutterforestmk/image_detail.dart';
 import 'package:flutterforestmk/member/loginpage.dart';
-import 'package:flutterforestmk/view_item.dart';
-import 'package:flutterforestmk/write_normal.dart';
+import 'package:flutterforestmk/border/view_item.dart';
+import 'package:flutterforestmk/border/write_normal.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutterforestmk/comment_item.dart';
+import 'package:flutterforestmk/border/comment_item.dart';
 
 class Viewpage_mine extends StatefulWidget {
   String wr_id,mb_id;
@@ -434,9 +434,16 @@ class _ViewpagemineState extends State<Viewpage_mine>{
           title:null,
           content: Container(
             height: MediaQuery.of(context2).size.height*0.032,
-            child: Text("글을 멘위로 업데이트 하시겠습니까?"),
+            child: Text("글을 맨 위로 업데이트 하시겠습니까?"),
           ),
           actions: <Widget>[
+
+            new FlatButton(
+              child: new Text("취소",style:TextStyle(color:Colors.red)),
+              onPressed: () {
+                Navigator.pop(context2);
+              },
+            ),
             new FlatButton(
               child: new Text("확인"),
               onPressed: ()async{
@@ -451,12 +458,6 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                   Navigator.pop(context2);
                   Navigator.pop(context,"delete");
                 }
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context2);
               },
             ),
           ],
@@ -942,6 +943,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
     );
     if(response.statusCode==200){
       Navigator.pop(popcontext);
+      show_Alert("선택한 회원이 차단되었습니다.", 1);
     }
   }
 
@@ -1402,7 +1404,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
                   Row(
                     children: <Widget>[
-                      real_mbid==mb_id?
+                      (itemdata_now['mb_id']==real_mbid || real_mbid =='admin' || real_mbid=='lets080')&&(itemdata_now['ca_name']!='업체')?
                       InkWell(
                         child: Container(
                           width: MediaQuery.of(context).size.width*0.17,
@@ -1424,6 +1426,28 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                             show_soldout();
                         },
                       ):Container(),
+                      (itemdata_now['ca_name']=='업체') && (itemdata_now['mb_id'] == real_mbid || real_mbid =='admin' || real_mbid =='lets080')?
+                      InkWell(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*0.16,
+                          height: MediaQuery.of(context).size.height*0.06,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.1)),
+                              border: Border.all(color: Color(0xffcccccc)),
+                              color: color_soldout
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              Image.asset("images/gotop.png",   width: MediaQuery.of(context).size.width*0.12, height: MediaQuery.of(context).size.height*0.035,),
+                              Text('글맨위로',style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.028,color: Colors.white),)
+                            ],
+                          ),
+                        ),
+                        onTap: (){
+                          show_pushupwr(itemdata_now['wr_id']);
+                        },
+                      ):Container(),
+
                       SizedBox(width: 3,),
                       InkWell(
                         child: Container(

@@ -13,8 +13,8 @@ import 'package:flutterforestmk/main.dart';
 import 'package:flutterforestmk/main_item.dart';
 import 'package:flutterforestmk/member/my_items.dart';
 import 'package:flutterforestmk/member/mypage.dart';
-import 'package:flutterforestmk/viewpage.dart';
-import 'package:flutterforestmk/write_normal.dart';
+import 'package:flutterforestmk/border/viewpage.dart';
+import 'package:flutterforestmk/border/write_normal.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -555,7 +555,7 @@ class _search_mainState extends State<search_main> {
                     ));
                     if(result == 'success'){
                       // print(result);
-                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
                       Navigator.pop(bc);
                       get_data();
                     }
@@ -671,7 +671,6 @@ class _search_mainState extends State<search_main> {
       widget.mb_5 = temp_mbdata['mb_5'];
       widget.mb_6 = temp_mbdata['mb_6'];
     });
-
   }
 
   @override
@@ -689,8 +688,6 @@ class _search_mainState extends State<search_main> {
       sort_value  = widget.sch_order;
     }
     super.initState();
-
-
   }
 
 
@@ -972,9 +969,14 @@ class _search_mainState extends State<search_main> {
                         child: Image.asset("images/hd_cate04.png"),
                       ),
                       onTap: (){
-                        Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                        ));
+                        if(widget.mb_id!=null) {
+                          Navigator.push(context,MaterialPageRoute(
+                              builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                          ));
+                        }
+                        else{
+                          request_logindialog();
+                        }
                       },
                     ),
                     InkWell(
@@ -986,16 +988,19 @@ class _search_mainState extends State<search_main> {
                         child: Image.asset("images/hd_cate05.png"),
                       ),
                       onTap: ()async{
-                        var result = await   Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                        ));
-                        if(result == 'back'){
-                          get_mbdata();
-                          get_data();
+                        if(widget.mb_id!=null) {
+                          var result = await   Navigator.push(context,MaterialPageRoute(
+                              builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                          ));
+                          if(result == 'back'){
+                            get_mbdata();
+                            get_data();
+                          }
                         }
-                     /*   Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                        ));*/
+                        else{
+                          request_logindialog();
+                        }
+
                       },
                     ),
                   ],
@@ -1089,9 +1094,14 @@ class _search_mainState extends State<search_main> {
                               child: Image.asset("images/hd_cate04.png"),
                             ),
                             onTap: (){
-                              Navigator.push(context,MaterialPageRoute(
-                                  builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                              ));
+                              if(widget.mb_id!=null) {
+                                Navigator.push(context,MaterialPageRoute(
+                                    builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                ));
+                              }
+                              else{
+                                request_logindialog();
+                              }
                             },
                           ),
                           InkWell(
@@ -1103,13 +1113,20 @@ class _search_mainState extends State<search_main> {
                               child: Image.asset("images/hd_cate05.png"),
                             ),
                             onTap: ()async{
-                              var result = await   Navigator.push(context,MaterialPageRoute(
-                                  builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                              ));
-                              if(result == 'back'){
-                                get_mbdata();
-                                get_data();
+
+                              if(widget.mb_id!=null) {
+                                var result = await   Navigator.push(context,MaterialPageRoute(
+                                    builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                ));
+                                if(result == 'back'){
+                                  get_mbdata();
+                                  get_data();
+                                }
                               }
+                              else{
+                                request_logindialog();
+                              }
+
                              /* Navigator.push(context,MaterialPageRoute(
                                   builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                               ));*/

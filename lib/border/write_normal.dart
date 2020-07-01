@@ -543,7 +543,7 @@ class writenormal_State extends State<write_normal> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.07),
           child: AppBar(
-            title: Text(widget.info==null?"중고거래 글쓰기":"중고거래 글쓰기 수정" ,style: TextStyle(color: Colors.black87, fontSize: MediaQuery.of(context).size.width*0.045),),
+            title: Text(widget.info==null?"중고거래 글쓰기":"중고거래 글쓰기 수" ,style: TextStyle(color: Colors.black87, fontSize: MediaQuery.of(context).size.width*0.045),),
             backgroundColor: Colors.white,
             elevation: 0.0,
             leading: InkWell(
@@ -793,7 +793,7 @@ class writenormal_State extends State<write_normal> {
                           click_upload = 1;
                         }
                         else{
-                          show_Alert("빈칸 모두 입력해주세요!", 1);
+                          show_Alert("작성된 내용이 올바르지 않습니다. ", 1);
                         }
                       },
                     ),
