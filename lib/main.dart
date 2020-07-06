@@ -306,9 +306,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                     if(result == 'success'){
                      // print(result);
                       _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
-                      Navigator.pop(bc);
                       get_data();
                     }
+                    Navigator.pop(bc);
                   },
                 ),
                 InkWell(
@@ -330,9 +330,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                     if(result == 'success'){
                       // print(result);
                       _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
-                      Navigator.pop(bc);
                       get_data();
                     }
+                    else{
+                      get_data();
+                    }
+                    Navigator.pop(bc);
                   },
                 ),
               ],
@@ -902,6 +905,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
    );
 
     setState(() {
+     // print(response.body);
      itemdata = jsonDecode(response.body);
      _getWidget();
    });

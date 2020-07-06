@@ -546,11 +546,14 @@ class _chk_writeadState extends State<chk_writead> {
                           style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.05, color: Colors.white),),
                     )
               ),
-              onTap: (){
+              onTap: ()async{
                 if(flg_value==1) {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => write_ad()
-                  ));
+                    var result = await  Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => write_ad()
+                    ));
+                    if(result == 'success'){
+                      Navigator.pop(context,"success");
+                    }
                 }
                 else{
                   _showDialog();

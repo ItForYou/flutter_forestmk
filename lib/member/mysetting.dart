@@ -86,8 +86,8 @@ class _mysettingState extends State<mysetting> {
           title:null,
           content: Container(
 
-            height: MediaQuery.of(context2).size.height*0.049,
-            child: Text("회원님의 게시물과 모든 정보들이 삭제됩니다.\t숲마켓을 탈퇴하시겠습니까?", style: TextStyle(fontSize: MediaQuery.of(context2).size.height*0.022,),),
+            height: MediaQuery.of(context2).size.height*0.052,
+            child: Text("회원님의 게시물과 모든 정보들이 삭제됩니다.\t숲마켓을 탈퇴하시겠습니까?", style: TextStyle(fontSize: MediaQuery.of(context2).size.width*0.043,),),
           ),
           actions: <Widget>[
             new FlatButton(

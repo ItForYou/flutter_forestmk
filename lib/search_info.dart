@@ -146,7 +146,6 @@ class _search_infoState extends State<search_info> {
             child: Text(
               "로그인 바로가기",
               style: TextStyle(
-                  decoration: TextDecoration.underline
               ),
             ),
             onTap: (){

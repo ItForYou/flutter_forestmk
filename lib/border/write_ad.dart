@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterforestmk/main_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -143,6 +144,10 @@ class writead_State extends State<write_ad> {
     SharedPreferences sp = await SharedPreferences.getInstance();
     if(sp.getString('id')!=null) {
       mb_id = sp.getString('id');
+
+      if(widget.info==null)
+        get_countad();
+
       get_mbdata();
     }
   }
@@ -232,8 +237,6 @@ class writead_State extends State<write_ad> {
     );
     pr.show();
 
-
-
     var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/insert_writedeal.php"));
 
     request.fields['wr_subject'] = input_subject.text;
@@ -279,8 +282,6 @@ class writead_State extends State<write_ad> {
     var res = await request.send();
     if (res.statusCode == 200) {
       //return res.stream.bytesToString();
-      if(widget.info==null)
-      Navigator.pop(context);
 
       Navigator.pop(context);
       Navigator.pop(context,"success");
@@ -307,7 +308,6 @@ class writead_State extends State<write_ad> {
       }
       selected_day = select_days[index];
     });
-
   }
 
   void show_Alert(text,flg) {
@@ -325,9 +325,16 @@ class writead_State extends State<write_ad> {
             new FlatButton(
               child: new Text("확인"),
               onPressed: (){
-                if(flg ==2)
-                  Navigator.of(context).pop(true);
-                Navigator.of(context2).pop(true);
+                if(flg==3){
+                  Navigator.pop(context2);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }
+                else {
+                  if (flg == 2)
+                    Navigator.of(context).pop(true);
+                  Navigator.of(context2).pop(true);
+                }
               },
             ),
           ],
@@ -339,31 +346,39 @@ class writead_State extends State<write_ad> {
   getGalleryImage() async {
 
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      if(first_build==1) {
-        first_build = 0;
-        Images.add(image);
-        image_boxes.clear();
-        image_boxes.add(get_Imagebox(image));
-        if(Images.length <10)
-        image_boxes.add(get_addbox());
-      }
-      else{
-        Images.add(image);
-        image_boxes.removeLast();
-        image_boxes.add(get_Imagebox(image));
-
-        if(Images.length <10)
-          image_boxes.add(get_addbox());
-
-        if(Images.length >3 && Images.length <=7){
-          grid_height = MediaQuery.of(context).size.height*0.21;
+    if(image!=null) {
+      setState(() {
+        if (first_build == 1) {
+          first_build = 0;
+          Images.add(image);
+          image_boxes.clear();
+          image_boxes.add(get_Imagebox(image));
+          if (Images.length < 10)
+            image_boxes.add(get_addbox());
         }
-        else if(Images.length >7){
-          grid_height = MediaQuery.of(context).size.height*0.31;
+        else {
+          Images.add(image);
+          image_boxes.removeLast();
+          image_boxes.add(get_Imagebox(image));
+
+          if (Images.length < 10)
+            image_boxes.add(get_addbox());
+
+          if (Images.length > 3 && Images.length <= 7) {
+            grid_height = MediaQuery
+                .of(context)
+                .size
+                .height * 0.21;
+          }
+          else if (Images.length > 7) {
+            grid_height = MediaQuery
+                .of(context)
+                .size
+                .height * 0.31;
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   Future<dynamic> get_data_now() async{
@@ -381,6 +396,31 @@ class writead_State extends State<write_ad> {
       input_subject.text = itemdata_now['wr_subject'];
 
     });
+  }
+
+  Future<dynamic> get_countad () async{
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_countad.php'),
+        body: {
+          "mb_id" :mb_id==null?'':mb_id,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+
+    int cnt_ads=0;
+
+    if(!response.body.contains("admin"))
+        cnt_ads = int.parse(response.body);
+
+    print(response.body);
+
+    if(cnt_ads>0){
+      show_Alert("광고게시글은 1회 원칙으로 두고있습니다!", 3);
+   /*   Navigator.pop(context);
+      Navigator.pop(context,"success");*/
+    }
+
+
   }
 
   void show_exit() {
@@ -619,6 +659,10 @@ class writead_State extends State<write_ad> {
                               child: Container(
                                 margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.15,),
                                 child:TextField(
+                                  inputFormatters: <TextInputFormatter>[
+                                    WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                                  ],
+                                  keyboardType: TextInputType.number,
                                   controller: input_wr_5,
                                   cursorColor: Colors.black,
                                   decoration: InputDecoration(

@@ -61,17 +61,18 @@ class _basicboardState extends State<basicboard> {
              child: Text("한번 삭제한 자료는 복구할 방법이 없습니다.\n선택한 게시물을 정말 삭제하시겠습니까?"),
            ),
            actions: <Widget>[
+
              new FlatButton(
-               child: new Text("확인"),
-               onPressed: ()async{
-                  var result = await delete_data(context);
-                  print(result);
+               child: new Text("취소",style: TextStyle(color: Colors.red),),
+               onPressed: () {
+                 Navigator.pop(context);
                },
              ),
              new FlatButton(
-               child: new Text("취소"),
-               onPressed: () {
-                 Navigator.pop(context);
+               child: new Text("확인",style: TextStyle(color: Colors.forestmk),),
+               onPressed: ()async{
+                 var result = await delete_data(context);
+                 print(result);
                },
              ),
            ],

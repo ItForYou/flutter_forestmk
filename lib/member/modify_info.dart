@@ -79,6 +79,7 @@ class _modify_infoState extends State<modify_info> {
             builder:(context, setState) {
               return AlertDialog(
                 title: null,
+                contentPadding: EdgeInsets.only(left:MediaQuery.of(context).size.width*0.05, right:MediaQuery.of(context).size.width*0.05, top: MediaQuery.of(context).size.height*0.02,bottom: 0),
                 content: Container(
                   width: MediaQuery
                       .of(context)
@@ -87,7 +88,7 @@ class _modify_infoState extends State<modify_info> {
                   height: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.34,
+                      .height * 0.44,
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -178,7 +179,7 @@ class _modify_infoState extends State<modify_info> {
                         height: MediaQuery
                             .of(context)
                             .size
-                            .height * 0.17,
+                            .height * 0.23,
                         margin: EdgeInsets.only(top: MediaQuery
                             .of(context)
                             .size
@@ -188,24 +189,21 @@ class _modify_infoState extends State<modify_info> {
                               children: results_search,
                             )
                         ),
+                      ),
+                      InkWell(child:
+                      Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.05),child:
+                      Align(alignment: Alignment.bottomRight,child:
+                      Text("취소",style: TextStyle(color:Colors.forestmk),)
                       )
+                      ),
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                      ),
                     ],
                   ),
                 ),
-                actions: <Widget>[
-//                  new FlatButton(
-//                    child: new Text("확인"),
-//                    onPressed: () {
-//                      Navigator.pop(context);
-//                    },
-//                  ),
-                  new FlatButton(
-                    child: new Text("취소"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
+                actions:null
               );
             }
         );

@@ -220,7 +220,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                   child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd), fontSize: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.02),),
+                      .height * 0.015),),
                   onTap: ()async{
                     var result = await Navigator.push(context, MaterialPageRoute(
                         builder: (context) => comment_reply(wr_comment: temp_data.wr_comment,wr_parent:temp_data.wr_parent, writer_id: widget.mb_id,)
@@ -1021,6 +1021,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       ),
 
       onTap: ()async{
+        print(temp_data.mb_id);
         var result = await Navigator.push(context, MaterialPageRoute(
             builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id, mb_id:temp_data.mb_id)
         ));
@@ -1200,6 +1201,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   }
 
   void set_items(){
+
     if(itemdata['data'].length > 0) {
       itmes_height = MediaQuery.of(context).size.height*0.355;
       list_subitem.clear();
@@ -1215,6 +1217,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         list_extraitem.add(get_content2(i,2));
       }
     }
+
   }
 
   void show_ban() {
@@ -1295,6 +1298,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   Widget build(BuildContext context) {
 
     if(itemdata!=null) {
+
       if (itemdata_now['wr_content'] != '' &&
           itemdata_now['wr_content'] != null) {
         content_size = MediaQuery
@@ -1302,6 +1306,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
             .size
             .height * (itemdata_now['wr_content'].length / 850);
       }
+
     }
 
     return WillPopScope(
@@ -1327,26 +1332,30 @@ class _ViewpagemineState extends State<Viewpage_mine>{
               RaisedButton(
                 color: Color(0xfffae100),
                 onPressed: ()async{
-                  if (mb_id != null && real_mbid !=null && real_mbid!='' && real_mbid!=mb_id) {
-                    var result = await Navigator.push(
-                        context, MaterialPageRoute(
-                        builder: (context) =>
-                            chat_webview(
+                  if(itemdata_now!=null) {
+                    if (mb_id != null && real_mbid != null && real_mbid != '' &&
+                        real_mbid != mb_id) {
+                      var result = await Navigator.push(
+                          context, MaterialPageRoute(
+                          builder: (context) =>
+                              chat_webview(
                                 url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
                                     real_mbid + "&mb_password=" +
-                                    real_mbpwd+ "&flg_view=1&view_id="+widget.wr_id+"-"+real_mbid,view: 1,
+                                    real_mbpwd + "&flg_view=1&view_id=" +
+                                    widget.wr_id + "-" + real_mbid, view: 1,
 
-                            )
-                    ));
-                    if (result == 'change') {
-                      get_data();
+                              )
+                      ));
+                      if (result == 'change') {
+                        get_data();
+                      }
                     }
-                  }
-                  else if(real_mbid == itemdata_now['mb_id']){
-                    show_ban();
-                  }
-                  else {
-                    request_logindialog();
+                    else if (real_mbid == itemdata_now['mb_id']) {
+                      show_ban();
+                    }
+                    else {
+                      request_logindialog();
+                    }
                   }
                 },
                 child: Text("1:1채팅"),
@@ -1365,43 +1374,43 @@ class _ViewpagemineState extends State<Viewpage_mine>{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      InkWell(
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          padding: EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(50)),
-                              border: Border.all(color: Color(0xffcccccc)),
-                              image: DecorationImage(//이미지 꾸미기
-                                  fit:BoxFit.cover,
-                                image:(itemdata_now!=null)&&(itemdata_now['mb_1']!='')?NetworkImage(itemdata_now['mb_1']):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
-                              )
-                          ),
+                  InkWell(
+                    child: Row(
+                      children: <Widget>[
+                         Container(
+                            width: 50,
+                            height: 50,
+                            padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(50)),
+                                border: Border.all(color: Color(0xffcccccc)),
+                                image: DecorationImage(//이미지 꾸미기
+                                    fit:BoxFit.cover,
+                                  image:(itemdata_now!=null)&&(itemdata_now['mb_1']!='')?NetworkImage(itemdata_now['mb_1']):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
+                                )
+                            ),
                         ),
-                        onTap: (){
-                          if(real_mbid!='')
-                            show_block();
-                          else{
-                            request_logindialog();
-                          }
-                        },
-                      ),
-                      SizedBox(width: 3,),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(itemdata_now==null?"테스트":itemdata_now['mb_name'],style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
-                          SizedBox(height: 8,),
-                          Text(itemdata_now==null?"테스트":itemdata_now['ca_name']=='업체'?itemdata_now['wr_11']:itemdata_now['mb_2'],style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
-                    ],
+                        SizedBox(width: 3,),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(itemdata_now==null?"테스트":itemdata_now['mb_name'],style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
+                            SizedBox(height: 8,),
+                            Text(itemdata_now==null?"테스트":itemdata_now['ca_name']=='업체'?itemdata_now['wr_11']:itemdata_now['mb_2'],style: TextStyle(fontSize: 12)),
+                          ],
+                        ),
+                      ],
+                    ),
+                onTap: (){
+                  if(real_mbid!='')
+                    show_block();
+                  else{
+                    request_logindialog();
+                  }
+                }
                   ),
-
+                  itemdata_now!=null?
                   Row(
                     children: <Widget>[
                       (itemdata_now['mb_id']==real_mbid || real_mbid =='admin' || real_mbid=='lets080')&&(itemdata_now['ca_name']!='업체')?
@@ -1479,10 +1488,17 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                         },
                       ),
                     ],
-                  ),
+                  ):Container(),
                 ],
               ),
             ),
+            (itemdata_now!=null)&&(itemdata_now['ca_name']=='업체')?
+            Container(
+                padding: EdgeInsets.only(left: 15,),
+                width: MediaQuery.of(context).size.width,
+                height:MediaQuery.of(context).size.height*0.02,
+                child:Text(itemdata_now.wr_5)
+            ):Container(),
             Container(
               padding: EdgeInsets.only(left: 15,right: 15,top: 10, bottom: 10),
               height: MediaQuery.of(context).size.height*0.1,
@@ -1550,9 +1566,9 @@ class _ViewpagemineState extends State<Viewpage_mine>{
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height*0.2+content_size,
-              child: Text(itemdata_now==null?'테스트':itemdata_now['wr_content']),
-
+              child: Wrap(children : [
+                Text(itemdata_now==null?'테스트':itemdata_now['wr_content'])
+              ]),
             ),
             Container(
               height: MediaQuery.of(context).size.height*0.05,

@@ -418,8 +418,8 @@ class writenormal_State extends State<write_normal> {
             new FlatButton(
               child: new Text("확인", style: TextStyle(color: Colors.forestmk)),
               onPressed: (){
-                Navigator.of(context).pop(true);
-                Navigator.of(context2).pop(true);
+                Navigator.of(context2).pop();
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -432,31 +432,40 @@ class writenormal_State extends State<write_normal> {
  getGalleryImage() async {
 
    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-   setState(() {
-     if(first_build==1) {
-       first_build = 0;
-       Images.add(image);
-       image_boxes.clear();
-       image_boxes.add(get_Imagebox(image));
-       if(Images.length <10)
-         image_boxes.add(get_addbox());
-     }
-     else{
-       Images.add(image);
-       image_boxes.removeLast();
-       image_boxes.add(get_Imagebox(image));
 
-       if(image_boxes.length <10)
-         image_boxes.add(get_addbox());
+   if(image!=null) {
+     setState(() {
+       if (first_build == 1) {
+         first_build = 0;
+         Images.add(image);
+         image_boxes.clear();
+         image_boxes.add(get_Imagebox(image));
+         if (Images.length < 10)
+           image_boxes.add(get_addbox());
+       }
+       else {
+         Images.add(image);
+         image_boxes.removeLast();
+         image_boxes.add(get_Imagebox(image));
 
-       if(image_boxes.length >3 && image_boxes.length <=7){
-         grid_height = MediaQuery.of(context).size.height*0.21;
+         if (image_boxes.length < 10)
+           image_boxes.add(get_addbox());
+
+         if (image_boxes.length > 3 && image_boxes.length <= 7) {
+           grid_height = MediaQuery
+               .of(context)
+               .size
+               .height * 0.21;
+         }
+         else if (image_boxes.length > 7) {
+           grid_height = MediaQuery
+               .of(context)
+               .size
+               .height * 0.31;
+         }
        }
-       else if(image_boxes.length >7){
-         grid_height = MediaQuery.of(context).size.height*0.31;
-       }
-     }
-   });
+     });
+   }
 
   }
 
@@ -543,7 +552,7 @@ class writenormal_State extends State<write_normal> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(MediaQuery.of(context).size.height*0.07),
           child: AppBar(
-            title: Text(widget.info==null?"중고거래 글쓰기":"중고거래 글쓰기 수" ,style: TextStyle(color: Colors.black87, fontSize: MediaQuery.of(context).size.width*0.045),),
+            title: Text(widget.info==null?"중고거래 글쓰기":"중고거래 글쓰기 수정" ,style: TextStyle(color: Colors.black87, fontSize: MediaQuery.of(context).size.width*0.045),),
             backgroundColor: Colors.white,
             elevation: 0.0,
             leading: InkWell(

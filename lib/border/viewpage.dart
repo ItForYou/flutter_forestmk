@@ -76,11 +76,9 @@ class _ViewpageState extends State<Viewpage>{
         else
           before_tdata  = comment_item.fromJson(comment_data[comment_data.length-1]);
 
-
-
-        String temp_wrcontent = temp_data.wr_content.replaceAll('\n','              ');
+       // String temp_wrcontent = temp_data.wr_content.replaceAll('\n','              ');
         //print(temp_wrcontent.length/24.2);
-        double comment_height = (temp_wrcontent.length/24.2) * MediaQuery.of(context).size.height*0.00004;
+       // double comment_height = (temp_wrcontent.length/24.2) * MediaQuery.of(context).size.height*0.00004;
        //print(comment_height);
 
         Widget temp = Container(
@@ -91,7 +89,7 @@ class _ViewpageState extends State<Viewpage>{
         height: MediaQuery
             .of(context)
             .size
-            .height * (0.085+comment_height)+13,
+            .height * (0.085)+13,
         margin: EdgeInsets.only(bottom: MediaQuery
             .of(context)
             .size
@@ -174,7 +172,7 @@ class _ViewpageState extends State<Viewpage>{
                     .size
                     .width * 0.02,),
                 InkWell(
-                    child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd), fontSize:MediaQuery.of(context).size.height * 0.02),),
+                    child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd), fontSize:MediaQuery.of(context).size.height * 0.015),),
                     onTap: ()async{
                       var result = await Navigator.push(context, MaterialPageRoute(
                           builder: (context) => comment_reply(wr_comment: temp_data.wr_comment,wr_parent:temp_data.wr_parent, writer_id: widget.info.mb_id,)
@@ -510,20 +508,21 @@ class _ViewpageState extends State<Viewpage>{
             child: Text(temp_title),
           ),
           actions: <Widget>[
+
             new FlatButton(
-              child: new Text("확인"),
+              child: new Text("취소",style: TextStyle(color:Colors.red),),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            new FlatButton(
+              child: new Text("확인",style: TextStyle(color: Colors.forestmk),),
               onPressed: (){
                 //print(flg_soldout);
                 if(flg_soldout ==1)
                   update_soldout(1);
                 else
                   update_soldout(2);
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
               },
             ),
           ],
@@ -1052,6 +1051,7 @@ class _ViewpageState extends State<Viewpage>{
         ),
       ),
       onTap: ()async{
+        print(temp_data.mb_id);
         var result = await Navigator.push(context, MaterialPageRoute(
             builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id, mb_id:temp_data.mb_id)
         ));
@@ -1388,41 +1388,41 @@ class _ViewpageState extends State<Viewpage>{
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          InkWell(
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              padding: EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(50)),
-                                  color: Color(0xfff3f3f3),
-                                  image: DecorationImage(//이미지 꾸미기
-                                      fit:BoxFit.cover,
-                                      image:widget.info.profile_img!=''?NetworkImage(widget.info.profile_img):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
-                                  )
+                      InkWell(
+                        child: Row(
+                          children: <Widget>[
+                             Container(
+                                width: 50,
+                                height: 50,
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                                    color: Color(0xfff3f3f3),
+                                    image: DecorationImage(//이미지 꾸미기
+                                        fit:BoxFit.cover,
+                                        image:widget.info.profile_img!=''?NetworkImage(widget.info.profile_img):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
+                                    )
                               ),
                             ),
-                            onTap: (){
-                              if(real_mbid!='')
-                              show_block();
-                              else{
-                                request_logindialog();
-                              }
-                            },
-                          ),
-                          SizedBox(width: 3,),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(widget.info.mb_name==null?'test':widget.info.mb_name,style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
-                              SizedBox(height: 8,),
-                              Text(widget.info==null?'test':widget.info.ca_name=='업체'?widget.info.wr_11:widget.info.mb_2,style: TextStyle(fontSize: 12)),
-                            ],
-                          ),
-                        ],
+                            SizedBox(width: 3,),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(widget.info.mb_name==null?'test':widget.info.mb_name,style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
+                                SizedBox(height: 8,),
+                                Text(widget.info==null?'test':widget.info.ca_name=='업체'?widget.info.wr_11:widget.info.mb_2,style: TextStyle(fontSize: 12)),
+                              ],
+                            ),
+                          ],
+                        ),
+                        onTap: (){
+                          if(real_mbid!='')
+                            show_block();
+                          else{
+                            request_logindialog();
+                          }
+                        },
                       ),
 
                       Row(
@@ -1506,10 +1506,13 @@ class _ViewpageState extends State<Viewpage>{
                 ),
                 widget.info.ca_name=='업체'?
                 Container(
-
+                  padding: EdgeInsets.only(left: 15,),
+                  width: MediaQuery.of(context).size.width,
+                  height:MediaQuery.of(context).size.height*0.02,
+                  child:Text(widget.info.wr_5)
                 ):Container(),
                 Container(
-                  padding: EdgeInsets.only(left: 15,right: 15,top: 10, bottom: 10),
+                  padding: EdgeInsets.only(left: 15,right: 15, bottom: 10),
                   height: MediaQuery.of(context).size.height*0.1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1518,7 +1521,7 @@ class _ViewpageState extends State<Viewpage>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(widget.info.wr_subject==null?'teest':widget.info.wr_subject,style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),),
+                          Text(widget.info.wr_subject==null?'test':widget.info.wr_subject,style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),),
                           SizedBox(height: MediaQuery.of(context).size.height*0.012,),
                           Row(
                             children:<Widget>[
@@ -1572,11 +1575,15 @@ class _ViewpageState extends State<Viewpage>{
                     ],
                   ),
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.height*0.2+content_size,
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.032,right: MediaQuery.of(context).size.width*0.032),
-                  child: Text(widget.info.wr_content==null?'test':widget.info.wr_content.trimRight(),style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
-                ),
+
+          Container(
+            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.032,right: MediaQuery.of(context).size.width*0.032),
+            child: Wrap(
+                    children :[
+                      Text(widget.info.wr_content==null?'test':widget.info.wr_content.trimRight(),style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
+                    ]
+                  ),
+          ),
                 Container(
                   height: MediaQuery.of(context).size.height*0.05,
                   padding: EdgeInsets.only(left: 10),

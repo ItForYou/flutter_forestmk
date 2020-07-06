@@ -24,7 +24,6 @@ class my_items extends StatefulWidget {
   String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id,mb_pwd,title;
   my_items({Key key, this.title,this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id,this.mb_pwd}) : super(key: key);
 
-
   @override
   _my_itemsState createState() => _my_itemsState();
 }
@@ -164,7 +163,6 @@ class _my_itemsState extends State<my_items> {
     }
   }
 
-
   Future<dynamic> delete_recent() async{
 
     List <String> checked_id=[];
@@ -199,6 +197,8 @@ class _my_itemsState extends State<my_items> {
     var temp_data = main_item.fromJson(itemdata['data'][id]);
 
     String temp_price;
+    String temp_wrcontent;
+
     if(temp_data.ca_name =='업체'){
       temp_price=temp_data.wr_subject;
     }
@@ -210,192 +210,217 @@ class _my_itemsState extends State<my_items> {
       temp_price=fmf.withoutFractionDigits.toString()+'원';
     }
 
+    if(temp_data.ca_name=='업체'){
+      temp_wrcontent = temp_data.wr_content.replaceAll('\n','              ');
+      if(temp_wrcontent.length<15){
+
+      }
+      else{
+        temp_wrcontent = temp_wrcontent.substring(0,12)+"···";
+      }
+    }
+
     Container temp =
     Container(
         height: 100,
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border(
-                bottom: BorderSide(color: Color(0xffdddddd), width: 2)
+                bottom: BorderSide(color: Color(0xffdddddd), width: 1)
             )
         ),
         padding: EdgeInsets.only(left: 10,right: 20,top:10,bottom: 10),
-        child: InkWell(
-
-          child: Row(
+        child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(
-                  children: <Widget>[
-
-                    InkWell(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width*0.055,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.white
-                        ),
-                        margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.03),
-                        alignment: Alignment.center,
+              InkWell(
+                child: Row(
+                    children: <Widget>[
+                      InkWell(
                         child: Container(
-                          width: 20,
-                          height: 20,
-                         decoration: BoxDecoration(
-                             color:Color(0xffeeeeee),
-                             borderRadius: BorderRadius.all(Radius.circular(5))
-                         ),
+                          width: MediaQuery.of(context).size.width*0.055,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            color: Colors.white
+                          ),
+                          margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.03),
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                           decoration: BoxDecoration(
+                               color:Color(0xffeeeeee),
+                               borderRadius: BorderRadius.all(Radius.circular(5))
+                           ),
 
-                          child: Theme(
-                            data: ThemeData(
-                                unselectedWidgetColor: Color(0xffeeeeee),
-                            ),
-                            child: Checkbox(
-                              value: checkbox_values[id],
-                              activeColor: Colors.black12,
-                              onChanged: (bool value){
-                                setState(() {
-                                  checkbox_values[id] = value;
-                                  _getWidget();
-                                });
-                              },
+                            child: Theme(
+                              data: ThemeData(
+                                  unselectedWidgetColor: Color(0xffeeeeee),
+                              ),
+                              child: Checkbox(
+                                value: checkbox_values[id],
+                                activeColor: Colors.black12,
+                                onChanged: (bool value){
+                                  setState(() {
+                                    checkbox_values[id] = value;
+                                    _getWidget();
+                                  });
+                                },
+                              ),
                             ),
                           ),
                         ),
+                        onTap: (){
+                          setState(() {
+                            checkbox_values[id] = !checkbox_values[id];
+                            _getWidget();
+                          });
+                        },
                       ),
-                      onTap: (){
-                        setState(() {
-                          checkbox_values[id] = !checkbox_values[id];
-                          _getWidget();
+                      InkWell(
+                        child: Hero(
+                          tag: "hero"+id.toString(),
+                          child:
+                          temp_data.wr_9!='거래완료'?
+                          Container(
+                            width: MediaQuery.of(context).size.width*0.225,
+                            height: MediaQuery.of(context).size.width*0.2,
 
-                        });
-                      },
-                    ),
-
-                    InkWell(
-                      child: Hero(
-                        tag: "hero"+id.toString(),
-                        child:
-                        temp_data.wr_9!='거래완료'?
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.225,
-                          height: MediaQuery.of(context).size.width*0.2,
-
-                          decoration: BoxDecoration(
-                              border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
-                              borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.015)),
-                              image: DecorationImage(//이미지 꾸미기
-                                  fit:BoxFit.cover,
-                                  image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
-                              )
-                          ),
-                        ):Stack(
-                            children: <Widget>[
-                              Container(
-                                width: MediaQuery.of(context).size.width*0.225,
-                                height: MediaQuery.of(context).size.height*0.2,
-
-                                decoration: BoxDecoration(
-                                    border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
-                                    borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
-                                    image: DecorationImage(//이미지 꾸미기
-                                        fit:BoxFit.fitWidth,
-                                        image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
-                                    )
-                                ),
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width*0.225,
-                                height: MediaQuery.of(context).size.height*0.2,
-                                decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.8)
-                                ),
-                                child: Center(
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width*0.225,
-                                    height: MediaQuery.of(context).size.height*0.04,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white
-                                    ),
-                                    child: Center(child: Text("판매완료")),
+                            decoration: BoxDecoration(
+                                border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
+                                borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.015)),
+                                image: DecorationImage(//이미지 꾸미기
+                                    fit:BoxFit.cover,
+                                    image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                                )
+                            ),
+                          ):Stack(
+                              children: <Widget>[
+                                Container(
+                                  width: MediaQuery.of(context).size.width*0.225,
+                                  height: MediaQuery.of(context).size.height*0.2,
+                                  decoration: BoxDecoration(
+                                      border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
+                                      borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
+                                      image: DecorationImage(//이미지 꾸미기
+                                          fit:BoxFit.fitWidth,
+                                          image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                                      )
                                   ),
                                 ),
-                              )
-                            ]
+                                Container(
+                                  width: MediaQuery.of(context).size.width*0.225,
+                                  height: MediaQuery.of(context).size.height*0.2,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.8)
+                                  ),
+                                  child: Center(
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width*0.225,
+                                      height: MediaQuery.of(context).size.height*0.04,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white
+                                      ),
+                                      child: Center(child: Text("판매완료")),
+                                    ),
+                                  ),
+                                )
+                              ]
+                          ),
                         ),
-                      ),
-                      onTap: ()async{
-                        var result = await Navigator.push(context, PageRouteBuilder(
-                          transitionDuration: Duration(milliseconds: 800),
-                          pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
-                        ));
-                        if(result == 'delete'){
-                          get_data();
-                        }
+                        onTap: ()async{
+                          var result = await Navigator.push(context, PageRouteBuilder(
+                            transitionDuration: Duration(milliseconds: 800),
+                            pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+                          ));
+                          if(result == 'delete'){
+                            get_data();
+                          }
 //        Navigator.push(context,MaterialPageRoute(
 //            builder:(context) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,)
 //        ));
-                      },
-                    ),
-                    SizedBox(width: 10,),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
-                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                        Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: FontWeight.bold),),
-                        SizedBox(height: MediaQuery.of(context).size.height*0.005,),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        },
+                      ),
+                      SizedBox(width: 10,),
+                      InkWell(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-
-                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025,color:Color(0xff444444))),
-                            SizedBox(width: MediaQuery.of(context).size.width*0.005,),
-                            Container(
-                              width: MediaQuery.of(context).size.width*0.01,
-                              height: MediaQuery.of(context).size.width*0.01,
-                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
-                                  color: Colors.forestmk
-                              ),
+                            SizedBox(height: MediaQuery.of(context).size.height*0.003,),
+                            Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                            SizedBox(height: MediaQuery.of(context).size.height*0.003,),
+                            Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name!='업체'?MediaQuery.of(context).size.width*0.035:MediaQuery.of(context).size.width*0.03,fontWeight: temp_data.ca_name=='업체'?null:FontWeight.bold),),
+                            SizedBox(height: MediaQuery.of(context).size.height*0.005,),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025,color:Color(0xff444444))),
+                                SizedBox(width: MediaQuery.of(context).size.width*0.005,),
+                                Container(
+                                  width: MediaQuery.of(context).size.width*0.01,
+                                  height: MediaQuery.of(context).size.width*0.01,
+                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                                      color: Colors.forestmk
+                                  ),
+                                ),
+                                Text(temp_data.timegap,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                              ],
                             ),
-                            Text(temp_data.timegap,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
-
+                            SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
+                            Row(
+                              children: <Widget>[
+                                Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                                Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
+                                Container(
+                                  width: MediaQuery.of(context).size.width*0.01,
+                                  height: MediaQuery.of(context).size.width*0.01,
+                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                                      color: Colors.forestmk
+                                  ),
+                                ),
+                                Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
+                                Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
+                                Container(
+                                  width: MediaQuery.of(context).size.width*0.01,
+                                  height: MediaQuery.of(context).size.width*0.01,
+                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                                      color: Colors.forestmk
+                                  ),
+                                ),
+                                Image.asset("images/fa-comment.png",height: MediaQuery.of(context).size.height*0.018,),
+                                Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
+                              ],
+                            ),
                           ],
                         ),
-                        SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
-                        Row(
-                          children: <Widget>[
-                            Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
-                            Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
-                            Container(
-                              width: MediaQuery.of(context).size.width*0.01,
-                              height: MediaQuery.of(context).size.width*0.01,
-                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
-                                  color: Colors.forestmk
-                              ),
-                            ),
-                            Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
-                            Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
-                            Container(
-                              width: MediaQuery.of(context).size.width*0.01,
-                              height: MediaQuery.of(context).size.width*0.01,
-                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
-                                  color: Colors.forestmk
-                              ),
-                            ),
-                            Image.asset("images/fa-comment.png",height: MediaQuery.of(context).size.height*0.018,),
-                            Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
-                          ],
-                        ),
-                      ],
-                    ),]
+                        onTap: ()async{
+                          var result = await Navigator.push(context, PageRouteBuilder(
+                            transitionDuration: Duration(milliseconds: 800),
+                            pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+                          ));
+                          if(result == 'delete'){
+                            get_data();
+                          }
+                        },
+                      ),]
+                ),
+                onTap: ()async{
+                /*  var result = await Navigator.push(context, PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 800),
+                    pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+                  ));
+                  if(result == 'delete'){
+                    get_data();
+                  }*/
+                print("testclick!!");
+                },
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -419,11 +444,8 @@ class _my_itemsState extends State<my_items> {
                 ],
               ),
             ],
-          )
-          ,
-        ),
+          ),
       );
-
     return temp;
   }
 
@@ -458,10 +480,12 @@ class _my_itemsState extends State<my_items> {
                     if(result == 'success'){
                       // print(result);
                       _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
-                      Navigator.pop(bc);
                       get_data();
-
                     }
+                    else{
+                      get_data();
+                    }
+                    Navigator.pop(bc);
                   },
                 ),
                 InkWell(
@@ -496,7 +520,7 @@ class _my_itemsState extends State<my_items> {
     );
   }
 
-  void _showDialog() {
+  void show_deletealrt(){
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -505,19 +529,22 @@ class _my_itemsState extends State<my_items> {
           title:null,
           content: Container(
             height: MediaQuery.of(context).size.height*0.03,
-            child: Text("체크된 항목을 모두 삭제 하시겠습니까?"),
+            child: Text("선택한 게시물을 삭제하시겠습니까?"),
           ),
           actions: <Widget>[
-            new FlatButton(
-              child: new Text("확인"),
-              onPressed: ()async {
 
+            new FlatButton(
+              child: new Text("취소",style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                Navigator.pop(context);
               },
             ),
             new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
+              child: new Text("확인"),
+              onPressed: ()async {
                 Navigator.pop(context);
+                var result = await delete_recent();
+                //print(result);
               },
             ),
           ],
@@ -529,8 +556,12 @@ class _my_itemsState extends State<my_items> {
   Future<dynamic> get_data() async{
 
     String url ="";
+
     if(widget.title=="최근 본 글"){
        url="http://14.48.175.177/get_myrecent.php";
+    }
+    else if(widget.title=="나의광고"){
+      url="http://14.48.175.177/get_myadv.php";
     }
     else{
        url="http://14.48.175.177/get_mywrite.php";
@@ -610,10 +641,10 @@ class _my_itemsState extends State<my_items> {
                       .width * 0.05, top: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.01, bottom: MediaQuery
+                      .height * 0.016, bottom: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.01),
+                      .height * 0.016),
                   child: Image.asset("images/logo_name.png", fit: BoxFit.fill,),
                 ),
                 Row(
@@ -623,15 +654,15 @@ class _my_itemsState extends State<my_items> {
                         width: MediaQuery
                             .of(context)
                             .size
-                            .width * 0.09,
+                            .width * 0.085,
                         height: MediaQuery
                             .of(context)
                             .size
-                            .width * 0.09,
+                            .width * 0.085,
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon01.png"),
                       ),
@@ -648,7 +679,7 @@ class _my_itemsState extends State<my_items> {
                     SizedBox(width: MediaQuery
                         .of(context)
                         .size
-                        .width * 0.02,),
+                        .width * 0.03,),
                     InkWell(
                       child: Container(
                         width: MediaQuery
@@ -662,7 +693,7 @@ class _my_itemsState extends State<my_items> {
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon02.png"),
                       ),
@@ -685,7 +716,7 @@ class _my_itemsState extends State<my_items> {
                     SizedBox(width: MediaQuery
                         .of(context)
                         .size
-                        .width * 0.02,),
+                        .width * 0.03,),
                     InkWell(
                       child: Container(
                         width: MediaQuery
@@ -699,7 +730,7 @@ class _my_itemsState extends State<my_items> {
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon03.png"),
                       ),
@@ -1138,7 +1169,6 @@ class _my_itemsState extends State<my_items> {
                             Text(widget.title ,style: TextStyle(fontSize:MediaQuery.of(context).size.width*0.04)),
                         Row(
                           children: <Widget>[
-
                             InkWell(
                                 child: Text("모두선택",style: TextStyle(color: Colors.forestmk),),
                                 onTap: (){
@@ -1161,11 +1191,11 @@ class _my_itemsState extends State<my_items> {
                                 },
                             ),
                             SizedBox(width:  MediaQuery.of(context).size.width*0.03,),
+
                             InkWell(
                                 child: Text("지우기",style: TextStyle(color: Colors.forestmk),),
-                                onTap: ()async{
-                                  var result = await delete_recent();
-                                  print(result);
+                                onTap: (){
+                                  show_deletealrt();
                                 },
                             ),
                           ],

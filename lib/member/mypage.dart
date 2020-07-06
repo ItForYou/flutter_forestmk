@@ -81,8 +81,15 @@ class _mypageState extends State<mypage> {
             child: Text("로그아웃 하시겠습니까?"),
           ),
           actions: <Widget>[
+
             new FlatButton(
-              child: new Text("확인"),
+              child: new Text("취소",style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            new FlatButton(
+              child: new Text("확인",style: TextStyle(color: Colors.forestmk),),
               onPressed: ()async {
                 Navigator.pop(context);
                 SharedPreferences sp = await SharedPreferences.getInstance();
@@ -90,12 +97,6 @@ class _mypageState extends State<mypage> {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => MyApp()),
                         (Route<dynamic> route) => false);
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
               },
             ),
           ],
@@ -266,7 +267,7 @@ class _mypageState extends State<mypage> {
                         ),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
-                              builder:(context) => search_main(title:"나의광고",sch_flgmyadv: "1", mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                              builder:(context) => my_items(title:"광고중인 게시글", mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                           ));
                         },
                       ),
@@ -290,7 +291,6 @@ class _mypageState extends State<mypage> {
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width*0.01,),
                         Text("나의 위치 설정",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),)
-
                       ],
                     ),
                   ),

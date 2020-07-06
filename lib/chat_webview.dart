@@ -46,7 +46,8 @@ class _chat_webviewState extends State<chat_webview> {
         flutterWebViewPlugin.evalJavascript("javascript:leavepage();");
       }
       else {
-        Navigator.pop(context);
+        print("back!!");
+       Navigator.pop(context);
       }
     }
   }
@@ -58,16 +59,17 @@ class _chat_webviewState extends State<chat_webview> {
    // print(widget.url);
     flutterWebViewPlugin.close();
     flutterWebViewPlugin.onBack.listen((_){
-      presed_bak();
+      print("back2!!");
+     // presed_bak();
     });
     _onUrlChanged = flutterWebViewPlugin.onUrlChanged.listen((String url) {
       if (mounted) {
         if(!url.contains("chatting") && !url.contains("mb_id") ){
             presed_bak();
-            //print("urlchange: "+url);
+            print("back1!!");
+           // print("urlchange: "+url);
             flutterWebViewPlugin.close();
           }
-
         else {
           setState(() {
             current_url = url;
@@ -82,6 +84,7 @@ class _chat_webviewState extends State<chat_webview> {
 
     return WillPopScope(
       onWillPop: (){
+        //print("back3!!");
         presed_bak();
       },
       child:Scaffold(
@@ -103,7 +106,6 @@ class _chat_webviewState extends State<chat_webview> {
                   presed_bak();
                 }
             ),
-
           ]),
         ),
       )

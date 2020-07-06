@@ -157,8 +157,8 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
           width: MediaQuery.of(context).size.width*0.1,
           height: MediaQuery.of(context).size.width*0.1,
           child: FloatingActionButton(
-            backgroundColor: Colors.black,
-            child:Icon(Icons.arrow_upward,color: Colors.white,),
+            backgroundColor: Colors.white,
+            child:Icon(Icons.arrow_upward,color: Colors.black,),
           ),
         ),
         onTap: (){
@@ -815,6 +815,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
           child: AppBar(
             title: null,
             elevation: 0.0,
+            leading: new Container(),
             backgroundColor: Colors.white,
             actions: <Widget>[
               Container(
@@ -955,7 +956,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon01.png"),
                       ),
@@ -986,7 +987,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon02.png"),
                       ),
@@ -1022,7 +1023,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon03.png"),
                       ),
@@ -1121,6 +1122,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
 //          borderRadius: BorderRadius.all(Radius.circular(50)),
 //          border: Border.all(color: Color(0xffcccccc))
 //      ),
+
         body:
           Column(
             children: <Widget>[

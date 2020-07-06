@@ -78,7 +78,7 @@ class _search_mainState extends State<search_main> {
             ),
             content: Container(
               width: MediaQuery.of(context).size.width,
-              height: widget.title!='광고'?MediaQuery.of(context).size.height*0.26:MediaQuery.of(context).size.height*0.2,
+              height: widget.title!='광고'?MediaQuery.of(context).size.height*0.35:MediaQuery.of(context).size.height*0.2,
               color: Colors.white,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,6 +122,9 @@ class _search_mainState extends State<search_main> {
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height*0.07,
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -186,13 +189,46 @@ class _search_mainState extends State<search_main> {
                       Navigator.pop(context);
                     },
                   ):SizedBox(),
-                  InkWell(
+                  widget.title!='광고'?InkWell(
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height*0.07,
                       decoration: BoxDecoration(
                           border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
                       ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("높은가격순"),
+                          Radio(
+                            value: "높은가격순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                sort_value = T;
+                                widget.sch_order = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: (){
+                      setState(() {
+                        sort_value = '높은가격순';
+                        widget.sch_order = '높은가격순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
+                  ):SizedBox(),
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.07,
+
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -319,7 +355,7 @@ class _search_mainState extends State<search_main> {
       //temp_price=temp_data.wr_1+'원';
     }
 
-    if(widget.title=='광고'){
+    if(temp_data.ca_name=='업체'){
       temp_wrcontent = temp_data.wr_content.replaceAll('\n','              ');
       if(temp_wrcontent.length<15){
 
@@ -403,9 +439,9 @@ class _search_mainState extends State<search_main> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: widget.title=='광고'?FontWeight.bold:null),),
+                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: temp_data.ca_name=='업체'?FontWeight.bold:null),),
                         SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                        Text(widget.title=='광고'?temp_wrcontent:temp_price, style: TextStyle(fontSize: widget.title!='광고'?MediaQuery.of(context).size.width*0.035:MediaQuery.of(context).size.width*0.03,fontWeight: widget.title!='광고'?FontWeight.bold:null),),
+                        Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name!='업체'?MediaQuery.of(context).size.width*0.035:MediaQuery.of(context).size.width*0.03,fontWeight: temp_data.ca_name!='업체'?FontWeight.bold:null),),
                         SizedBox(height: MediaQuery.of(context).size.height*0.005,),
                         Row(
                           children: <Widget>[
@@ -556,9 +592,12 @@ class _search_mainState extends State<search_main> {
                     if(result == 'success'){
                       // print(result);
                       _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
-                      Navigator.pop(bc);
                       get_data();
                     }
+                    else{
+                      get_data();
+                    }
+                    Navigator.pop(bc);
                   },
                 ),
               ],
@@ -576,8 +615,8 @@ class _search_mainState extends State<search_main> {
           width: MediaQuery.of(context).size.width*0.1,
           height: MediaQuery.of(context).size.width*0.1,
           child: FloatingActionButton(
-            backgroundColor: Colors.black,
-            child:Icon(Icons.arrow_upward,color: Colors.white,),
+            backgroundColor: Colors.white,
+            child:Icon(Icons.arrow_upward,color: Colors.black,),
           ),
         ),
         onTap: (){
@@ -723,10 +762,10 @@ class _search_mainState extends State<search_main> {
                       .width * 0.05, top: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.01, bottom: MediaQuery
+                      .height * 0.016, bottom: MediaQuery
                       .of(context)
                       .size
-                      .height * 0.01),
+                      .height * 0.016),
                   child: Image.asset("images/logo_name.png", fit: BoxFit.fill,),
                 ),
                 Row(
@@ -736,15 +775,15 @@ class _search_mainState extends State<search_main> {
                         width: MediaQuery
                             .of(context)
                             .size
-                            .width * 0.09,
+                            .width * 0.085,
                         height: MediaQuery
                             .of(context)
                             .size
-                            .width * 0.09,
+                            .width * 0.085,
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon01.png"),
                       ),
@@ -761,7 +800,7 @@ class _search_mainState extends State<search_main> {
                     SizedBox(width: MediaQuery
                         .of(context)
                         .size
-                        .width * 0.02,),
+                        .width * 0.03,),
                     InkWell(
                       child: Container(
                         width: MediaQuery
@@ -775,7 +814,7 @@ class _search_mainState extends State<search_main> {
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon02.png"),
                       ),
@@ -798,7 +837,7 @@ class _search_mainState extends State<search_main> {
                     SizedBox(width: MediaQuery
                         .of(context)
                         .size
-                        .width * 0.02,),
+                        .width * 0.03,),
                     InkWell(
                       child: Container(
                         width: MediaQuery
@@ -812,7 +851,7 @@ class _search_mainState extends State<search_main> {
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffcccccc))
+                            border: Border.all(color: Color(0xffeeeeee))
                         ),
                         child: Image.asset("images/hd_icon03.png"),
                       ),

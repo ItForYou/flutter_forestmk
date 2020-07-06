@@ -243,7 +243,7 @@ class _loginpageState extends State<loginpage>{
                     Container(
                       width: MediaQuery.of(context).size.width*0.7,
                       child: InkWell(
-                        child: Text("아이디/비밀번호 찾기",textAlign: TextAlign.right,style: TextStyle(fontSize:MediaQuery.of(context).size.height*0.018,decoration: TextDecoration.underline,color: Colors.black, fontWeight: FontWeight.bold),),
+                        child: Text("아이디/비밀번호 찾기",textAlign: TextAlign.right,style: TextStyle(fontSize:MediaQuery.of(context).size.height*0.018,color: Colors.black, fontWeight: FontWeight.bold),),
                         onTap: (){
                           Navigator.push(context,MaterialPageRoute(
                               builder:(context) => search_info()
@@ -255,7 +255,7 @@ class _loginpageState extends State<loginpage>{
                       child: Container(
                         margin: EdgeInsets.only(top:  MediaQuery.of(context).size.height*0.01,),
                         width: MediaQuery.of(context).size.width*0.7,
-                          child: Text("숲마켓 회원가입", textAlign: TextAlign.right,style: TextStyle(fontSize:MediaQuery.of(context).size.height*0.018,decoration: TextDecoration.underline,color: Colors.black, fontWeight: FontWeight.bold),),
+                          child: Text("회원가입", textAlign: TextAlign.right,style: TextStyle(fontSize:MediaQuery.of(context).size.height*0.018,color: Colors.black, fontWeight: FontWeight.bold),),
                       ),
                       onTap: () {
                         Navigator.push(context,MaterialPageRoute(
