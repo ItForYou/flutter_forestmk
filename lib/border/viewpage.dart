@@ -182,6 +182,24 @@ class _ViewpageState extends State<Viewpage>{
                       }
                     },
                 ),
+                SizedBox(width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.02,),
+                InkWell(
+                  child: Text("신고하기", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.015),),
+                  onTap: (){
+                    setState(() {
+                      if(real_mbid!=null && real_mbid !='') {
+                        seleted_comm_wrid = temp_data.wr_id;
+                        show_declarecomm();
+                      }
+                      else{
+                        request_logindialog();
+                      }
+                    });
+                  },
+                ),
                 (temp_data.mb_id==real_mbid) || real_mbid == "admin"?
                 SizedBox(width: MediaQuery
                     .of(context)
@@ -189,7 +207,7 @@ class _ViewpageState extends State<Viewpage>{
                     .width * 0.02,):SizedBox(),
                 (temp_data.mb_id==real_mbid) || (real_mbid=="admin")?
                 InkWell(
-                    child: Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),),
+                    child: Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.015),),
                     onTap: (){
                       setState(() {
                         seleted_comm_wrid = temp_data.wr_id;
@@ -208,7 +226,7 @@ class _ViewpageState extends State<Viewpage>{
                     .width * 0.02,):SizedBox(),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
                 InkWell(
-                    child: Text("삭제", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),
+                    child: Text("삭제", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.015),
                     ),
                   onTap: (){
                     show_deletecmmt(temp_data.wr_id);
@@ -487,7 +505,36 @@ class _ViewpageState extends State<Viewpage>{
     );
   }
 
+  void show_declarecomm() {
 
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.03,
+            child: Text("이 댓글을 신고하시겠습니까?"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("취소",style: TextStyle(color:Colors.red),),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            new FlatButton(
+              child: new Text("확인",style: TextStyle(color: Colors.forestmk),),
+              onPressed: (){
+                declare_comm(seleted_comm_wrid);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void show_soldout() {
     String temp_title = "";
@@ -951,6 +998,24 @@ class _ViewpageState extends State<Viewpage>{
 
   }
 
+  Future<dynamic> declare_comm(id) async{
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/update_declarecomm.php'),
+        body: {
+          "wr_commid":id,
+          "wr_id":widget.info.wr_id,
+          "mb_id":real_mbid,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+    if(response.statusCode==200){
+      Navigator.pop(context);
+      show_Alert("신고가 완료되었습니다.", 1);
+    }
+
+  }
+
   Future<dynamic> update_block(popcontext) async{
 
     final response = await http.post(
@@ -962,11 +1027,13 @@ class _ViewpageState extends State<Viewpage>{
         },
         headers: {'Accept' : 'application/json'}
     );
+
     if(response.statusCode==200){
      // show_Alert("선택한 회원이 차단되었습니다.", 1);
       Navigator.pop(popcontext);
       show_Alert("선택한 회원이 차단되었습니다.", 1);
     }
+
   }
 
   Future<dynamic> update_soldout(flg) async{

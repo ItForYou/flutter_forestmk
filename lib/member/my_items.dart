@@ -179,6 +179,7 @@ class _my_itemsState extends State<my_items> {
 
     request.fields['mb_id'] = widget.mb_id;
     request.fields['title'] = widget.title;
+
     for(int i=0; i<checked_id.length; i++){
       request.fields['wr_id['+i.toString()+']'] = checked_id[i];
     }

@@ -221,23 +221,23 @@ class _chk_writeadState extends State<chk_writead> {
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
                           child:
-                          get_textbox("광고가 관련 법령을 위반하는 상점, 상품 또는 서비스를 홍보함"),
+                          get_textbox("광고가 관련 법령을 위반하는 상점, 상품 또는 서비스를 홍보"),
                         ),
 
                       ],
                     ),
-                    get_textbox("으로써 회사가 민.형사적 책임을 부담할 가능성이 있는경우"),
+                    get_textbox("함으로써 회사가 민.형사적 책임을 부담할 가능성이 있는경우"),
                     Row(
                       children: <Widget>[
                         get_number("3"),
                         Container(
                           width: MediaQuery.of(context).size.width*0.8,
-                          child: get_textbox("광고가 관련 법령을 위반하는 회원의 영업행위 들에 연계됨으"),
+                          child: get_textbox("광고가 관련 법령을 위반하는 회원의 영업행위 들에 연계됨"),
                         ),
 
                       ],
                     ),
-                    get_textbox("로써 회사가 민.형사적 책임을 부담할 가능성이 있는 경우"),
+                    get_textbox("으로써 회사가 민.형사적 책임을 부담할 가능성이 있는 경우"),
                     SizedBox(height: MediaQuery.of(context).size.height*0.06,),
                     Text(
                       "ex대표적인 사례들",

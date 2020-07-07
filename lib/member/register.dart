@@ -115,35 +115,52 @@ class _registerState extends State<register> {
   }
 
   Future<String> request_number() async {
-    try {
 
-      var request = http.MultipartRequest('POST', Uri.parse("http://14.48.175.177/bbs/ajax.send_number.php"));
-      var random = Random();
-      String temp_number = "";
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/check_hp.php'),
+        body: {
+          "value":input_ph.text,
+        },
+        headers: {'Accept': 'application/json'}
+    );
 
-      for(int i=0; i<6; i++){
-        temp_number += random.nextInt(9).toString();
-      }
+    int temp_conut = int.parse(response.body);
 
-      request.fields['msg'] = temp_number;
-      request.fields['hp'] = input_ph.text;
+    if(temp_conut>0) {
+      show_Alert("이미 이번호는 가입이 되었습니다.", 1);
+      return '';
+    }
+    else{
+      try {
+        var request = http.MultipartRequest(
+            'POST', Uri.parse("http://14.48.175.177/bbs/ajax.send_number.php"));
+        var random = Random();
+        String temp_number = "";
 
-    /*  if (profile_img != null) {
+        for (int i = 0; i < 6; i++) {
+          temp_number += random.nextInt(9).toString();
+        }
+
+        request.fields['msg'] = temp_number;
+        request.fields['hp'] = input_ph.text;
+
+        /*  if (profile_img != null) {
         request.files.add(
             await http.MultipartFile.fromPath('profile', profile_img.path));
       }*/
 
-      var res = await request.send();
-      if (res.statusCode == 200) {
-        show_Alert("문자가 발송되었습니다.",1);
-        flg_readonly_hp = true;
-        flg_certihp=0;
-        sended_number = temp_number;
-        request_certification=1;
-        // return res.stream.bytesToString();
+        var res = await request.send();
+        if (res.statusCode == 200) {
+          show_Alert("문자가 발송되었습니다.", 1);
+          flg_readonly_hp = true;
+          flg_certihp = 0;
+          sended_number = temp_number;
+          request_certification = 1;
+          // return res.stream.bytesToString();
+        }
+      } catch (e) {
+        print(e.toString());
       }
-    }catch(e){
-      print(e.toString());
     }
   }
 

@@ -23,6 +23,7 @@ class _chat_webviewState extends State<chat_webview> {
 
 
   void presed_bak(){
+    print(current_url);
       //구글 웹뷰 사용시
        /*   if(widget.view ==1){
             Navigator.pop(context);
@@ -42,11 +43,12 @@ class _chat_webviewState extends State<chat_webview> {
       Navigator.pop(context);
     }
     else {
+     // print("excute_javascript");
       if (current_url.contains("chatting.php")) {
+       print("excute_javascript");
         flutterWebViewPlugin.evalJavascript("javascript:leavepage();");
       }
       else {
-        print("back!!");
        Navigator.pop(context);
       }
     }
@@ -59,8 +61,8 @@ class _chat_webviewState extends State<chat_webview> {
    // print(widget.url);
     flutterWebViewPlugin.close();
     flutterWebViewPlugin.onBack.listen((_){
-      print("back2!!");
-     // presed_bak();
+     // print("back2!!");
+      presed_bak();
     });
     _onUrlChanged = flutterWebViewPlugin.onUrlChanged.listen((String url) {
       if (mounted) {
