@@ -282,6 +282,8 @@ class writead_State extends State<write_ad> {
     var res = await request.send();
     if (res.statusCode == 200) {
       //return res.stream.bytesToString();
+      if(widget.info==null)
+        Navigator.pop(context);
 
       Navigator.pop(context);
       Navigator.pop(context,"success");

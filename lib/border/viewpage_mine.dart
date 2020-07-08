@@ -108,6 +108,55 @@ class _ViewpagemineState extends State<Viewpage_mine>{
     );
   }
 
+  void show_declarecomm() {
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.03,
+            child: Text("이 댓글을 신고하시겠습니까?"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("취소",style: TextStyle(color:Colors.red),),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            new FlatButton(
+              child: new Text("확인",style: TextStyle(color: Colors.forestmk),),
+              onPressed: (){
+                declare_comm(seleted_comm_wrid);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<dynamic> declare_comm(id) async{
+
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/update_declarecomm.php'),
+        body: {
+          "wr_commid":id,
+          "wr_id":itemdata_now!=null?itemdata_now['wr_id']:'',
+          "mb_id":real_mbid,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+    if(response.statusCode==200){
+      Navigator.pop(context);
+      show_Alert("신고가 완료되었습니다.", 1);
+    }
+
+  }
+
   void add_widget_comments(){
     widget_comments.clear();
 
@@ -228,6 +277,24 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     if(result == 'reply'){
                       get_comment();
                     }
+                  },
+                ),
+                SizedBox(width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.02,),
+                InkWell(
+                  child: Text("신고하기", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.015),),
+                  onTap: (){
+                    setState(() {
+                      if(real_mbid!=null && real_mbid !='') {
+                        seleted_comm_wrid = temp_data.wr_id;
+                        show_declarecomm();
+                      }
+                      else{
+                        request_logindialog();
+                      }
+                    });
                   },
                 ),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?

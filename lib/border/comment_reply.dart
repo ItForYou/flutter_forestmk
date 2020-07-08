@@ -73,9 +73,11 @@ class _comment_replyState extends State<comment_reply> {
         },
         headers: {'Accept' : 'application/json'}
     );
+
     if(response.statusCode==200){
       get_data();
     }
+
   }
 
   void add_items(){
@@ -256,10 +258,12 @@ class _comment_replyState extends State<comment_reply> {
         },
         headers: {'Accept' : 'application/json'}
     );
+
     if(response.statusCode==200){
       //print(response.body);
       get_data();
     }
+
   }
 
   @override

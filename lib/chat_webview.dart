@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class chat_webview extends StatefulWidget {
 
@@ -62,7 +63,9 @@ class _chat_webviewState extends State<chat_webview> {
     flutterWebViewPlugin.close();
     flutterWebViewPlugin.onBack.listen((_){
      // print("back2!!");
-      presed_bak();
+      if (current_url.contains("chatting.php")) {
+        presed_bak();
+      }
     });
     _onUrlChanged = flutterWebViewPlugin.onUrlChanged.listen((String url) {
       if (mounted) {
@@ -98,7 +101,6 @@ class _chat_webviewState extends State<chat_webview> {
           url: widget.url,
           withJavascript: true,
           withZoom: false,
-
           withLocalStorage: true,
          // hidden: true,
           javascriptChannels: Set.from([

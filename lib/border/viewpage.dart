@@ -1269,6 +1269,7 @@ class _ViewpageState extends State<Viewpage>{
   }
 
   Future<dynamic> get_data() async{
+
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/get_view.php'),
         body: {
@@ -1278,6 +1279,7 @@ class _ViewpageState extends State<Viewpage>{
         },
         headers: {'Accept' : 'application/json'}
     );
+
     setState(() {
       itemdata = jsonDecode(response.body);
       get_likeflg();
@@ -1354,7 +1356,7 @@ class _ViewpageState extends State<Viewpage>{
     path= widget.info.file;
     count_like=int.parse(widget.info.like);
 
-    if(widget.info.wr_9 =='거래완료') {
+    if(widget.info.wr_9 =='거래완료'){
       setState(() {
         txt_soldout ="거래완료";
         color_soldout=Color(0xffbebebe);

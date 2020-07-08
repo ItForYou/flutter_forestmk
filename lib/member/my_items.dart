@@ -231,221 +231,220 @@ class _my_itemsState extends State<my_items> {
             )
         ),
         padding: EdgeInsets.only(left: 10,right: 20,top:10,bottom: 10),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              InkWell(
-                child: Row(
-                    children: <Widget>[
-                      InkWell(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width*0.055,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            color: Colors.white
-                          ),
-                          margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.03),
-                          alignment: Alignment.center,
+        child: InkWell(
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                  Row(
+                      children: <Widget>[
+                        InkWell(
                           child: Container(
-                            width: 20,
-                            height: 20,
-                           decoration: BoxDecoration(
-                               color:Color(0xffeeeeee),
-                               borderRadius: BorderRadius.all(Radius.circular(5))
-                           ),
+                            width: MediaQuery.of(context).size.width*0.055,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: Colors.white
+                            ),
+                            margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.03),
+                            alignment: Alignment.center,
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                             decoration: BoxDecoration(
+                                 color:Color(0xffeeeeee),
+                                 borderRadius: BorderRadius.all(Radius.circular(5))
+                             ),
 
-                            child: Theme(
-                              data: ThemeData(
-                                  unselectedWidgetColor: Color(0xffeeeeee),
-                              ),
-                              child: Checkbox(
-                                value: checkbox_values[id],
-                                activeColor: Colors.black12,
-                                onChanged: (bool value){
-                                  setState(() {
-                                    checkbox_values[id] = value;
-                                    _getWidget();
-                                  });
-                                },
+                              child: Theme(
+                                data: ThemeData(
+                                    unselectedWidgetColor: Color(0xffeeeeee),
+                                ),
+                                child: Checkbox(
+                                  value: checkbox_values[id],
+                                  activeColor: Colors.black12,
+                                  onChanged: (bool value){
+                                    setState(() {
+                                      checkbox_values[id] = value;
+                                      _getWidget();
+                                    });
+                                  },
+                                ),
                               ),
                             ),
                           ),
+                          onTap: (){
+                            setState(() {
+                              checkbox_values[id] = !checkbox_values[id];
+                              _getWidget();
+                            });
+                          },
                         ),
-                        onTap: (){
-                          setState(() {
-                            checkbox_values[id] = !checkbox_values[id];
-                            _getWidget();
-                          });
-                        },
-                      ),
-                      InkWell(
-                        child: Hero(
-                          tag: "hero"+id.toString(),
-                          child:
-                          temp_data.wr_9!='거래완료'?
-                          Container(
-                            width: MediaQuery.of(context).size.width*0.225,
-                            height: MediaQuery.of(context).size.width*0.2,
+                        InkWell(
+                          child: Hero(
+                            tag: "hero"+id.toString(),
+                            child:
+                            temp_data.wr_9!='거래완료'?
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.225,
+                              height: MediaQuery.of(context).size.width*0.2,
 
-                            decoration: BoxDecoration(
-                                border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
-                                borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.015)),
-                                image: DecorationImage(//이미지 꾸미기
-                                    fit:BoxFit.cover,
-                                    image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
-                                )
-                            ),
-                          ):Stack(
-                              children: <Widget>[
-                                Container(
-                                  width: MediaQuery.of(context).size.width*0.225,
-                                  height: MediaQuery.of(context).size.height*0.2,
-                                  decoration: BoxDecoration(
-                                      border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
-                                      borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
-                                      image: DecorationImage(//이미지 꾸미기
-                                          fit:BoxFit.fitWidth,
-                                          image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
-                                      )
-                                  ),
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width*0.225,
-                                  height: MediaQuery.of(context).size.height*0.2,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.8)
-                                  ),
-                                  child: Center(
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width*0.225,
-                                      height: MediaQuery.of(context).size.height*0.04,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white
-                                      ),
-                                      child: Center(child: Text("판매완료")),
+                              decoration: BoxDecoration(
+                                  border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
+                                  borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.015)),
+                                  image: DecorationImage(//이미지 꾸미기
+                                      fit:BoxFit.cover,
+                                      image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                                  )
+                              ),
+                            ):Stack(
+                                children: <Widget>[
+                                  Container(
+                                    width: MediaQuery.of(context).size.width*0.225,
+                                    height: MediaQuery.of(context).size.height*0.2,
+                                    decoration: BoxDecoration(
+                                        border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
+                                        borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
+                                        image: DecorationImage(//이미지 꾸미기
+                                            fit:BoxFit.fitWidth,
+                                            image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                                        )
                                     ),
                                   ),
-                                )
-                              ]
+                                  Container(
+                                    width: MediaQuery.of(context).size.width*0.225,
+                                    height: MediaQuery.of(context).size.height*0.2,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.8)
+                                    ),
+                                    child: Center(
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width*0.225,
+                                        height: MediaQuery.of(context).size.height*0.04,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white
+                                        ),
+                                        child: Center(child: Text("판매완료")),
+                                      ),
+                                    ),
+                                  )
+                                ]
+                            ),
                           ),
-                        ),
-                        onTap: ()async{
-                          var result = await Navigator.push(context, PageRouteBuilder(
-                            transitionDuration: Duration(milliseconds: 800),
-                            pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
-                          ));
-                          if(result == 'delete'){
-                            get_data();
-                          }
+                          onTap: ()async{
+                            var result = await Navigator.push(context, PageRouteBuilder(
+                              transitionDuration: Duration(milliseconds: 800),
+                              pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+                            ));
+                            if(result == 'delete'){
+                              get_data();
+                            }
 //        Navigator.push(context,MaterialPageRoute(
 //            builder:(context) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,)
 //        ));
-                        },
-                      ),
-                      SizedBox(width: 10,),
-                      InkWell(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                            Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
-                            SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                            Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name!='업체'?MediaQuery.of(context).size.width*0.035:MediaQuery.of(context).size.width*0.03,fontWeight: temp_data.ca_name=='업체'?null:FontWeight.bold),),
-                            SizedBox(height: MediaQuery.of(context).size.height*0.005,),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025,color:Color(0xff444444))),
-                                SizedBox(width: MediaQuery.of(context).size.width*0.005,),
-                                Container(
-                                  width: MediaQuery.of(context).size.width*0.01,
-                                  height: MediaQuery.of(context).size.width*0.01,
-                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
-                                      color: Colors.forestmk
-                                  ),
-                                ),
-                                Text(temp_data.timegap,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
-                              ],
-                            ),
-                            SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
-                            Row(
-                              children: <Widget>[
-                                Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
-                                Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
-                                Container(
-                                  width: MediaQuery.of(context).size.width*0.01,
-                                  height: MediaQuery.of(context).size.width*0.01,
-                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
-                                      color: Colors.forestmk
-                                  ),
-                                ),
-                                Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
-                                Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
-                                Container(
-                                  width: MediaQuery.of(context).size.width*0.01,
-                                  height: MediaQuery.of(context).size.width*0.01,
-                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
-                                      color: Colors.forestmk
-                                  ),
-                                ),
-                                Image.asset("images/fa-comment.png",height: MediaQuery.of(context).size.height*0.018,),
-                                Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
-                              ],
-                            ),
-                          ],
+                          },
                         ),
-                        onTap: ()async{
-                          var result = await Navigator.push(context, PageRouteBuilder(
-                            transitionDuration: Duration(milliseconds: 800),
-                            pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
-                          ));
-                          if(result == 'delete'){
-                            get_data();
-                          }
-                        },
-                      ),]
-                ),
-                onTap: ()async{
-                /*  var result = await Navigator.push(context, PageRouteBuilder(
-                    transitionDuration: Duration(milliseconds: 800),
-                    pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
-                  ));
-                  if(result == 'delete'){
-                    get_data();
-                  }*/
-                print("testclick!!");
-                },
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    width: 40,
-                    height: 40,
-                    padding: EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                        //border: Border.all(color: Color(0xffcccccc)),
-                        color: Color(0xfff3f3f3),
-                        image: DecorationImage(//이미지 꾸미기
-                            fit:BoxFit.cover,
-                            image:temp_data.profile_img==''?AssetImage("images/wing_mb_noimg2.png"):NetworkImage(temp_data.profile_img)//이미지 가져오기
-                        )
-                    ),
+                        SizedBox(width: 10,),
+                        InkWell(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(height: MediaQuery.of(context).size.height*0.003,),
+                              Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
+                              SizedBox(height: MediaQuery.of(context).size.height*0.003,),
+                              Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name!='업체'?MediaQuery.of(context).size.width*0.035:MediaQuery.of(context).size.width*0.03,fontWeight: temp_data.ca_name=='업체'?null:FontWeight.bold),),
+                              SizedBox(height: MediaQuery.of(context).size.height*0.005,),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025,color:Color(0xff444444))),
+                                  SizedBox(width: MediaQuery.of(context).size.width*0.005,),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width*0.01,
+                                    height: MediaQuery.of(context).size.width*0.01,
+                                    margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                                        color: Colors.forestmk
+                                    ),
+                                  ),
+                                  Text(temp_data.timegap,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                                ],
+                              ),
+                              SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
+                              Row(
+                                children: <Widget>[
+                                  Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                                  Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width*0.01,
+                                    height: MediaQuery.of(context).size.width*0.01,
+                                    margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                                        color: Colors.forestmk
+                                    ),
+                                  ),
+                                  Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
+                                  Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width*0.01,
+                                    height: MediaQuery.of(context).size.width*0.01,
+                                    margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                                        color: Colors.forestmk
+                                    ),
+                                  ),
+                                  Image.asset("images/fa-comment.png",height: MediaQuery.of(context).size.height*0.018,),
+                                  Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          onTap: ()async{
+                            var result = await Navigator.push(context, PageRouteBuilder(
+                              transitionDuration: Duration(milliseconds: 800),
+                              pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+                            ));
+                            if(result == 'delete'){
+                              get_data();
+                            }
+                          },
+                        ),]
                   ),
-                  SizedBox(height: 6,),
-                  Text(temp_data.mb_name.length<5?temp_data.mb_name:temp_data.mb_name.substring(0,3)+"···",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),)
-                ],
-              ),
-            ],
-          ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: 40,
+                      height: 40,
+                      padding: EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          //border: Border.all(color: Color(0xffcccccc)),
+                          color: Color(0xfff3f3f3),
+                          image: DecorationImage(//이미지 꾸미기
+                              fit:BoxFit.cover,
+                              image:temp_data.profile_img==''?AssetImage("images/wing_mb_noimg2.png"):NetworkImage(temp_data.profile_img)//이미지 가져오기
+                          )
+                      ),
+                    ),
+                    SizedBox(height: 6,),
+                    Text(temp_data.mb_name.length<5?temp_data.mb_name:temp_data.mb_name.substring(0,3)+"···",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),)
+                  ],
+                ),
+              ],
+            ),
+          onTap: ()async{
+            var result = await Navigator.push(context, PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 800),
+              pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+            ));
+            if(result == 'delete'){
+              get_data();
+            }
+          },
+        ),
       );
     return temp;
   }
@@ -561,7 +560,7 @@ class _my_itemsState extends State<my_items> {
     if(widget.title=="최근 본 글"){
        url="http://14.48.175.177/get_myrecent.php";
     }
-    else if(widget.title=="나의광고"){
+    else if(widget.title=="광고중인 게시글"){
       url="http://14.48.175.177/get_myadv.php";
     }
     else{
