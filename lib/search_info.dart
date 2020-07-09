@@ -26,36 +26,44 @@ class _search_infoState extends State<search_info> {
 
   Future<dynamic> get_searchinfo() async{
 
-    final response = await http.post(
-        Uri.encodeFull('http://14.48.175.177/search_info.php'),
-        body: {
+    if(input_hp.text!=null && input_hp.text!='') {
+
+      final response = await http.post(
+          Uri.encodeFull('http://14.48.175.177/search_info.php'),
+          body: {
             "mb_hp": input_hp.text,
-            "flg" : 1.toString()
-        },
-        headers: {'Accept' : 'application/json'}
-    );
+            "flg": 1.toString()
+          },
+          headers: {'Accept': 'application/json'}
+      );
 
-    //print(response.body);
+      //print(response.body);
 
-    if(response.statusCode ==200) {
-      setState(() {
+      if (response.statusCode == 200) {
+        setState(() {
+          info_data = jsonDecode(response.body);
 
-        info_data = jsonDecode(response.body);
+          if (info_data['data'].length <= 0) {
+            flg_searchbt = true;
+            flg_searchsuccess = false;
+          }
+          else {
+            flg_searchsuccess = true;
+            id = info_data['data'][0]['mb_id'];
+            flg_searchbt = true;
+          }
+        });
+      }
 
-        if(info_data['data'].length <=0) {
-          flg_searchbt = true;
-          flg_searchsuccess = false;
-        }
-        else{
-          flg_searchsuccess = true;
-          id = info_data['data'][0]['mb_id'];
-          flg_searchbt = true;
-        }
-      });
     }
+    else{
+      show_Alert("정보를 모두 입력해주세요", 1);
+    }
+
   }
 
   void show_Alert(text,flg) {
+
     showDialog(
       context: context,
       builder: (BuildContext context2) {
@@ -88,6 +96,10 @@ class _search_infoState extends State<search_info> {
 
   Future<dynamic> get_password() async{
 
+    if(input_schpwdhp.text!='' && input_schpwdhp.text!=null && input_schpwdid.text!='' && input_schpwdid.text!=null){
+
+    show_Alert("임시 비밀번호가 문자로 전송 되었습니다.", 1);
+
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/search_info.php'),
         body: {
@@ -97,12 +109,10 @@ class _search_infoState extends State<search_info> {
         },
         headers: {'Accept' : 'application/json'}
     );
-
     //print(response.body);
-
     if(response.statusCode ==200) {
 
-       print(response.body);
+      // print(response.body);
        if(response.body.toString()=='hpnone'){
          show_Alert("핸드폰 번호가 일치하지 않습니다." ,1);
        }
@@ -110,6 +120,10 @@ class _search_infoState extends State<search_info> {
          show_Alert("아이디가 존재하지 않습니다.", 1);
        }
 
+    }
+    }
+    else{
+      show_Alert("정보를 모두 입력해주세요", 1);
     }
   }
 

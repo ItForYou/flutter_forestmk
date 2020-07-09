@@ -409,19 +409,23 @@ class writead_State extends State<write_ad> {
         headers: {'Accept' : 'application/json'}
     );
 
+
+    var temp  =  jsonDecode(response.body);
     int cnt_ads=0;
 
-    if(!response.body.contains("admin"))
-        cnt_ads = int.parse(response.body);
+    print(temp['wr6cnt']);
 
-    print(response.body);
+    if(!response.body.contains("admin"))
+        cnt_ads = int.parse(temp['cnt']);
 
     if(cnt_ads>0){
+      if(int.parse(temp['wr6cnt'])>0)
+      show_Alert("승인을 기다려주세요!", 3);
+      else
       show_Alert("광고게시글은 1회 원칙으로 두고있습니다!", 3);
-   /*   Navigator.pop(context);
-      Navigator.pop(context,"success");*/
+//      Navigator.pop(context);
+//      Navigator.pop(context,"success");
     }
-
 
   }
 
@@ -630,8 +634,17 @@ class writead_State extends State<write_ad> {
                                  ),
                                );
                                setState(() {
+
                                  color_cate=Colors.black;
-                                 str_address = '${model.sido} ${model.sigungu} ${model.bname}';//'${model.address}';
+                                 if(model.userSelectedType=='J') {
+                                   str_address =
+                                   '${model.sido} ${model.sigungu} ${model
+                                       .bname}'; //'${model.address}';
+                                 }
+                                 else{
+                                   str_address ="${model.sido} ${model.sigungu} ${model
+                                       .roadname}";
+                                 }
                                });
                              },
                            )

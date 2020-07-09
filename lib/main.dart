@@ -184,20 +184,26 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   var initSetting = InitializationSettings(initAndroidSetting, initIosSetting);
   await FlutterLocalNotificationsPlugin().initialize(initSetting, onSelectNotification: (String value) async{
 
-    var result = await Navigator.push(
-        context, MaterialPageRoute(
-        builder: (context) =>
-            chat_webview(
-              url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
-                  mb_id + "&mb_password=" +
-                  mb_pwd+ "&flg_view=1&view_id="+value,view: 1,
-            )
-    ));
-    if (result == 'change') {
-      get_data();
-    }
+      if(value =='댓글'){
+
+      }
+      else {
+        var result = await Navigator.push(
+            context, MaterialPageRoute(
+            builder: (context) =>
+                chat_webview(
+                  url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
+                      mb_id + "&mb_password=" +
+                      mb_pwd + "&flg_view=1&view_id=" + value, view: 1,
+                )
+        ));
+        if (result == 'change') {
+          get_data();
+        }
+      }
  // print("noticevalue : $value");
   });
+
 }
 
   _changeappbar(){
@@ -359,8 +365,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       temp_price=temp_data.wr_1;
     }
     else{
-      MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
-      temp_price=fmf.withoutFractionDigits.toString()+'원';
+      if(temp_data.wr_1.contains(','))
+        temp_price = temp_data.wr_1+"원";
+      else {
+        MoneyFormatterOutput fmf = FlutterMoneyFormatter(
+            amount: double.parse(temp_data.wr_1)).output;
+        temp_price = fmf.withoutFractionDigits.toString() + '원';
+      }
     }
 
     if(temp_data.ca_name=='업체'){
@@ -532,7 +543,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
             pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
           ));
           if(result == 'delete'){
-            print("test"+result);
+           // print("test"+result);
             get_data();
           }
        /*   Navigator.push(context,MaterialPageRoute(
@@ -924,6 +935,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   }
 
   Future<void> showNotification(title,body,link) async {
+
     var android = AndroidNotificationDetails(
         'channelId', 'channelName', 'channelDescription');
     var iOS = IOSNotificationDetails();
@@ -1000,9 +1012,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
              );*/
         }
         else {
-          showNotification(message['notification']['title'].toString(),
-              message['notification']['body'].toString(),
-              message['data']['flutter_go'].toString());
+          if(message['data']['flutter_go'].toString()=='댓글'){
+            showNotification(message['notification']['title'].toString(),
+                message['notification']['body'].toString(),'댓글');
+          }
+          else {
+            showNotification(message['notification']['title'].toString(),
+                message['notification']['body'].toString(),
+                message['data']['flutter_go'].toString());
+          }
         }
       },
       //onBackgroundMessage:Platform.isIOS?null:myBackgroundMessageHandler,

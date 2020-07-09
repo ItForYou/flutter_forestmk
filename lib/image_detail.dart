@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutterforestmk/main_item.dart';
+import 'package:photo_view/photo_view.dart';
 
 class image_detail extends StatefulWidget {
 
@@ -35,7 +36,7 @@ class _image_detailState extends State<image_detail> {
       body: Swiper(
         itemCount: widget.flg_view ==1 ?widget.info.length-1:widget.info.length,
         itemBuilder: (BuildContext context, int index){
-          return Image.network(widget.flg_view ==1?widget.info[index+1]:widget.info[index]);
+          return PhotoView(imageProvider : NetworkImage(widget.flg_view ==1?widget.info[index+1]:widget.info[index]));
         },
         pagination: (widget.flg_view==1 && (widget.info.length-1)>1)|| (widget.flg_view==2 && (widget.info.length)>1)?SwiperPagination():null,
         loop: (widget.flg_view==1 && (widget.info.length-1)>1)|| (widget.flg_view==2 && (widget.info.length)>1)? true:false,

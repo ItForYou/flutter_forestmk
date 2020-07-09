@@ -30,7 +30,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 
 class main_home extends StatefulWidget {
-  main_home({Key key, this.title,}) : super(key: key);
+  String mb_id;
+  main_home({Key key, this.title,this.mb_id}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -696,7 +697,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/get_write.php'),
         body: {
-          "mb_id":mb_id==null?'':mb_id,
+          "mb_id":widget.mb_id==null?'':widget.mb_id,
           "sch_order":sort_value,
           "nowlat":mb_5,
           "nowlng":mb_6,

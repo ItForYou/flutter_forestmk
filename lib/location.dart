@@ -130,43 +130,91 @@ class location_State extends State<location> {
 
   }
 
+  void show_Alert(text,flg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.03,
+            child: Text(text),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: ()async{
+                if(flg ==2){
+                  Navigator.of(context).pop(true);
+                  Navigator.of(context2).pop(true);
+                }
+                else{
+                  Navigator.of(context2).pop(true);
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void get_location() async{
 
-    ProgressDialog pr = ProgressDialog(context);
-    //pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
-    pr.style(
+    bool geolocationStatus  = await Geolocator().isLocationServiceEnabled();
+
+    if(geolocationStatus==true) {
+      ProgressDialog pr = ProgressDialog(context);
+      //pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+      pr.style(
         message: '잠시만 기다려주세요...',
         borderRadius: 5.0,
         backgroundColor: Colors.white,
-        progressWidget: Container(padding:EdgeInsets.all(MediaQuery.of(context).size.height * 0.014),child: CircularProgressIndicator()),
+        progressWidget: Container(padding: EdgeInsets.all(MediaQuery
+            .of(context)
+            .size
+            .height * 0.014), child: CircularProgressIndicator()),
         elevation: 5.0,
-      messageTextStyle: TextStyle(
-          color: Colors.black, fontSize: MediaQuery.of(context).size.height * 0.018,),
+        messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: MediaQuery
+            .of(context)
+            .size
+            .height * 0.018,),
         insetAnimCurve: Curves.easeInOut,
-    );
-    pr.show();
+      );
+      pr.show();
 
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await Geolocator().getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
 
-    final response = await http.post(
-        Uri.encodeFull('http://14.48.175.177/get_current.php'),
-        body: {
-          "x": position.longitude.toString(),
-          'y':position.latitude.toString()
-        },
-        headers: {'Accept': 'application/json'}
-    );
+      if (position != null) {
+        final response = await http.post(
+            Uri.encodeFull('http://14.48.175.177/get_current.php'),
+            body: {
+              "x": position.longitude.toString(),
+              'y': position.latitude.toString()
+            },
+            headers: {'Accept': 'application/json'}
+        );
 
-    if(response.statusCode==200){
-      Navigator.pop(context);
-     // print(jsonDecode(response.body));
-      var json_address = jsonDecode(response.body);
-      String address = json_address['documents'][0]['address']['region_1depth_name']+" "+json_address['documents'][0]['address']['region_2depth_name']+" "+json_address['documents'][0]['address']['region_3depth_name'];
-      //print(address);
-      update_location(address);
-
+        if (response.statusCode == 200) {
+          Navigator.pop(context);
+          // print(jsonDecode(response.body));
+          var json_address = jsonDecode(response.body);
+          String address = json_address['documents'][0]['address']['region_1depth_name'] +
+              " " +
+              json_address['documents'][0]['address']['region_2depth_name'] +
+              " " +
+              json_address['documents'][0]['address']['region_3depth_name'];
+          //print(address);
+          update_location(address);
+        }
+      }
     }
-
+    else{
+      show_Alert("위치기능을 켜주세요", 1);
+    }
   }
 
   @override

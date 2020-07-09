@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutterforestmk/main_item.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -60,6 +61,14 @@ class writenormal_State extends State<write_normal> {
     mb_name = temp_mbdata['mb_name'];
     mb_5 = temp_mbdata['mb_5'];
     mb_6 = temp_mbdata['mb_6'];
+  }
+
+  void add_comma(value){
+
+    MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(value)).output;
+    value=fmf.withoutFractionDigits.toString();
+    input_wr_1.text=value;
+
   }
 
   Widget get_Imagebox2(image) {
@@ -664,6 +673,7 @@ class writenormal_State extends State<write_normal> {
                                           WhitelistingTextInputFormatter(RegExp("[0-9]")),
                                         ],
                                         controller: input_wr_1,
+                                        onChanged: (value)=>add_comma(value),
                                         enabled: flg_enablewr1,
                                         cursorColor: Colors.black,
                                         decoration: InputDecoration(

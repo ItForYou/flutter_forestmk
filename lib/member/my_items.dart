@@ -845,7 +845,7 @@ class _my_itemsState extends State<my_items> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => main_home()
+                            builder:(context) => main_home(mb_id:widget.mb_id)
                         ));
                       },
                     ),
@@ -974,7 +974,7 @@ class _my_itemsState extends State<my_items> {
                           ),
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(
-                                builder:(context) => main_home()
+                                builder:(context) => main_home(mb_id: widget.mb_id,)
                             ));
                           },
                         ),

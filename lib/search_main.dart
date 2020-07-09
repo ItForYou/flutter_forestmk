@@ -965,7 +965,7 @@ class _search_mainState extends State<search_main> {
                       ),
                       onTap: (){
                         Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => main_home()
+                            builder:(context) => main_home(mb_id: widget.mb_id,)
                         ));
                       },
                     ),
@@ -1090,7 +1090,7 @@ class _search_mainState extends State<search_main> {
                             ),
                             onTap: (){
                               Navigator.push(context,MaterialPageRoute(
-                                  builder:(context) => main_home()
+                                  builder:(context) => main_home(mb_id: widget.mb_id,)
                               ));
                             },
                           ),

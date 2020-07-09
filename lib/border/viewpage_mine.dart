@@ -11,6 +11,7 @@ import 'package:flutterforestmk/border/write_normal.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutterforestmk/border/comment_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Viewpage_mine extends StatefulWidget {
   String wr_id,mb_id;
@@ -419,6 +420,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
           "comment_content":input_comment.text,
           "ca_name":itemdata_now!=null?itemdata_now['ca_name']:'',
           "mb_id":real_mbid,
+          "bo_table":'deal',
           "w":flg_uploadcomm_bt==1?'u':''
         },
         headers: {'Accept' : 'application/json'}
@@ -439,6 +441,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         Uri.encodeFull('http://14.48.175.177/get_comments.php'),
         body: {
           "wr_id":widget.wr_id,
+          "bo_table":'deal'
         },
         headers: {'Accept' : 'application/json'}
     );
@@ -1052,8 +1055,13 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       price=temp_data.wr_1;
     }
     else{
-      MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
-      price='금액 ' + fmf.withoutFractionDigits.toString()+'원';
+      if(temp_data.wr_1.contains(','))
+        price = temp_data.wr_1+"원";
+      else {
+        MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
+        price='금액 ' + fmf.withoutFractionDigits.toString()+'원';
+      }
+
     }
 
     InkWell temp = InkWell(
@@ -1151,7 +1159,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       setState(() {
         got_item_now = true;
         itemdata_now = jsonDecode(response.body);
-
+        print(itemdata_now);
         if (itemdata_now['ca_name'] == '업체') {
           now_price = itemdata_now['wr_subject'];
         }
@@ -1159,9 +1167,15 @@ class _ViewpagemineState extends State<Viewpage_mine>{
           now_price = itemdata_now['wr_1'];
         }
         else {
-          MoneyFormatterOutput fmf = FlutterMoneyFormatter(
-              amount: double.parse(itemdata_now['wr_1'])).output;
-          now_price = '금액 ' + fmf.withoutFractionDigits.toString() + '원';
+
+          if(itemdata_now['wr_1'].contains(','))
+            now_price = itemdata_now['wr_1']+"원";
+          else {
+            MoneyFormatterOutput fmf = FlutterMoneyFormatter(
+                amount: double.parse(itemdata_now['wr_1'])).output;
+            now_price = '금액 ' + fmf.withoutFractionDigits.toString() + '원';
+          }
+
         }
         mb_id = itemdata_now['mb_id'];
         ca_name = itemdata_now['ca_name'];
@@ -1560,11 +1574,16 @@ class _ViewpagemineState extends State<Viewpage_mine>{
               ),
             ),
             (itemdata_now!=null)&&(itemdata_now['ca_name']=='업체')?
-            Container(
-                padding: EdgeInsets.only(left: 15,),
-                width: MediaQuery.of(context).size.width,
-                height:MediaQuery.of(context).size.height*0.02,
-                child:Text(itemdata_now.wr_5)
+            InkWell(
+              child: Container(
+                  padding: EdgeInsets.only(left: 15,),
+                  width: MediaQuery.of(context).size.width,
+                  height:MediaQuery.of(context).size.height*0.02,
+                  child:Text(itemdata_now.wr_5)
+              ),
+              onTap: (){
+                launch("tel://"+itemdata_now.wr_5);
+              },
             ):Container(),
             Container(
               padding: EdgeInsets.only(left: 15,right: 15,top: 10, bottom: 10),

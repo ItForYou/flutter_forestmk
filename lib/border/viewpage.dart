@@ -16,6 +16,7 @@ import 'package:flutterforestmk/border/write_normal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Viewpage extends StatefulWidget {
   final String tag,src;
@@ -393,16 +394,19 @@ class _ViewpageState extends State<Viewpage>{
         body: {
           "wr_id":flg_uploadcomm_bt==0?widget.info.wr_id:seleted_comm_wrid,
           "comment_content":input_comment.text,
+          "bo_table": 'deal',
           "ca_name":widget.info.ca_name,
           "mb_id":real_mbid,
           "w":flg_uploadcomm_bt==1?'u':''
         },
         headers: {'Accept' : 'application/json'}
     );
+
     if(response.statusCode==200){
       //print(response.body);
       get_comment();
     }
+
   }
 
   Future<dynamic> get_comment() async{
@@ -411,6 +415,7 @@ class _ViewpageState extends State<Viewpage>{
         Uri.encodeFull('http://14.48.175.177/get_comments.php'),
         body: {
           "wr_id":widget.info.wr_id,
+          "bo_table":'deal',
         },
         headers: {'Accept' : 'application/json'}
     );
@@ -421,6 +426,7 @@ class _ViewpageState extends State<Viewpage>{
         add_widget_comments();
       });
     }
+
   }
 
   void show_pushupwr(id) async{
@@ -1081,8 +1087,13 @@ class _ViewpageState extends State<Viewpage>{
       temp_price=temp_data.wr_1;
     }
     else{
-      MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
-      temp_price=fmf.withoutFractionDigits.toString()+'원';
+      if(temp_data.wr_1.contains(','))
+      temp_price = temp_data.wr_1+'원';
+      else {
+        MoneyFormatterOutput fmf = FlutterMoneyFormatter(
+            amount: double.parse(temp_data.wr_1)).output;
+        temp_price = fmf.withoutFractionDigits.toString() + '원';
+      }
     }
 
     //print(temp_data);
@@ -1374,6 +1385,7 @@ class _ViewpageState extends State<Viewpage>{
     //print(widget.info.wr_content);
 
     set_herocontent(path);
+
     if(widget.info.ca_name =='업체'){
       price=widget.info.wr_subject;
     }
@@ -1381,8 +1393,13 @@ class _ViewpageState extends State<Viewpage>{
       price=widget.info.wr_1;
     }
     else{
-      MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(widget.info.wr_1)).output;
-      price='금액 ' + fmf.withoutFractionDigits.toString()+'원';
+      if(widget.info.wr_1.contains(','))
+        price = widget.info.wr_1+"원";
+      else {
+        MoneyFormatterOutput fmf = FlutterMoneyFormatter(
+            amount: double.parse(widget.info.wr_1)).output;
+        price = fmf.withoutFractionDigits.toString() + '원';
+      }
     }
 
     if(widget.info.wr_content!='' && widget.info.wr_content!=null){
@@ -1574,11 +1591,16 @@ class _ViewpageState extends State<Viewpage>{
                   ),
                 ),
                 widget.info.ca_name=='업체'?
-                Container(
-                  padding: EdgeInsets.only(left: 15,),
-                  width: MediaQuery.of(context).size.width,
-                  height:MediaQuery.of(context).size.height*0.02,
-                  child:Text(widget.info.wr_5)
+                InkWell(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 15,),
+                    width: MediaQuery.of(context).size.width,
+                    height:MediaQuery.of(context).size.height*0.02,
+                    child:Text(widget.info.wr_5)
+                  ),
+                  onTap: (){
+                     launch("tel://"+widget.info.wr_5);
+                  },
                 ):Container(),
                 Container(
                   padding: EdgeInsets.only(left: 15,right: 15, bottom: 10),
