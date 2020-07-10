@@ -483,6 +483,13 @@ class _ViewpageState extends State<Viewpage>{
             child: Text("이 댓글을 삭제를 하시겠습니까?"),
           ),
           actions: <Widget>[
+
+            new FlatButton(
+              child: new Text("취소"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             new FlatButton(
               child: new Text("확인"),
               onPressed: ()async{
@@ -497,12 +504,6 @@ class _ViewpageState extends State<Viewpage>{
                   Navigator.pop(context2);
                   get_comment();
                 }
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
               },
             ),
           ],
@@ -1231,6 +1232,13 @@ class _ViewpageState extends State<Viewpage>{
             child: Text("한번 삭제한 자료는 복구할 방법이 없습니다.\n정말 삭제하시겠습니까?"),
           ),
           actions: <Widget>[
+
+            new FlatButton(
+              child: new Text("취소"),
+              onPressed: () {
+                Navigator.pop(context2);
+              },
+            ),
             new FlatButton(
               child: new Text("확인"),
               onPressed: ()async{
@@ -1242,16 +1250,11 @@ class _ViewpageState extends State<Viewpage>{
                     },
                     headers: {'Accept' : 'application/json'}
                 );
+
                 if(response.statusCode ==200){
                   Navigator.pop(context2);
                   Navigator.pop(context,"delete");
                 }
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context2);
               },
             ),
           ],
