@@ -485,7 +485,7 @@ class _ViewpageState extends State<Viewpage>{
           actions: <Widget>[
 
             new FlatButton(
-              child: new Text("취소"),
+              child: new Text("취소",style:TextStyle(color: Colors.red)),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -1229,12 +1229,12 @@ class _ViewpageState extends State<Viewpage>{
           title:null,
           content: Container(
             height: MediaQuery.of(context2).size.height*0.06,
-            child: Text("한번 삭제한 자료는 복구할 방법이 없습니다.\n정말 삭제하시겠습니까?"),
+            child: Text("한번 삭제한 자료는 복구할 방법이 없습니다.\n정말 삭제하시겠습니까?", style: TextStyle(fontSize: MediaQuery.of(context2).size.height*0.0185,),),
           ),
           actions: <Widget>[
 
             new FlatButton(
-              child: new Text("취소"),
+              child: new Text("취소", style:TextStyle(color:Colors.red)),
               onPressed: () {
                 Navigator.pop(context2);
               },
@@ -1283,7 +1283,7 @@ class _ViewpageState extends State<Viewpage>{
   }
 
   Future<dynamic> get_data() async{
-
+print(widget.info.ca_name);
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/get_view.php'),
         body: {
@@ -1498,7 +1498,7 @@ class _ViewpageState extends State<Viewpage>{
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(widget.info.mb_name==null?'test':widget.info.mb_name,style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
+                                Text(widget.info.mb_name==null?'test':widget.info.mb_name.length>10?widget.info.mb_name.substring(0,10)+"···":widget.info.mb_name,style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
                                 SizedBox(height: 8,),
                                 Text(widget.info==null?'test':widget.info.ca_name=='업체'?widget.info.wr_11:widget.info.mb_2,style: TextStyle(fontSize: 12)),
                               ],
@@ -1599,7 +1599,7 @@ class _ViewpageState extends State<Viewpage>{
                     padding: EdgeInsets.only(left: 15,),
                     width: MediaQuery.of(context).size.width,
                     height:MediaQuery.of(context).size.height*0.02,
-                    child:Text(widget.info.wr_5)
+                    child:Text(widget.info.wr_5, style:TextStyle(color:Color(0xff041ae3),))
                   ),
                   onTap: (){
                      launch("tel://"+widget.info.wr_5);
@@ -1900,7 +1900,7 @@ class _ViewpageState extends State<Viewpage>{
                       Container(
                         height: MediaQuery.of(context).size.height*0.1,
                         padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                        child: Text(widget.info.mb_name==null?'test':widget.info.mb_name+"님의 판매상품",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),),
+                        child: Text(widget.info.mb_name==null?'test':widget.info.mb_name.length>10?widget.info.mb_name.substring(0,10)+"···님의 판매상품":widget.info.mb_name+"님의 판매상품",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),),
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width,

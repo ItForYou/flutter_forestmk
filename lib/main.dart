@@ -28,7 +28,7 @@ import 'package:flutterforestmk/border/viewpage.dart';
 import 'package:flutterforestmk/member/mypage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 
 /*Future <void> main() async{
@@ -91,34 +91,31 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
 
 class _MyAppState extends State<MyApp> {
 
-
-
   @override
   Widget build(BuildContext context) {
 
     return MaterialApp(
-      title: '숲마켓',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.forestmk,
+        title: '숲마켓',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.forestmk,
 
-      ),
+        ),
 
 
-      home: MyHomePage(title: '숲마켓', ),
+        home: MyHomePage(title: '숲마켓', ),
+
     );
   }
 }
-
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title,}) : super(key: key);
@@ -283,6 +280,38 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     }
   }
 
+  void show_Alert(text,flg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.02))
+          ),
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.06,
+            child: Text(text, style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.015),),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: (){
+                if(flg ==2)
+                  Navigator.of(context).pop(true);
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showcontent() {
 
     showModalBottomSheet(
@@ -330,18 +359,24 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                     ),
                   ),
                   onTap: ()async{
+
                     var result = await   Navigator.push(context,MaterialPageRoute(
                         builder:(context) => chk_writead()
                     ));
                     if(result == 'success'){
+
                       // print(result);
-                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
+                      Navigator.pop(bc);
+                      show_Alert("승인을 기다려주세요!\n승인시 자동 업로드 됩니다.",1);
+                      //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
                       get_data();
+
                     }
                     else{
                       get_data();
+                      Navigator.pop(bc);
+
                     }
-                    Navigator.pop(bc);
                   },
                 ),
               ],
@@ -368,6 +403,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       if(temp_data.wr_1.contains(','))
         temp_price = temp_data.wr_1+"원";
       else {
+
         MoneyFormatterOutput fmf = FlutterMoneyFormatter(
             amount: double.parse(temp_data.wr_1)).output;
         temp_price = fmf.withoutFractionDigits.toString() + '원';
@@ -481,7 +517,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                     SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
                     Row(
                       children: <Widget>[
-                       Text( temp_data.ca_name!='업체'? temp_data.ca_name:'광고', style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                       Text( temp_data.ca_name!='업체'? temp_data.ca_name:'광고업체', style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                         Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
                         Container(
                           width: MediaQuery.of(context).size.width*0.01,
@@ -1541,7 +1577,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                                 decoration: BoxDecoration(
                                     color: Color(0xfff3f3f3),
                                     borderRadius: BorderRadius.all(Radius.circular(50)),
-                                   // border: Border.all(color: Color(0xffcccccc)),
+                                    border: Border.all(color: Color(0xffcccccc)),
                                     image: DecorationImage(//이미지 꾸미기
                                         fit:BoxFit.cover,
                                         //image:  AssetImage("images/wing_mb_noimg2.png"),

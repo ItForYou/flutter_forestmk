@@ -89,7 +89,8 @@ class _basicviewState extends State<basicview> {
     );
 
     if(response.statusCode==200){
-
+        input_comment.text='';
+        get_comments();
       //print(response.body);
     }
 

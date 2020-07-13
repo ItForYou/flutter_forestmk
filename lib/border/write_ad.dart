@@ -314,32 +314,36 @@ class writead_State extends State<write_ad> {
 
   void show_Alert(text,flg) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context2) {
         // return object of type Dialog
-        return AlertDialog(
-          title:null,
-          content: Container(
-            height: MediaQuery.of(context2).size.height*0.03,
-            child: Text(text),
-          ),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("확인"),
-              onPressed: (){
-                if(flg==3){
-                  Navigator.pop(context2);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }
-                else {
-                  if (flg == 2)
-                    Navigator.of(context).pop(true);
-                  Navigator.of(context2).pop(true);
-                }
-              },
+        return WillPopScope(
+          onWillPop: (){},
+          child: AlertDialog(
+            title:null,
+            content: Container(
+              height: MediaQuery.of(context2).size.height*0.03,
+              child: Text(text),
             ),
-          ],
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("확인"),
+                onPressed: (){
+                  if(flg==3){
+                    Navigator.pop(context2);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
+                  else {
+                    if (flg == 2)
+                      Navigator.of(context).pop(true);
+                    Navigator.of(context2).pop(true);
+                  }
+                },
+              ),
+            ],
+          ),
         );
       },
     );
@@ -638,12 +642,10 @@ class writead_State extends State<write_ad> {
                                  color_cate=Colors.black;
                                  if(model.userSelectedType=='J') {
                                    str_address =
-                                   '${model.sido} ${model.sigungu} ${model
-                                       .bname}'; //'${model.address}';
+                                   '${model.address}'; //'${model.sido} ${model.sigungu} ${model.bname}';
                                  }
                                  else{
-                                   str_address ="${model.sido} ${model.sigungu} ${model
-                                       .roadname}";
+                                   str_address ='${model.roadAddress}';//"${model.sido} ${model.sigungu} ${model.roadname}"
                                  }
                                });
                              },

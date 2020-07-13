@@ -207,8 +207,13 @@ class _my_itemsState extends State<my_items> {
       temp_price=temp_data.wr_1;
     }
     else{
-      MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
-      temp_price=fmf.withoutFractionDigits.toString()+'원';
+      if(temp_data.wr_1.contains(','))
+        temp_price = temp_data.wr_1+"원";
+      else {
+        MoneyFormatterOutput fmf = FlutterMoneyFormatter(
+            amount: double.parse(temp_data.wr_1)).output;
+        temp_price = fmf.withoutFractionDigits.toString() + '원';
+      }
     }
 
     if(temp_data.ca_name=='업체'){
@@ -373,7 +378,7 @@ class _my_itemsState extends State<my_items> {
                               SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
                               Row(
                                 children: <Widget>[
-                                  Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                                  Text(temp_data.ca_name=="업체"?"광고업체":temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                                   Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
                                   Container(
                                     width: MediaQuery.of(context).size.width*0.01,
@@ -449,6 +454,38 @@ class _my_itemsState extends State<my_items> {
     return temp;
   }
 
+  void show_Alert(text,flg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.02))
+          ),
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.03,
+            child: Text(text),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: (){
+                if(flg ==2)
+                  Navigator.of(context).pop(true);
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showcontent() {
 
     showModalBottomSheet(
@@ -506,7 +543,8 @@ class _my_itemsState extends State<my_items> {
                     ));
                     if(result == 'success'){
                       // print(result);
-                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
+                      show_Alert("승인을 기다려주세요!\n승인시 자동 업로드 됩니다.",1);
+                      //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
                       Navigator.pop(bc);
                       get_data();
                     }

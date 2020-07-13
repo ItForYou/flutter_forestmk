@@ -1231,9 +1231,16 @@ class _ViewpagemineState extends State<Viewpage_mine>{
           title:null,
           content: Container(
             height: MediaQuery.of(context2).size.height*0.06,
-            child: Text("한번 삭제한 자료는 복구할 방법이 없습니다.\n정말 삭제하시겠습니까?"),
+            child: Text("한번 삭제한 자료는 복구할 방법이 없습니다.\n정말 삭제하시겠습니까?", style:TextStyle(fontSize:MediaQuery.of(context2).size.height*0.0185)),
           ),
           actions: <Widget>[
+
+            new FlatButton(
+              child: new Text("취소",style: TextStyle(color:Colors.red),),
+              onPressed: () {
+                Navigator.pop(context2);
+              },
+            ),
             new FlatButton(
               child: new Text("확인"),
               onPressed: ()async{
@@ -1249,12 +1256,6 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                   Navigator.pop(context2);
                   Navigator.pop(context,"delete");
                 }
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context2);
               },
             ),
           ],
@@ -1424,7 +1425,6 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                                     real_mbid + "&mb_password=" +
                                     real_mbpwd + "&flg_view=1&view_id=" +
                                     widget.wr_id + "-" + real_mbid, view: 1,
-
                               )
                       ));
                       if (result == 'change') {
@@ -1476,7 +1476,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(itemdata_now==null?"테스트":itemdata_now['mb_name'],style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
+                            Text(itemdata_now==null?"테스트":itemdata_now['mb_name'].length>10?itemdata_now['mb_name'].substring(0,10)+"···":itemdata_now['mb_name'],style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
                             SizedBox(height: 8,),
                             Text(itemdata_now==null?"테스트":itemdata_now['ca_name']=='업체'?itemdata_now['wr_11']:itemdata_now['mb_2'],style: TextStyle(fontSize: 12)),
                           ],
@@ -1880,7 +1880,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                   Container(
                     height: MediaQuery.of(context).size.height*0.1,
                     padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                    child: Text(itemdata_now==null?"테스트":itemdata_now['mb_name']+"님의 판매상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                    child: Text(itemdata_now==null?"테스트":itemdata_now['mb_name'].length>10?itemdata_now['mb_name'].substring(0,10)+"···님의 판매상품":itemdata_now['mb_name']+"님의 판매상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,

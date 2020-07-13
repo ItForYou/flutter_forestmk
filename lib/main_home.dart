@@ -187,6 +187,38 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
     }
   }
 
+  void show_Alert(text,flg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(MediaQuery
+                  .of(context)
+                  .size
+                  .width * 0.02))
+          ),
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.03,
+            child: Text(text),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: (){
+                if(flg ==2)
+                  Navigator.of(context).pop(true);
+                Navigator.of(context).pop(true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showcontent() {
 
     showModalBottomSheet(
@@ -231,10 +263,20 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                       ],
                     ),
                   ),
-                  onTap: (){
-                    Navigator.push(context,MaterialPageRoute(
+                  onTap: ()async{
+                    var result = await   Navigator.push(context,MaterialPageRoute(
                         builder:(context) => chk_writead()
                     ));
+                    if(result == 'success'){
+                      // print(result);
+                      show_Alert("승인을 기다려주세요!\n승인시 자동 업로드 됩니다.",1);
+                      //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
+                      get_data();
+                    }
+                    else{
+                      get_data();
+                    }
+                    Navigator.pop(bc);
                   },
                 ),
               ],
@@ -249,6 +291,8 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
     var temp_data = main_item.fromJson(itemdata['data'][id]);
 
     String temp_price;
+    String temp_wrcontent;
+
     if(temp_data.ca_name =='업체'){
       temp_price=temp_data.wr_subject;
     }
@@ -256,9 +300,28 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
       temp_price=temp_data.wr_1;
     }
     else{
-      MoneyFormatterOutput  fmf = FlutterMoneyFormatter(amount: double.parse(temp_data.wr_1)).output;
-      temp_price=fmf.withoutFractionDigits.toString()+'원';
+      if(temp_data.wr_1.contains(','))
+        temp_price = temp_data.wr_1+"원";
+      else {
+        MoneyFormatterOutput fmf = FlutterMoneyFormatter(
+            amount: double.parse(temp_data.wr_1)).output;
+        temp_price = fmf.withoutFractionDigits.toString() + '원';
+
+      }
+
+      //temp_price="temp";
     }
+
+    if(temp_data.ca_name=='업체'){
+      temp_wrcontent = temp_data.wr_content.replaceAll('\n','              ');
+      if(temp_wrcontent.length<15){
+
+      }
+      else{
+        temp_wrcontent = temp_wrcontent.substring(0,12)+"···";
+      }
+    }
+
     InkWell temp = InkWell(
       child: Container(
         height: 100,
@@ -326,14 +389,13 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ),
                     SizedBox(width: 10,),
                     Column(
-
                       mainAxisAlignment: temp_data.ca_name!='업체'? MainAxisAlignment.start: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035),),
-                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                        temp_data.ca_name!='업체'? Text(temp_price, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, fontWeight:FontWeight.bold)): Container(),
+                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, fontWeight: temp_data.ca_name=='업체'?FontWeight.bold:null),),
+                        SizedBox(height: temp_data.ca_name=='업체'?MediaQuery.of(context).size.height*0.005:MediaQuery.of(context).size.height*0.003,),
+                        Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name=='업체'?MediaQuery.of(context).size.width*0.028:MediaQuery.of(context).size.width*0.035, fontWeight:temp_data.ca_name=='업체'?null:FontWeight.bold)),
                         temp_data.ca_name!='업체'? SizedBox(height: MediaQuery.of(context).size.height*0.005,): Container(),
                         Row(
                           children: <Widget>[
@@ -356,8 +418,8 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                         SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
                         Row(
                           children: <Widget>[
-                            temp_data.ca_name!='업체'? Text(temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)):Container(),
-                            temp_data.ca_name!='업체'? Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,):Container(),
+                            Text( temp_data.ca_name!='업체'? temp_data.ca_name:'광고업체', style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                            Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
                             temp_data.ca_name!='업체'?Container(
                               width: MediaQuery.of(context).size.width*0.01,
                               height: MediaQuery.of(context).size.width*0.01,
