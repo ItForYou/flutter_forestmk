@@ -421,10 +421,12 @@ class _ViewpageState extends State<Viewpage>{
     );
     if(response.statusCode==200){
          //print(response.body);
-      setState(() {
-        comment_data = jsonDecode(response.body);
-        add_widget_comments();
-      });
+      if(mounted) {
+        setState(() {
+          comment_data = jsonDecode(response.body);
+          add_widget_comments();
+        });
+      }
     }
 
   }
@@ -1130,7 +1132,7 @@ class _ViewpageState extends State<Viewpage>{
         ),
       ),
       onTap: ()async{
-        print(temp_data.mb_id);
+        //print(temp_data.mb_id);
         var result = await Navigator.push(context, MaterialPageRoute(
             builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id, mb_id:temp_data.mb_id)
         ));
@@ -1283,7 +1285,7 @@ class _ViewpageState extends State<Viewpage>{
   }
 
   Future<dynamic> get_data() async{
-print(widget.info.ca_name);
+//print(widget.info.ca_name);
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/get_view.php'),
         body: {
@@ -1299,7 +1301,6 @@ print(widget.info.ca_name);
       get_likeflg();
       set_items();
     });
-
   }
 
   void set_items(){
@@ -1411,6 +1412,35 @@ print(widget.info.ca_name);
     }
 
     //print(real_mbid);
+    String call_number="test";
+    if(widget.info!=null){
+      if(widget.info.ca_name=='업체') {
+        call_number = widget.info.wr_5;
+        if (call_number.startsWith("02") && call_number.length == 9) {
+          call_number =
+              call_number.substring(0, 2) + "-" + call_number.substring(2, 5) +
+                  "-" + call_number.substring(5, call_number.length);
+        }
+        else if (call_number.startsWith("02") && call_number.length == 10) {
+          call_number =
+              call_number.substring(0, 2) + "-" + call_number.substring(2, 6) +
+                  "-" + call_number.substring(6, call_number.length);
+        }
+        else if (!call_number.startsWith("02") && call_number.length == 10) {
+          call_number =
+              call_number.substring(0, 3) + "-" + call_number.substring(3, 6) +
+                  "-" + call_number.substring(6, call_number.length);
+        }
+        else if(call_number.length <=9) {
+
+        }
+        else {
+          call_number =
+              call_number.substring(0, 3) + "-" + call_number.substring(3, 7) +
+                  "-" + call_number.substring(7, call_number.length);
+        }
+      }
+    }
 
 
     return WillPopScope(
@@ -1500,7 +1530,7 @@ print(widget.info.ca_name);
                               children: <Widget>[
                                 Text(widget.info.mb_name==null?'test':widget.info.mb_name.length>10?widget.info.mb_name.substring(0,10)+"···":widget.info.mb_name,style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
                                 SizedBox(height: 8,),
-                                Text(widget.info==null?'test':widget.info.ca_name=='업체'?widget.info.wr_11:widget.info.mb_2,style: TextStyle(fontSize: 12)),
+                                Text(widget.info==null?'test':widget.info.ca_name=='업체'?widget.info.wr_12:widget.info.mb_2,style: TextStyle(fontSize: 12)),
                               ],
                             ),
                           ],
@@ -1593,13 +1623,24 @@ print(widget.info.ca_name);
                     ],
                   ),
                 ),
+
                 widget.info.ca_name=='업체'?
                 InkWell(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 15,),
-                    width: MediaQuery.of(context).size.width,
-                    height:MediaQuery.of(context).size.height*0.02,
-                    child:Text(widget.info.wr_5, style:TextStyle(color:Color(0xff041ae3),))
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(left: 15,),
+                        width: MediaQuery.of(context).size.width*0.08,
+                        height: MediaQuery.of(context).size.width*0.08,
+                        child:Image.asset("images/call.png"),
+                      ),
+                      Container(
+                        margin:  EdgeInsets.only(left: 4,),
+                        width: MediaQuery.of(context).size.width*0.8,
+                        height:MediaQuery.of(context).size.height*0.02,
+                        child:Text(call_number, style:TextStyle(color:Color(0xff041ae3),))
+                      ),
+                    ],
                   ),
                   onTap: (){
                      launch("tel://"+widget.info.wr_5);
@@ -1644,7 +1685,7 @@ print(widget.info.ca_name);
                                   builder: (context) => widget.info.ca_name=='업체'?write_ad(info: widget.info,):write_normal(info: widget.info)
                               ));
                               if(result == 'success'){
-                                print(result);
+                                //print(result);
                                 Navigator.pop(context,"delete");
                               }
                             },
@@ -1912,7 +1953,6 @@ print(widget.info.ca_name);
                                 children: list_subitem
                               ),
                       ),
-
                     ],
                   ),
                 ),

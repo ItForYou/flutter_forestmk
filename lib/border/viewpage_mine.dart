@@ -57,15 +57,17 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
   void load_myinfo()async{
     SharedPreferences sp = await SharedPreferences.getInstance();
-    setState(() {
-      if(sp.getString('id')!=null) {
-        real_mbid = sp.getString('id');
-        real_mbpwd = sp.getString('pwd');
-        update_hitnrecent();
-      }
-      else
-        real_mbid='';
-    });
+    if(mounted) {
+      setState(() {
+        if (sp.getString('id') != null) {
+          real_mbid = sp.getString('id');
+          real_mbpwd = sp.getString('pwd');
+          update_hitnrecent();
+        }
+        else
+          real_mbid = '';
+      });
+    }
   }
 
   void show_soldout() {
@@ -90,7 +92,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
             new FlatButton(
               child: new Text("확인"),
               onPressed: (){
-                print(flg_soldout);
+                //print(flg_soldout);
                 if(flg_soldout ==1)
                   update_soldout(1);
                 else
@@ -1096,7 +1098,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       ),
 
       onTap: ()async{
-        print(temp_data.mb_id);
+        //print(temp_data.mb_id);
         var result = await Navigator.push(context, MaterialPageRoute(
             builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id, mb_id:temp_data.mb_id)
         ));
@@ -1156,69 +1158,78 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         headers: {'Accept' : 'application/json'}
     );
     if(response.statusCode ==200) {
-      setState(() {
-        got_item_now = true;
-        itemdata_now = jsonDecode(response.body);
-        print(itemdata_now);
-        if (itemdata_now['ca_name'] == '업체') {
-          now_price = itemdata_now['wr_subject'];
-        }
-        else if (itemdata_now['wr_1'] == '무료나눔') {
-          now_price = itemdata_now['wr_1'];
-        }
-        else {
-
-          if(itemdata_now['wr_1'].contains(','))
-            now_price = itemdata_now['wr_1']+"원";
-          else {
-            MoneyFormatterOutput fmf = FlutterMoneyFormatter(
-                amount: double.parse(itemdata_now['wr_1'])).output;
-            now_price = '금액 ' + fmf.withoutFractionDigits.toString() + '원';
+      if(mounted) {
+        setState(() {
+          got_item_now = true;
+          itemdata_now = jsonDecode(response.body);
+          //print(itemdata_now);
+          if (itemdata_now['ca_name'] == '업체') {
+            now_price = itemdata_now['wr_subject'];
           }
-
-        }
-        mb_id = itemdata_now['mb_id'];
-        ca_name = itemdata_now['ca_name'];
-        count_like = int.parse(itemdata_now['wr_10']);
-        if(itemdata_now['files'].length>0 && itemdata_now['files'][0]!='nullimage') {
-          Swiper_widget = Container(
-            height: MediaQuery.of(context).size.height*0.35,
-            width: MediaQuery.of(context).size.width,
-            child: Swiper(
-              itemCount: itemdata_now['files'].length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.35,
-                  decoration: BoxDecoration(
-                      color: Color(0xfff3f3f3),
-                      image: DecorationImage( //이미지 꾸미기
-                        fit: BoxFit.cover,
-                        image: itemdata_now['files'][index] != '' ? NetworkImage(
-                            itemdata_now['files'][index]) : AssetImage(
-                            "images/wing_mb_noimg2.png"), //이미지 가져오기
-                      )
-                  ),
-                );
-                //Image.network(itemdata_now['files'][index]);
-              },
-              pagination: (itemdata_now['files'].length) > 1
-                  ? SwiperPagination()
-                  : null,
-              loop: (itemdata_now['files'].length) > 1 ? true : false,
-              onTap: move_imgdetail,
-            ),
-          );
-        }
-        get_lkeflg();
-        get_data();
-      });
+          else if (itemdata_now['wr_1'] == '무료나눔') {
+            now_price = itemdata_now['wr_1'];
+          }
+          else {
+            if (itemdata_now['wr_1'].contains(','))
+              now_price = itemdata_now['wr_1'] + "원";
+            else {
+              MoneyFormatterOutput fmf = FlutterMoneyFormatter(
+                  amount: double.parse(itemdata_now['wr_1'])).output;
+              now_price = '금액 ' + fmf.withoutFractionDigits.toString() + '원';
+            }
+          }
+          mb_id = itemdata_now['mb_id'];
+          ca_name = itemdata_now['ca_name'];
+          count_like = int.parse(itemdata_now['wr_10']);
+          if (itemdata_now['files'].length > 0 &&
+              itemdata_now['files'][0] != 'nullimage') {
+            Swiper_widget = Container(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.35,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+              child: Swiper(
+                itemCount: itemdata_now['files'].length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.35,
+                    decoration: BoxDecoration(
+                        color: Color(0xfff3f3f3),
+                        image: DecorationImage( //이미지 꾸미기
+                          fit: BoxFit.cover,
+                          image: itemdata_now['files'][index] != ''
+                              ? NetworkImage(
+                              itemdata_now['files'][index])
+                              : AssetImage(
+                              "images/wing_mb_noimg2.png"), //이미지 가져오기
+                        )
+                    ),
+                  );
+                  //Image.network(itemdata_now['files'][index]);
+                },
+                pagination: (itemdata_now['files'].length) > 1
+                    ? SwiperPagination()
+                    : null,
+                loop: (itemdata_now['files'].length) > 1 ? true : false,
+                onTap: move_imgdetail,
+              ),
+            );
+          }
+          get_lkeflg();
+          get_data();
+        });
+      }
     }
   }
 
@@ -1276,10 +1287,14 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         },
         headers: {'Accept' : 'application/json'}
     );
-    setState(() {
-      itemdata = jsonDecode(response.body);
-      set_items();
-    });
+    if(response.statusCode==200) {
+      if (mounted) {
+        setState(() {
+          itemdata = jsonDecode(response.body);
+          set_items();
+        });
+      }
+    }
   }
 
   void set_items(){
@@ -1390,6 +1405,34 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       }
 
     }
+    String call_number="test";
+    if(itemdata_now!=null) {
+      if(itemdata_now['ca_name']=='업체') {
+        call_number = itemdata_now['wr_5'];
+        if (call_number.startsWith("02") && call_number.length == 9) {
+          call_number =
+              call_number.substring(0, 2) + "-" + call_number.substring(2, 5) +
+                  "-" + call_number.substring(5, call_number.length);
+        }
+        else if (call_number.startsWith("02") && call_number.length == 10) {
+          call_number =
+              call_number.substring(0, 2) + "-" + call_number.substring(2, 6) +
+                  "-" + call_number.substring(6, call_number.length);
+        }
+        else if (!call_number.startsWith("02") && call_number.length == 10) {
+          call_number =
+              call_number.substring(0, 3) + "-" + call_number.substring(3, 6) +
+                  "-" + call_number.substring(6, call_number.length);
+        }
+        else if(call_number.length <=9){
+        }
+        else {
+          call_number =
+              call_number.substring(0, 3) + "-" + call_number.substring(3, 7) +
+                  "-" + call_number.substring(7, call_number.length);
+        }
+      }
+    }
 
     return WillPopScope(
       onWillPop: (){
@@ -1478,7 +1521,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                           children: <Widget>[
                             Text(itemdata_now==null?"테스트":itemdata_now['mb_name'].length>10?itemdata_now['mb_name'].substring(0,10)+"···":itemdata_now['mb_name'],style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
                             SizedBox(height: 8,),
-                            Text(itemdata_now==null?"테스트":itemdata_now['ca_name']=='업체'?itemdata_now['wr_11']:itemdata_now['mb_2'],style: TextStyle(fontSize: 12)),
+                            Text(itemdata_now==null?"테스트":itemdata_now['ca_name']=='업체'?itemdata_now['wr_12']:itemdata_now['mb_2'],style: TextStyle(fontSize: 12)),
                           ],
                         ),
                       ],
@@ -1575,14 +1618,24 @@ class _ViewpagemineState extends State<Viewpage_mine>{
             ),
             (itemdata_now!=null)&&(itemdata_now['ca_name']=='업체')?
             InkWell(
-              child: Container(
-                  padding: EdgeInsets.only(left: 15,),
-                  width: MediaQuery.of(context).size.width,
-                  height:MediaQuery.of(context).size.height*0.02,
-                  child:Text(itemdata_now.wr_5)
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(left: 15,),
+                    width: MediaQuery.of(context).size.width*0.08,
+                    height: MediaQuery.of(context).size.width*0.08,
+                    child: Image.asset("images/call.png"),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(left: 4,),
+                      width: MediaQuery.of(context).size.width*0.8,
+                      height:MediaQuery.of(context).size.height*0.02,
+                      child:Text(call_number,style:TextStyle(color:Color(0xff041ae3),))
+                  ),
+                ],
               ),
               onTap: (){
-                launch("tel://"+itemdata_now.wr_5);
+                launch("tel://"+itemdata_now['wr_5']);
               },
             ):Container(),
             Container(

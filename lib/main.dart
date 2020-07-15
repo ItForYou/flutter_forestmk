@@ -295,7 +295,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           title:null,
           content: Container(
             height: MediaQuery.of(context).size.height*0.06,
-            child: Text(text, style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.015),),
+            child: Text(text, style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.02),),
           ),
           actions: <Widget>[
             new FlatButton(
@@ -1445,7 +1445,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 //          borderRadius: BorderRadius.all(Radius.circular(50)),
 //          border: Border.all(color: Color(0xffcccccc))
 //      ),
-        body:WillPopScope(
+        body: WillPopScope(
          onWillPop: (){
             show_quit();
          },

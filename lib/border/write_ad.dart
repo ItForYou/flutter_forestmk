@@ -32,7 +32,8 @@ class writead_State extends State<write_ad> {
   List<File> Images = [];
   int first_build =1;
   double grid_height;
-  String str_address ="업체주소를 입력해주세요";
+  String str_address ;
+  String str_address_detail="업체주소를 입력해주세요";
   String mb_id,mb_name,mb_5,mb_6,wr_6='미승인';
   List <int> select_days=[7,14,21,28];
   List<String> modify_imges= [];
@@ -264,6 +265,7 @@ class writead_State extends State<write_ad> {
     request.fields['mb_id'] = mb_id;
     request.fields['mb_name'] = mb_name;
     request.fields['wr_11'] = str_address;
+    request.fields['wr_12'] = str_address_detail;
     request.fields['wr_5'] = input_wr_5.text;
     request.fields['wr_6'] = wr_6;
     request.fields['wr_7'] = selected_day.toString();
@@ -480,6 +482,7 @@ class writead_State extends State<write_ad> {
       input_wr_5.text = widget.info.wr_5;
       color_cate = Colors.black;
       str_address = widget.info.wr_11;
+      str_address_detail = widget.info.wr_12;
       wr_6 = widget.info.wr_6;
 
     }
@@ -626,7 +629,7 @@ class writead_State extends State<write_ad> {
                                   child: Center(
                                     child: Container(
                                         width: MediaQuery.of(context).size.width*0.7,
-                                        child:Text(str_address,style: TextStyle(color: color_cate,fontSize: MediaQuery.of(context).size.width*0.038,),textAlign: TextAlign.start,)
+                                        child:Text(str_address_detail,style: TextStyle(color: color_cate,fontSize: MediaQuery.of(context).size.width*0.038,),textAlign: TextAlign.start,)
                                     ),
                                   )
                               ),
@@ -639,13 +642,22 @@ class writead_State extends State<write_ad> {
                                );
                                setState(() {
 
-                                 color_cate=Colors.black;
-                                 if(model.userSelectedType=='J') {
-                                   str_address =
-                                   '${model.address}'; //'${model.sido} ${model.sigungu} ${model.bname}';
-                                 }
-                                 else{
-                                   str_address ='${model.roadAddress}';//"${model.sido} ${model.sigungu} ${model.roadname}"
+                                 if(model!=null) {
+                                   if (model.userSelectedType == 'J') {
+                                     str_address =
+                                     '${model.sido} ${model.sigungu} ${model
+                                         .bname}';
+                                     str_address_detail = '${model.jibunAddress}';
+                                     color_cate = Colors.black;
+                                   }
+                                   else {
+                                     str_address =
+                                     "${model.sido} ${model.sigungu} ${model
+                                         .roadname}";
+                                     str_address_detail =
+                                     '${model.roadAddress}';
+                                     color_cate = Colors.black;
+                                   }
                                  }
                                });
                              },
@@ -867,7 +879,7 @@ class writead_State extends State<write_ad> {
                   if(input_subject.text!='' && input_subject.text!=null
                       && input_wr_5.text!=null && input_wr_5.text!=''
                       && input_content.text!='' && input_content.text!=null
-                      && str_address!='업체주소를 입력해주세요'
+                      && str_address_detail!='업체주소를 입력해주세요'
                   ) {
                     var result = await uploaddata();
                     print(result);

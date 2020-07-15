@@ -16,6 +16,7 @@ import 'package:flutterforestmk/member/mypage.dart';
 import 'package:flutterforestmk/border/viewpage.dart';
 import 'package:flutterforestmk/border/write_normal.dart';
 import 'package:http/http.dart' as http;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -33,6 +34,7 @@ class search_main extends StatefulWidget {
 
 class _search_mainState extends State<search_main> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  RefreshController _refreshController =  RefreshController(initialRefresh: false);
   static double scrollbar_height=1;
   double list_height;
   int start_height=1,flg_floatbt=0;
@@ -752,6 +754,15 @@ class _search_mainState extends State<search_main> {
     });
   }
 
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 800));
+    // if failed,use refreshFailed()
+    get_data();
+
+    _refreshController.refreshCompleted();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -1103,335 +1114,341 @@ class _search_mainState extends State<search_main> {
 //          borderRadius: BorderRadius.all(Radius.circular(50)),
 //          border: Border.all(color: Color(0xffcccccc))
 //      ),
-        body:Column(
-          children: <Widget>[
-            Container(
-              height: list_height,
-              decoration: BoxDecoration(color: Colors.white),
-              child: ListView(
-                controller: change_appbar,
-                children: <Widget>[
-                  SizedBox(height: 5,),
-                  head_first,
-                  Container(
-                      padding: EdgeInsets.only(left: 22, right: 22),
-                      height: MediaQuery.of(context).size.height*0.075,
-                      decoration: new BoxDecoration(color: Colors.white),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
+        body: SmartRefresher(
+          enablePullDown: true,
+          header: MaterialClassicHeader(),
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: list_height,
+                decoration: BoxDecoration(color: Colors.white),
+                child: ListView(
+                  controller: change_appbar,
+                  children: <Widget>[
+                    SizedBox(height: 5,),
+                    head_first,
+                    Container(
+                        padding: EdgeInsets.only(left: 22, right: 22),
+                        height: MediaQuery.of(context).size.height*0.075,
+                        decoration: new BoxDecoration(color: Colors.white),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
 
-                          InkWell(
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              padding: EdgeInsets.all(3),
-                              child: Image.asset("images/hd_cate01.png"),
-                            ),
-                            onTap: (){
-                              Navigator.push(context,MaterialPageRoute(
-                                  builder:(context) => main_home(mb_id: widget.mb_id,)
-                              ));
-                            },
-                          ),
-
-                          InkWell(
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              padding: EdgeInsets.all(3),
-
-                              child: Image.asset("images/hd_cate02.png"),
-                            ),
-                            onTap: (){
-                              Navigator.push(context,MaterialPageRoute(
-                                  builder:(context) => search_main(title:'광고' ,sch_flgadv: "1", mb_id :widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                              ));
-                            },
-                          ),
-
-                          InkWell(
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              padding: EdgeInsets.all(3),
-
-                              child: Image.asset("images/hd_cate03.png"),
-                            ),
-                            onTap: (){
-                              Navigator.push(context,MaterialPageRoute(
-                                  builder:(context) => categorypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                              ));
-                            },
-                          ),
-
-                          InkWell(
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              padding: EdgeInsets.all(3),
-                              child: Image.asset("images/hd_cate04.png"),
-                            ),
-                            onTap: (){
-                              if(widget.mb_id!=null) {
+                            InkWell(
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                padding: EdgeInsets.all(3),
+                                child: Image.asset("images/hd_cate01.png"),
+                              ),
+                              onTap: (){
                                 Navigator.push(context,MaterialPageRoute(
-                                    builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                    builder:(context) => main_home(mb_id: widget.mb_id,)
                                 ));
-                              }
-                              else{
-                                request_logindialog();
-                              }
-                            },
-                          ),
-                          InkWell(
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              padding: EdgeInsets.all(3),
-
-                              child: Image.asset("images/hd_cate05.png"),
+                              },
                             ),
-                            onTap: ()async{
 
-                              if(widget.mb_id!=null) {
-                                var result = await   Navigator.push(context,MaterialPageRoute(
-                                    builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                            InkWell(
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                padding: EdgeInsets.all(3),
+
+                                child: Image.asset("images/hd_cate02.png"),
+                              ),
+                              onTap: (){
+                                Navigator.push(context,MaterialPageRoute(
+                                    builder:(context) => search_main(title:'광고' ,sch_flgadv: "1", mb_id :widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                                 ));
-                                if(result == 'back'){
-                                  get_mbdata();
-                                  get_data();
+                              },
+                            ),
+
+                            InkWell(
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                padding: EdgeInsets.all(3),
+
+                                child: Image.asset("images/hd_cate03.png"),
+                              ),
+                              onTap: (){
+                                Navigator.push(context,MaterialPageRoute(
+                                    builder:(context) => categorypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                ));
+                              },
+                            ),
+
+                            InkWell(
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                padding: EdgeInsets.all(3),
+                                child: Image.asset("images/hd_cate04.png"),
+                              ),
+                              onTap: (){
+                                if(widget.mb_id!=null) {
+                                  Navigator.push(context,MaterialPageRoute(
+                                      builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                  ));
                                 }
-                              }
-                              else{
-                                request_logindialog();
-                              }
-
-                             /* Navigator.push(context,MaterialPageRoute(
-                                  builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                              ));*/
-                            },
-                          ),
-                        ],
-                      )),
-                  Container(
-                      height: MediaQuery.of(context).size.height*0.06,
-                      decoration: BoxDecoration(color: Colors.white),
-                      padding:EdgeInsets.only(left: 22,right: 22),
-                      margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              InkWell(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*0.12,
-                                  height: MediaQuery.of(context).size.width*0.12,
-                                  padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                      color: Color(0xfff3f3f3),
-                                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                                      border: Border.all(color: Color(0xffcccccc)),
-                                      image: DecorationImage(//이미지 꾸미기
-                                        fit:BoxFit.cover,
-                                        //image:  AssetImage("images/wing_mb_noimg2.png"),
-                                        image:widget.mb_1=='test'?
-                                        AssetImage("images/wing_mb_noimg2.png"):
-                                        NetworkImage( widget.mb_1,),
-                                      )
-
-                                  ),
-
-                                ),
-                                onTap: ()async{
-                                  if(widget.mb_id==null) {
-                                    Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => loginpage()
-                                    ));
-                                    /*if(result!=null){
-                                      setState(() {
-
-                                      });
-                                    }*/
-                                  }
-                                  else{
-                                    var result = await   Navigator.push(context,MaterialPageRoute(
-                                        builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                                    ));
-                                    if(result == 'back'){
-                                      get_mbdata();
-                                      get_data();
-                                    }
-                                   /* Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                                    ));*/
-                                  }
-                                },
-                              ),
-                              SizedBox(width: 10,),
-                              InkWell(
-                                child: Container(
-                                    height: MediaQuery.of(context).size.height*0.08,
-                                    child: mb_infowidget
-                                ),
-                                onTap: ()async{
-                                  if(widget.mb_id==null) {
-                                    Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => loginpage()
-                                    ));
-                                    /*if(result!=null){
-                                      setState(() {
-
-                                      });
-                                    }*/
-                                  }
-                                  else{
-                                    var result = await   Navigator.push(context,MaterialPageRoute(
-                                        builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                                    ));
-                                    if(result == 'back'){
-                                      get_mbdata();
-                                      get_data();
-                                    }
-                                    /*Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) => mypage(mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                                    ));*/
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                          InkWell(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width*0.25,
-                              height: MediaQuery.of(context).size.height*0.035,
-                              padding: EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                  color: Color(0xff444444),
-                                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                                  border: Border.all(color: Color(0xffcccccc))
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.all(3),
-                                    child:Image.asset("images/mb_write_btn.png"),
-                                  ),
-                                  Text("글쓰기",style: TextStyle(color: Colors.white),)
-                                ],
-                              ),
+                                else{
+                                  request_logindialog();
+                                }
+                              },
                             ),
-                            onTap: (){
-                              if(widget.mb_id!=null) {
-                                _showcontent();
-                              }
-                              else{
-                                request_logindialog();
-                              }
-                            },
-                          ),
-                        ],
-                      )
-                  ),
-                  widget.title!='나의광고'?
-                  Container(
-                      padding: EdgeInsets.only(left: 22, right: 22),
-                      height: MediaQuery.of(context).size.height*0.06,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border(
-                            top: BorderSide(color: Color(0xffdddddd), width: 1),
-                            bottom: BorderSide(color: Color(0xffdddddd), width: 1),
-                          )
+                            InkWell(
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                padding: EdgeInsets.all(3),
 
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
+                                child: Image.asset("images/hd_cate05.png"),
+                              ),
+                              onTap: ()async{
 
-                          InkWell(
-                            child: Row(
+                                if(widget.mb_id!=null) {
+                                  var result = await   Navigator.push(context,MaterialPageRoute(
+                                      builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                  ));
+                                  if(result == 'back'){
+                                    get_mbdata();
+                                    get_data();
+                                  }
+                                }
+                                else{
+                                  request_logindialog();
+                                }
+
+                               /* Navigator.push(context,MaterialPageRoute(
+                                    builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                ));*/
+                              },
+                            ),
+                          ],
+                        )),
+                    Container(
+                        height: MediaQuery.of(context).size.height*0.06,
+                        decoration: BoxDecoration(color: Colors.white),
+                        padding:EdgeInsets.only(left: 22,right: 22),
+                        margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.01),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Row(
                               children: <Widget>[
-                                Text(sort_value,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032),),
-                                Image.asset("images/arrow_filter.png"),
+                                InkWell(
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width*0.12,
+                                    height: MediaQuery.of(context).size.width*0.12,
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xfff3f3f3),
+                                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                                        border: Border.all(color: Color(0xffcccccc)),
+                                        image: DecorationImage(//이미지 꾸미기
+                                          fit:BoxFit.cover,
+                                          //image:  AssetImage("images/wing_mb_noimg2.png"),
+                                          image:widget.mb_1=='test'?
+                                          AssetImage("images/wing_mb_noimg2.png"):
+                                          NetworkImage( widget.mb_1,),
+                                        )
+
+                                    ),
+
+                                  ),
+                                  onTap: ()async{
+                                    if(widget.mb_id==null) {
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) => loginpage()
+                                      ));
+                                      /*if(result!=null){
+                                        setState(() {
+
+                                        });
+                                      }*/
+                                    }
+                                    else{
+                                      var result = await   Navigator.push(context,MaterialPageRoute(
+                                          builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                      ));
+                                      if(result == 'back'){
+                                        get_mbdata();
+                                        get_data();
+                                      }
+                                     /* Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                      ));*/
+                                    }
+                                  },
+                                ),
+                                SizedBox(width: 10,),
+                                InkWell(
+                                  child: Container(
+                                      height: MediaQuery.of(context).size.height*0.08,
+                                      child: mb_infowidget
+                                  ),
+                                  onTap: ()async{
+                                    if(widget.mb_id==null) {
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) => loginpage()
+                                      ));
+                                      /*if(result!=null){
+                                        setState(() {
+
+                                        });
+                                      }*/
+                                    }
+                                    else{
+                                      var result = await   Navigator.push(context,MaterialPageRoute(
+                                          builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                      ));
+                                      if(result == 'back'){
+                                        get_mbdata();
+                                        get_data();
+                                      }
+                                      /*Navigator.push(context, MaterialPageRoute(
+                                          builder: (context) => mypage(mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                      ));*/
+                                    }
+                                  },
+                                ),
                               ],
                             ),
-                            onTap: (){
-                              _searchdialog();
-                            },
-                          ),
-                          widget.title!='광고'?
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                width: 20,
-                                height:20,
+                            InkWell(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width*0.25,
+                                height: MediaQuery.of(context).size.height*0.035,
+                                padding: EdgeInsets.all(3),
                                 decoration: BoxDecoration(
-                                    color:Color(0xffeeeeee),
-                                    borderRadius: BorderRadius.all(Radius.circular(5))
+                                    color: Color(0xff444444),
+                                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                                    border: Border.all(color: Color(0xffcccccc))
                                 ),
-                                child: Theme(
-                                  data:ThemeData(
-                                    unselectedWidgetColor: Color(0xffeeeeee),),
-                                  child: Checkbox(
-                                    value: checkbox_soldout,
-                                    activeColor: Color(0xffeeeeee),
-                                    checkColor: Colors.black,
-                                    onChanged: (bool value){
-                                      setState(() {
-                                          checkbox_soldout = value;
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(3),
+                                      child:Image.asset("images/mb_write_btn.png"),
+                                    ),
+                                    Text("글쓰기",style: TextStyle(color: Colors.white),)
+                                  ],
+                                ),
+                              ),
+                              onTap: (){
+                                if(widget.mb_id!=null) {
+                                  _showcontent();
+                                }
+                                else{
+                                  request_logindialog();
+                                }
+                              },
+                            ),
+                          ],
+                        )
+                    ),
+                    widget.title!='나의광고'?
+                    Container(
+                        padding: EdgeInsets.only(left: 22, right: 22),
+                        height: MediaQuery.of(context).size.height*0.06,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border(
+                              top: BorderSide(color: Color(0xffdddddd), width: 1),
+                              bottom: BorderSide(color: Color(0xffdddddd), width: 1),
+                            )
+
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+
+                            InkWell(
+                              child: Row(
+                                children: <Widget>[
+                                  Text(sort_value,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032),),
+                                  Image.asset("images/arrow_filter.png"),
+                                ],
+                              ),
+                              onTap: (){
+                                _searchdialog();
+                              },
+                            ),
+                            widget.title!='광고'?
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  width: 20,
+                                  height:20,
+                                  decoration: BoxDecoration(
+                                      color:Color(0xffeeeeee),
+                                      borderRadius: BorderRadius.all(Radius.circular(5))
+                                  ),
+                                  child: Theme(
+                                    data:ThemeData(
+                                      unselectedWidgetColor: Color(0xffeeeeee),),
+                                    child: Checkbox(
+                                      value: checkbox_soldout,
+                                      activeColor: Color(0xffeeeeee),
+                                      checkColor: Colors.black,
+                                      onChanged: (bool value){
+                                        setState(() {
+                                            checkbox_soldout = value;
+                                            if(value==true)
+                                            widget.sch_flgsold = '1';
+                                            else
+                                              widget.sch_flgsold = null;
+                                            get_data();
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Text("거래완료",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
+                                SizedBox(width: MediaQuery.of(context).size.width*0.016,),
+                                Container(
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                      color:Color(0xffeeeeee),
+                                      borderRadius: BorderRadius.all(Radius.circular(5))
+                                  ),
+                                  child: Theme(
+                                    data: ThemeData(
+                                      unselectedWidgetColor: Color(0xffeeeeee),),
+                                    child: Checkbox(
+                                      value: checkbox_adv,
+                                      activeColor: Colors.black12,
+                                      onChanged: (bool value){
+                                        setState(() {
+                                          checkbox_adv = value;
                                           if(value==true)
-                                          widget.sch_flgsold = '1';
+                                          widget.sch_flghide = '1';
                                           else
-                                            widget.sch_flgsold = null;
+                                          widget.sch_flghide = null;
                                           get_data();
-                                      });
-                                    },
+                                        });
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text("거래완료",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
-                              SizedBox(width: MediaQuery.of(context).size.width*0.016,),
-                              Container(
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                    color:Color(0xffeeeeee),
-                                    borderRadius: BorderRadius.all(Radius.circular(5))
-                                ),
-                                child: Theme(
-                                  data: ThemeData(
-                                    unselectedWidgetColor: Color(0xffeeeeee),),
-                                  child: Checkbox(
-                                    value: checkbox_adv,
-                                    activeColor: Colors.black12,
-                                    onChanged: (bool value){
-                                      setState(() {
-                                        checkbox_adv = value;
-                                        if(value==true)
-                                        widget.sch_flghide = '1';
-                                        else
-                                        widget.sch_flghide = null;
-                                        get_data();
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ),
-                              Text("업체안보기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
-                            ],
-                          ):Container(),
-                        ],
-                      )
-                  ):Container(),
-                  Column(
-                      children: items_content
-                  )
-                ],
+                                Text("업체안보기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),),
+                              ],
+                            ):Container(),
+                          ],
+                        )
+                    ):Container(),
+                    Column(
+                        children: items_content
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         floatingActionButton: flg_floatbt==1?float_button():Container(),
         // This trailing comma makes auto-formatting nicer for build methods.

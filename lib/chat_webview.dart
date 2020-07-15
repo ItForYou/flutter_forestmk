@@ -24,7 +24,7 @@ class _chat_webviewState extends State<chat_webview> {
 
 
   void presed_bak(){
-    print(current_url);
+   // print(current_url);
       //구글 웹뷰 사용시
        /*   if(widget.view ==1){
             Navigator.pop(context);
@@ -102,6 +102,7 @@ class _chat_webviewState extends State<chat_webview> {
           withJavascript: true,
           withZoom: false,
           withLocalStorage: true,
+
          // hidden: true,
           javascriptChannels: Set.from([
             JavascriptChannel(

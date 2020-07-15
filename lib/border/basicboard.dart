@@ -6,6 +6,7 @@ import 'package:flutterforestmk/border/basicview.dart';
 import 'package:flutterforestmk/member/my_items.dart';
 import 'package:flutterforestmk/border/write_basic.dart';
 import 'package:http/http.dart' as http;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class basicboard extends StatefulWidget {
 
@@ -17,7 +18,7 @@ class basicboard extends StatefulWidget {
 }
 
 class _basicboardState extends State<basicboard> {
-
+  RefreshController _refreshController =  RefreshController(initialRefresh: false);
    // List <bool> chebkbox_wr = [];
    Widget widget_writes;
    List <bool> checkbox_values;
@@ -111,6 +112,16 @@ class _basicboardState extends State<basicboard> {
 
    }
 
+
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 800));
+    // if failed,use refreshFailed()
+      get_data();
+
+    _refreshController.refreshCompleted();
+  }
+
    void get_writes(size){
         List <Widget> temp_list = [];
         Widget total_widget =  Container(
@@ -182,8 +193,14 @@ class _basicboardState extends State<basicboard> {
             );
             temp_list.add(temp_widget);
           }
-          widget_writes = ListView(
-            children: temp_list,
+          widget_writes = SmartRefresher(
+            enablePullDown: true,
+            header: MaterialClassicHeader(),
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            child: ListView(
+              children: temp_list,
+            ),
           );
         }
         else {

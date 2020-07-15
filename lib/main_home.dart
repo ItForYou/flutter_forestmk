@@ -1314,7 +1314,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                                     decoration: BoxDecoration(
                                         color: Color(0xfff3f3f3),
                                         borderRadius: BorderRadius.all(Radius.circular(50)),
-                                        // border: Border.all(color: Color(0xffcccccc)),
+                                        border: Border.all(color: Color(0xffcccccc)),
                                         image: DecorationImage(//이미지 꾸미기
                                           fit:BoxFit.cover,
                                           //image:  AssetImage("images/wing_mb_noimg2.png"),

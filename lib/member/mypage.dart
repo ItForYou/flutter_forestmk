@@ -172,6 +172,7 @@ class _mypageState extends State<mypage> {
                               decoration: BoxDecoration(
                                   color: Color(0xfff3f3f3),
                                   borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.5,)),
+                                  border: Border.all(color: Color(0xffcccccc)),
                                   image: DecorationImage(//이미지 꾸미기
                                       fit:BoxFit.cover,
                                       image:widget.mb_1!='test'?NetworkImage(widget.mb_1):AssetImage("images/wing_mb_noimg2.png")//이미지 가져오기

@@ -17,6 +17,7 @@ class main_item{
     final String wr_9;
     final String wr_10;
     final String wr_11;
+    final String wr_12;
     final String wr_hit;
     final String mb_2;
     final String mb_name;
@@ -54,6 +55,7 @@ class main_item{
       this.wr_9,
       this.wr_10,
       this.wr_11,
+      this.wr_12,
     });
    // main_item({this.wr_id,this.wr_content});
 
@@ -83,6 +85,7 @@ class main_item{
        wr_9: json['wr_9'],
        like: json['wr_10'],
        wr_11: json['wr_11'],
+       wr_12: json['wr_12'],
       );
     }
 
