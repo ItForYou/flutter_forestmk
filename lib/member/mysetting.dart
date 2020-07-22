@@ -31,7 +31,6 @@ class _mysettingState extends State<mysetting> {
 
   Future<String> update_state(flg,value) async{
 
-
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/update_state.php'),
         body: {
@@ -45,7 +44,6 @@ class _mysettingState extends State<mysetting> {
   }
 
   Future<String> load_state() async{
-
 
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/get_state.php'),
@@ -71,11 +69,9 @@ class _mysettingState extends State<mysetting> {
           switchvalue2=false;
         }
       });
-
     }
+
   }
-
-
 
   void _showDialog() {
     showDialog(
@@ -85,11 +81,20 @@ class _mysettingState extends State<mysetting> {
         return AlertDialog(
           title:null,
           content: Container(
-
-            height: MediaQuery.of(context2).size.height*0.052,
-            child: Text("회원님의 게시물과 모든 정보들이 삭제됩니다.\t숲마켓을 탈퇴하시겠습니까?", style: TextStyle(fontSize: MediaQuery.of(context2).size.width*0.043,),),
+            child: Wrap(
+                children: [
+                  Text("회원님의 게시물과 모든 정보들이 삭제됩니다.   숲마켓을 탈퇴하시겠습니까?", style: TextStyle(fontSize: MediaQuery.of(context2).size.width*0.043,),),
+                ]
+            ),
           ),
           actions: <Widget>[
+
+            new FlatButton(
+              child: new Text("취소",style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                Navigator.pop(context2);
+              },
+            ),
             new FlatButton(
               child: new Text("확인"),
               onPressed: () async {
@@ -108,12 +113,6 @@ class _mysettingState extends State<mysetting> {
                       MaterialPageRoute(builder: (context) => MyApp()),
                           (Route<dynamic> route) => false);
                 }
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context2);
               },
             ),
           ],

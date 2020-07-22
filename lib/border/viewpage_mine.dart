@@ -46,11 +46,12 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   ];
   String wr_id, mb_id='test',ca_name,real_mbid,price="", real_mbpwd, now_price="",seleted_comm_wrid='',uploadcomm_bt_txt="댓글게시";
   Widget Swiper_widget=SizedBox();
-  String txt_soldout = "완료하기",declare_cate="사기신고";
+  String txt_soldout = "완료하기",declare_cate="사기신고",declare_cate_comm="불법홍보 등";
   Color color_soldout = Color(0xff515151);
   int flg_soldout=0, flg_likenow=0, count_like=0,flg_opencomments=0,flg_uploadcomm_bt=0;
   bool got_item_now =false;
   TextEditingController delare_content = TextEditingController();
+  TextEditingController delare_comm_content = TextEditingController();
   TextEditingController input_comment = TextEditingController();
   ScrollController change_scroll = ScrollController(initialScrollOffset: 0);
   double content_size=0;
@@ -113,33 +114,313 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
   void show_declarecomm() {
 
+
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext context)
+      {
         // return object of type Dialog
-        return AlertDialog(
-          title:null,
-          content: Container(
-            height: MediaQuery.of(context).size.height*0.03,
-            child: Text("이 댓글을 신고하시겠습니까?"),
-          ),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("취소",style: TextStyle(color:Colors.red),),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            new FlatButton(
-              child: new Text("확인",style: TextStyle(color: Colors.forestmk),),
-              onPressed: (){
-                declare_comm(seleted_comm_wrid);
-              },
-            ),
-          ],
+        return StatefulBuilder(
+            builder:(context, setState) {
+              return AlertDialog(
+                contentPadding: EdgeInsets.all(0.0),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.02))
+                ),
+                title: null,
+                content: Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.45,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.07,
+                          padding: EdgeInsets.only(right: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.02, left: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.02),
+                          decoration: BoxDecoration(
+                              border: Border(bottom: BorderSide(
+                                  width: 1, color: Color(0xffdddddd)))
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text("신고하기"),
+                              InkWell(
+                                child: Icon(
+                                  Icons.clear, color: Color(0xffdddddd),),
+                                onTap: (){
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                          child: Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.05,
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(
+                                    width: 1, color: Color(0xffdddddd)))
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Radio(
+                                  value: "불법홍보 등",
+                                  groupValue: declare_cate_comm,
+                                  activeColor: Colors.forestmk,
+                                  onChanged: (T) {
+                                    setState(() {
+                                      declare_cate_comm = T;
+                                    });
+                                  },
+                                ),
+                                Text("불법홍보 등")
+                              ],
+                            ),
+                          ),
+                          onTap: (){
+                            setState(() {
+                              declare_cate_comm = '불법홍보 등';
+                            });
+                          },
+                        ),
+                        InkWell(
+                          child: Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.05,
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(
+                                    width: 1, color: Color(0xffdddddd)))
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Radio(
+                                  value: "성희롱, 욕설 등",
+                                  groupValue: declare_cate_comm,
+                                  activeColor: Colors.forestmk,
+                                  onChanged: (T) {
+                                    setState(() {
+                                      declare_cate_comm = T;
+                                    });
+                                  },
+                                ),
+                                Text("성희롱, 욕설 등")
+                              ],
+                            ),
+                          ),
+                          onTap: (){
+                            setState(() {
+                              declare_cate_comm = '성희롱, 욕설 등';
+                            });
+                          },
+                        ),
+                        InkWell(
+                          child: Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.05,
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(
+                                    width: 1, color: Color(0xffdddddd)))
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Radio(
+                                  value: "복사중복도배",
+                                  groupValue: declare_cate_comm,
+                                  activeColor: Colors.forestmk,
+                                  onChanged: (T) {
+                                    setState(() {
+                                      declare_cate_comm = T;
+                                    });
+                                  },
+                                ),
+                                Text("복사중복도배")
+                              ],
+                            ),
+                          ),
+                          onTap: (){
+                            setState(() {
+                              declare_cate_comm = '복사중복도배';
+                            });
+                          },
+                        ),
+//
+                        Container(
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.04,
+                          margin: EdgeInsets.only(top: MediaQuery
+                              .of(context)
+                              .size
+                              .height * 0.01, left: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.025),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: RichText(
+                              text: TextSpan(
+                                  children: <TextSpan>[
+                                    TextSpan(text: itemdata_now['mb_name']!=null?itemdata_now['mb_name']:"temp_null",
+                                        style: TextStyle(
+                                            color: Colors.forestmk, fontSize: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width * 0.04)),
+                                    TextSpan(text: "님을 신고합니다.", style: TextStyle(
+                                        color: Colors.black, fontSize: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.03)),
+                                  ]
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.1,
+                            margin: EdgeInsets.only(left: MediaQuery
+                                .of(context)
+                                .size
+                                .width * 0.03, right: MediaQuery
+                                .of(context)
+                                .size
+                                .width * 0.03,),
+                            decoration: BoxDecoration(
+                                border: Border.all(width: 1, color: Color(0xffdddddd))
+                            ),
+                            child: TextFormField(
+                              controller: delare_comm_content,
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.only(left : MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width * 0.03),
+                                  border: InputBorder.none
+                              ),
+
+                            )
+                        ),
+                        InkWell(
+                          child: Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height * 0.06,
+                              margin: EdgeInsets.only(top: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .height * 0.02,),
+                              decoration: BoxDecoration(
+                                  border: Border.all(width: 1, color: Color(0xffdddddd)),
+                                  color: Color(0xff333333)
+                              ),
+                              child: Center(child: Text(
+                                "신고하기", style: TextStyle(color: Colors.white),))
+                          ),
+                          onTap: (){
+                            declare_comm(seleted_comm_wrid);
+                          },
+                        ),
+
+
+                      ],
+                    ),
+                  ),
+                ),
+
+                actions: null,
+              );
+            }
         );
       },
     );
+
+//    showDialog(
+//      context: context,
+//      builder: (BuildContext context) {
+//        // return object of type Dialog
+//        return AlertDialog(
+//          title:null,
+//          content: Container(
+//            height: MediaQuery.of(context).size.height*0.03,
+//            child: Text("이 댓글을 신고하시겠습니까?"),
+//          ),
+//          actions: <Widget>[
+//            new FlatButton(
+//              child: new Text("취소",style: TextStyle(color:Colors.red),),
+//              onPressed: () {
+//                Navigator.pop(context);
+//              },
+//            ),
+//            new FlatButton(
+//              child: new Text("확인",style: TextStyle(color: Colors.forestmk),),
+//              onPressed: (){
+//                declare_comm(seleted_comm_wrid);
+//              },
+//            ),
+//          ],
+//        );
+//      },
+//    );
   }
 
   Future<dynamic> declare_comm(id) async{
@@ -148,8 +429,10 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         Uri.encodeFull('http://14.48.175.177/update_declarecomm.php'),
         body: {
           "wr_commid":id,
-          "wr_id":itemdata_now!=null?itemdata_now['wr_id']:'',
+          "wr_id":widget.wr_id,
           "mb_id":real_mbid,
+          "ca_name" : declare_cate_comm,
+          "content": delare_comm_content.text
         },
         headers: {'Accept' : 'application/json'}
     );
@@ -269,7 +552,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     .size
                     .width * 0.02,),
                 InkWell(
-                  child: Text("댓글달기", style: TextStyle(color: Color(0xffdddddd), fontSize: MediaQuery
+                  child: Text("댓글달기", style: TextStyle(color: Colors.forestmk, fontSize: MediaQuery
                       .of(context)
                       .size
                       .height * 0.015),),
@@ -287,7 +570,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     .size
                     .width * 0.02,),
                 InkWell(
-                  child: Text("신고하기", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.015),),
+                  child: Text("신고하기", style: TextStyle(color: Colors.red,fontSize:MediaQuery.of(context).size.height * 0.015),),
                   onTap: (){
                     setState(() {
                       if(real_mbid!=null && real_mbid !='') {
@@ -307,7 +590,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     .width * 0.02,):SizedBox(),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
                 InkWell(
-                  child: Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),),
+                  child: Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.015),),
                   onTap: (){
                     setState(() {
                       seleted_comm_wrid = temp_data.wr_id;
@@ -326,7 +609,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     .width * 0.02,):SizedBox(),
                 (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
                 InkWell(
-                  child: Text("삭제", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),
+                  child: Text("삭제", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.015),
                   ),
                   onTap: (){
                     show_deletecmmt(temp_data.wr_id);
@@ -465,10 +748,20 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context2).size.height*0.02,
-            child: Text("이 댓글을 삭제를 하시겠습니까?"),
+            child: Wrap(
+                children: [
+                  Text("이 댓글을 삭제를 하시겠습니까?")
+                ]
+            ),
           ),
           actions: <Widget>[
+
+            new FlatButton(
+              child: new Text("취소", style:TextStyle(color:Colors.red)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             new FlatButton(
               child: new Text("확인"),
               onPressed: ()async{
@@ -483,12 +776,6 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                   Navigator.pop(context2);
                   get_comment();
                 }
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
               },
             ),
           ],
@@ -1051,7 +1338,12 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
 
     if(temp_data.ca_name =='업체'){
-      price=temp_data.wr_subject;
+      if(temp_data.wr_subject!=null){
+        if(temp_data.wr_subject.length>10)
+        price=temp_data.wr_subject.toString().substring(0,10)+"···";
+        else
+         price=temp_data.wr_subject;
+      }
     }
     else if(temp_data.wr_1 =='무료나눔'){
       price=temp_data.wr_1;
@@ -1086,7 +1378,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     ),
 
                     SizedBox(height: 5,),
-                    Text(temp_data.wr_subject, style: TextStyle(fontSize: 12),),
+                    Text(temp_data.wr_subject==null?"Temp":temp_data.wr_subject.length>10?temp_data.wr_subject.toString().substring(0,10)+"···":temp_data.wr_subject, style: TextStyle(fontSize: 12),),
                     SizedBox(height: 5,),
                     Text(price, style: TextStyle(fontSize: 15),),
                   ]
@@ -1241,8 +1533,10 @@ class _ViewpagemineState extends State<Viewpage_mine>{
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context2).size.height*0.06,
-            child: Text("한번 삭제한 자료는 복구할 방법이 없습니다.\n정말 삭제하시겠습니까?", style:TextStyle(fontSize:MediaQuery.of(context2).size.height*0.0185)),
+            child: Wrap(children: [
+              Text("한번 삭제한 자료는 복구할 방법이 없습니다.  정말 삭제하시겠습니까?", style:TextStyle(fontSize:MediaQuery.of(context2).size.height*0.0185))
+            ]
+            ),
           ),
           actions: <Widget>[
 
@@ -1648,7 +1942,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(itemdata_now==null?'테스트':itemdata_now['wr_subject'],style:TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),),
+                      Text(itemdata_now==null?'테스트':itemdata_now['wr_subject'].length>10?itemdata_now['wr_subject'].substring(0,10)+"···":itemdata_now['wr_subject'],style:TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),),
                       SizedBox(height: 10,),
                       Row(
                           children:<Widget>[
@@ -1705,6 +1999,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
               ),
             ),
             Container(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.032,right: MediaQuery.of(context).size.width*0.032),
               child: Wrap(children : [
                 Text(itemdata_now==null?'테스트':itemdata_now['wr_content'])
               ]),
@@ -1886,7 +2181,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                           flg_uploadcomm_bt==1?
                           InkWell(
                               child: Text(
-                                "수정취소", style: TextStyle(color: Colors.forestmk),
+                                "수정취소", style: TextStyle(color: Colors.red),
                                 textAlign: TextAlign.right,),
                               onTap: (){
                                 setState((){

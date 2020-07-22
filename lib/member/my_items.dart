@@ -307,7 +307,7 @@ class _my_itemsState extends State<my_items> {
                                     height: MediaQuery.of(context).size.height*0.2,
                                     decoration: BoxDecoration(
                                         border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
-                                        borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
+                                        borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.015)),
                                         image: DecorationImage(//이미지 꾸미기
                                             fit:BoxFit.fitWidth,
                                             image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
@@ -468,8 +468,10 @@ class _my_itemsState extends State<my_items> {
           ),
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.03,
-            child: Text(text),
+            child: Wrap(children: [
+              Text(text),
+            ]
+            ),
           ),
           actions: <Widget>[
             new FlatButton(
@@ -516,13 +518,15 @@ class _my_itemsState extends State<my_items> {
                     ));
                     if(result == 'success'){
                       // print(result);
-                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
+                      Navigator.pop(bc);
+                      show_Alert("승인을 기다려주세요!\n승인시 자동 업로드 됩니다.",1);
+                      //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
                       get_data();
                     }
                     else{
                       get_data();
                     }
-                    Navigator.pop(bc);
+
                   },
                 ),
                 InkWell(
@@ -543,9 +547,9 @@ class _my_itemsState extends State<my_items> {
                     ));
                     if(result == 'success'){
                       // print(result);
+                      Navigator.pop(bc);
                       show_Alert("승인을 기다려주세요!\n승인시 자동 업로드 됩니다.",1);
                       //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
-                      Navigator.pop(bc);
                       get_data();
                     }
                   },
@@ -559,36 +563,45 @@ class _my_itemsState extends State<my_items> {
   }
 
   void show_deletealrt(){
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title:null,
-          content: Container(
-            height: MediaQuery.of(context).size.height*0.03,
-            child: Text("선택한 게시물을 삭제하시겠습니까?"),
-          ),
-          actions: <Widget>[
+    //print(checkbox_values.length.toString());
+    if(checkbox_values.contains(true)) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: null,
+            content: Container(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.03,
+              child: Text("선택한 게시물을 삭제하시겠습니까?"),
+            ),
+            actions: <Widget>[
 
-            new FlatButton(
-              child: new Text("취소",style: TextStyle(color: Colors.red),),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            new FlatButton(
-              child: new Text("확인"),
-              onPressed: ()async {
-                Navigator.pop(context);
-                var result = await delete_recent();
-                //print(result);
-              },
-            ),
-          ],
-        );
-      },
-    );
+              new FlatButton(
+                child: new Text("취소", style: TextStyle(color: Colors.red),),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              new FlatButton(
+                child: new Text("확인"),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  var result = await delete_recent();
+                  //print(result);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+    else {
+      show_Alert("항목을 선택해 주세요!", 1);
+    }
   }
 
   Future<dynamic> get_data() async{
@@ -651,12 +664,14 @@ class _my_itemsState extends State<my_items> {
   Widget build(BuildContext context) {
     //load_myinfo();
 
+
+
     if(widget.mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: MediaQuery.of(context).size.height*0.015,),
-          Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032,fontWeight: FontWeight.bold),),
+          Text(widget.mb_name.length>10?widget.mb_name.substring(0,10)+"···":widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032,fontWeight: FontWeight.bold),),
           Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032)),
         ],
       );
@@ -1116,7 +1131,7 @@ class _my_itemsState extends State<my_items> {
                                 decoration: BoxDecoration(
                                     color: Color(0xfff3f3f3),
                                     borderRadius: BorderRadius.all(Radius.circular(50)),
-                                    border: Border.all(color: Color(0xffcccccc)),
+//                                    border: Border.all(color: Color(0xffcccccc)),
                                     image: DecorationImage(//이미지 꾸미기
                                       fit:BoxFit.cover,
                                       //image:  AssetImage("images/wing_mb_noimg2.png"),

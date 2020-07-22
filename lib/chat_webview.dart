@@ -44,10 +44,9 @@ class _chat_webviewState extends State<chat_webview> {
       Navigator.pop(context);
     }
     else {
-     // print("excute_javascript");
       if (current_url.contains("chatting.php")) {
        print("excute_javascript");
-        flutterWebViewPlugin.evalJavascript("javascript:leavepage();");
+
       }
       else {
        Navigator.pop(context);
@@ -62,26 +61,38 @@ class _chat_webviewState extends State<chat_webview> {
    // print(widget.url);
     flutterWebViewPlugin.close();
     flutterWebViewPlugin.onBack.listen((_){
-     // print("back2!!");
+
       if (current_url.contains("chatting.php")) {
+        print("back2!!");
         presed_bak();
       }
     });
-    _onUrlChanged = flutterWebViewPlugin.onUrlChanged.listen((String url) {
-      if (mounted) {
+    flutterWebViewPlugin.onUrlChanged.listen((String url){
+    //  print("test_"+url);
+      if (mounted){
         if(!url.contains("chatting") && !url.contains("mb_id") ){
-            presed_bak();
+           // presed_bak();
             print("back1!!");
            // print("urlchange: "+url);
             flutterWebViewPlugin.close();
+            presed_bak();
           }
-        else {
-          setState(() {
-            current_url = url;
-          });
+        else if(current_url.contains("chatting.php")){
+          print("test_back!");
+          flutterWebViewPlugin.evalJavascript("javascript:leavepage();");
+          //presed_bak();
         }
+            current_url = url;
       }
     });
+  }
+  @override
+  void dispose() {
+    // Every listener should be canceled, the same should be done with this stream.
+   // _onUrlChanged.cancel();
+    flutterWebViewPlugin.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -89,7 +100,7 @@ class _chat_webviewState extends State<chat_webview> {
 
     return WillPopScope(
       onWillPop: (){
-        //print("back3!!");
+        print("back3!!");
         presed_bak();
       },
       child:Scaffold(
@@ -102,8 +113,7 @@ class _chat_webviewState extends State<chat_webview> {
           withJavascript: true,
           withZoom: false,
           withLocalStorage: true,
-
-         // hidden: true,
+          hidden: true,
           javascriptChannels: Set.from([
             JavascriptChannel(
                 name: 'goback',

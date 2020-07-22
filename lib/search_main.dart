@@ -313,6 +313,17 @@ class _search_mainState extends State<search_main> {
 
     double scrollposition = change_appbar.position.pixels;
 
+    if(scrollposition > MediaQuery.of(context).size.height*0.5){
+      setState(() {
+        flg_floatbt=1;
+      });
+    }
+    else{
+      setState(() {
+        flg_floatbt=0;
+      });
+    }
+
     if (scrollposition > 100) {
       setState(() {
         if(appbar != scroll_appbar)
@@ -531,7 +542,7 @@ class _search_mainState extends State<search_main> {
 
       onTap: () async{
         var result = await Navigator.push(context, PageRouteBuilder(
-          transitionDuration: Duration(milliseconds: 400),
+          transitionDuration: Duration(milliseconds: 800),
           pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
 
         ));
@@ -561,8 +572,10 @@ class _search_mainState extends State<search_main> {
           ),
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.03,
-            child: Text(text),
+            child: Wrap(
+                children: [
+                  Text(text)
+                ]),
           ),
           actions: <Widget>[
             new FlatButton(
@@ -632,14 +645,16 @@ class _search_mainState extends State<search_main> {
                     ));
                     if(result == 'success'){
                       // print(result);
+                      Navigator.pop(bc);
                       show_Alert("승인을 기다려주세요!\n승인시 자동 업로드 됩니다.",1);
                      // _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
                       get_data();
                     }
                     else{
+                      Navigator.pop(bc);
                       get_data();
                     }
-                    Navigator.pop(bc);
+
                   },
                 ),
               ],
@@ -651,7 +666,7 @@ class _search_mainState extends State<search_main> {
 
   Widget float_button(){
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.3,),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.15,),
       child: InkWell(
         child: Container(
           width: MediaQuery.of(context).size.width*0.1,
@@ -783,13 +798,16 @@ class _search_mainState extends State<search_main> {
 
   @override
   Widget build(BuildContext context) {
+    print("build!");
     //load_myinfo();
+
+
     if(widget.mb_id!=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: MediaQuery.of(context).size.height*0.013,),
-          Text(widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.033, fontWeight: FontWeight.bold),),
+          Text(widget.mb_name.length>10?widget.mb_name.substring(0,10)+"···":widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.033, fontWeight: FontWeight.bold),),
           SizedBox(height: MediaQuery.of(context).size.height*0.0028,),
           Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03,color: Color(0xff666666))),
         ],
@@ -963,6 +981,8 @@ class _search_mainState extends State<search_main> {
                       onTap: (){
                         widget.sch_text = search_text.text;
                         get_data();
+                      //  search_text.text = '';
+                       // widget.sch_text = search_text.text;
                       },
                     ),
                     hintText: "원하시는 키워드를 입력하세요",
@@ -1247,7 +1267,7 @@ class _search_mainState extends State<search_main> {
                                     decoration: BoxDecoration(
                                         color: Color(0xfff3f3f3),
                                         borderRadius: BorderRadius.all(Radius.circular(50)),
-                                        border: Border.all(color: Color(0xffcccccc)),
+//                                        border: Border.all(color: Color(0xffcccccc)),
                                         image: DecorationImage(//이미지 꾸미기
                                           fit:BoxFit.cover,
                                           //image:  AssetImage("images/wing_mb_noimg2.png"),

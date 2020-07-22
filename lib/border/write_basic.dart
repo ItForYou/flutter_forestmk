@@ -55,7 +55,6 @@ class _write_basicState extends State<write_basic> {
     }
     // TODO: implement initState
     super.initState();
-
   }
 
 

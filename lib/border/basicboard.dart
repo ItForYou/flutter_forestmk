@@ -138,7 +138,8 @@ class _basicboardState extends State<basicboard> {
 
             var temp_data = basic_item.fromJson(itemdata['data'][i]);
 
-            Widget temp_widget = Container(
+            Widget temp_widget = InkWell(
+                child:Container(
                 width: MediaQuery
                     .of(context)
                     .size
@@ -162,8 +163,7 @@ class _basicboardState extends State<basicboard> {
                         });
                       },
                     ):SizedBox(width: MediaQuery.of(context).size.width*0.1,),
-                    InkWell(
-                      child: Column(
+                    Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -179,17 +179,18 @@ class _basicboardState extends State<basicboard> {
                           Text(temp_data.mb_name+" | "+temp_data.wr_datetime.substring(5,10)+" | 조회 "+temp_data.wr_hit)
                         ],
                       ),
-                      onTap: () async{
-                        var result = await Navigator.push(context, MaterialPageRoute(
-                            builder: (context) =>  basicview(title: widget.title, item: temp_data,bo_table: widget.bo_table,mb_id:widget.mb_id, mb_name:widget.mb_name)
-                        ));
-                        if(result == 'delete'){
-                          get_data();
-                        }
-                      },
-                    )
+
                   ],
                 )
+            ),
+              onTap: () async{
+                var result = await Navigator.push(context, MaterialPageRoute(
+                    builder: (context) =>  basicview(title: widget.title, item: temp_data,bo_table: widget.bo_table,mb_id:widget.mb_id, mb_name:widget.mb_name)
+                ));
+                if(result == 'delete'){
+                  get_data();
+                }
+              },
             );
             temp_list.add(temp_widget);
           }

@@ -325,8 +325,11 @@ class writead_State extends State<write_ad> {
           child: AlertDialog(
             title:null,
             content: Container(
-              height: MediaQuery.of(context2).size.height*0.03,
-              child: Text(text),
+              child: Wrap(
+                  children : [
+                    Text(text),
+                  ],
+              ),
             ),
             actions: <Widget>[
               new FlatButton(
@@ -387,6 +390,7 @@ class writead_State extends State<write_ad> {
         }
       });
     }
+
   }
 
   Future<dynamic> get_data_now() async{
@@ -428,7 +432,7 @@ class writead_State extends State<write_ad> {
       if(int.parse(temp['wr6cnt'])>0)
       show_Alert("승인을 기다려주세요!", 3);
       else
-      show_Alert("광고게시글은 1회 원칙으로 두고있습니다!", 3);
+      show_Alert("광고게시글은 한 아이디당 1회 원칙으로 두고있습니다!", 3);
 //      Navigator.pop(context);
 //      Navigator.pop(context,"success");
     }
@@ -652,8 +656,8 @@ class writead_State extends State<write_ad> {
                                    }
                                    else {
                                      str_address =
-                                     "${model.sido} ${model.sigungu} ${model
-                                         .roadname}";
+                                     '${model.sido} ${model.sigungu} ${model
+                                         .bname}';
                                      str_address_detail =
                                      '${model.roadAddress}';
                                      color_cate = Colors.black;

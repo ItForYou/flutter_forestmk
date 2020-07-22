@@ -36,7 +36,11 @@ class _image_detailState extends State<image_detail> {
       body: Swiper(
         itemCount: widget.flg_view ==1 ?widget.info.length-1:widget.info.length,
         itemBuilder: (BuildContext context, int index){
-          return PhotoView(imageProvider : NetworkImage(widget.flg_view ==1?widget.info[index+1]:widget.info[index]));
+          return PhotoView(
+              imageProvider : NetworkImage(widget.flg_view ==1?widget.info[index+1]:widget.info[index]),
+              minScale: PhotoViewComputedScale.contained * 0.8,
+              maxScale: 4.0,
+          );
         },
         pagination: (widget.flg_view==1 && (widget.info.length-1)>1)|| (widget.flg_view==2 && (widget.info.length)>1)?SwiperPagination():null,
         loop: (widget.flg_view==1 && (widget.info.length-1)>1)|| (widget.flg_view==2 && (widget.info.length)>1)? true:false,

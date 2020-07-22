@@ -29,10 +29,20 @@ class _comment_replyState extends State<comment_reply> {
         return AlertDialog(
           title:null,
           content: Container(
-            height: MediaQuery.of(context2).size.height*0.03,
-            child: Text("이 댓글을 삭제를 하시겠습니가?"),
+            child: Wrap(
+                children: [
+                  Text("이 댓글을 삭제를 하시겠습니까?")
+                ]
+            ),
           ),
           actions: <Widget>[
+
+            new FlatButton(
+              child: new Text("취소",style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             new FlatButton(
               child: new Text("확인"),
               onPressed: ()async{
@@ -47,12 +57,6 @@ class _comment_replyState extends State<comment_reply> {
                   Navigator.pop(context2);
                   get_data();
                 }
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
               },
             ),
           ],
@@ -104,14 +108,10 @@ class _comment_replyState extends State<comment_reply> {
               .of(context)
               .size
               .width,
-          height: MediaQuery
-              .of(context)
-              .size
-              .height * (0.085+comment_height)+13,
           margin: EdgeInsets.only(top: MediaQuery
               .of(context)
               .size
-              .height * 0.01),
+              .height * 0.01,),
           padding: EdgeInsets.only(left:
           //(temp_data.wr_comment != before_tdata.wr_comment)||(i==0)?
           i==0?
@@ -131,86 +131,91 @@ class _comment_replyState extends State<comment_reply> {
               border: Border(
                   bottom: BorderSide(width: 1, color: Color(0xffdddddd)))
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  widget.writer_id == temp_data.mb_id?
-                  Container(
-                    width: MediaQuery
+          child: Wrap(
+            children: [Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    widget.writer_id == temp_data.mb_id?
+                    Container(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.02,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.02,
+                      decoration: BoxDecoration(
+                          color: Colors.forestmk,
+                          borderRadius: BorderRadius.all(Radius.circular(MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.05,))
+                      ),
+                    ):SizedBox(width: 0,),
+                    SizedBox(width: MediaQuery
                         .of(context)
                         .size
-                        .width * 0.02,
-                    height: MediaQuery
+                        .width * 0.02,),
+                    Text(temp_data.mb_name==''?'':temp_data.mb_name, style: TextStyle(fontSize: MediaQuery
                         .of(context)
                         .size
-                        .width * 0.02,
-                    decoration: BoxDecoration(
-                        color: Colors.forestmk,
-                        borderRadius: BorderRadius.all(Radius.circular(MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.05,))
-                    ),
-                  ):SizedBox(width: 0,),
-                  SizedBox(width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.02,),
-                  Text(temp_data.mb_name==''?'':temp_data.mb_name, style: TextStyle(fontSize: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.032),)
+                        .width * 0.032),)
 
-                ],
-              ),
-              SizedBox(height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.005,),
-              Text(
-                  temp_data.wr_content==''?'':temp_data.wr_content,
-                  style: TextStyle(fontSize: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.016)),
-              SizedBox(height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.005,),
-              Row(
-                children: <Widget>[
-                  Text(temp_data.wr_datetime==''?'':temp_data.wr_datetime, style: TextStyle(
-                      color: Color(0xffdddddd), fontSize: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.03),),
-                  (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
-                  SizedBox(width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.02,):SizedBox(),
-                  (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
-                  Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),):SizedBox(),
-                  (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
-                  SizedBox(width: MediaQuery
-                       .of(context)
-                      .size
-                      .width * 0.02,):SizedBox(),
-                  (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
-                  InkWell(
-                    child: Text("삭제", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.02),
-                    ),
-                    onTap: (){
-                      show_deletecmmt(temp_data.wr_id);
-                    },
-                  ):SizedBox(),
-
-
-                ],
-              )
-            ],
+                  ],
+                ),
+                SizedBox(height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.005,),
+                Text(
+                    temp_data.wr_content==''?'':temp_data.wr_content,
+                    style: TextStyle(fontSize: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.016)),
+                SizedBox(height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.005,),
+                Row(
+                  children: <Widget>[
+                    Text(temp_data.wr_datetime==''?'':temp_data.wr_datetime, style: TextStyle(
+                        color: Color(0xffdddddd), fontSize: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.03),),
+                    (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                    SizedBox(width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.02,):SizedBox(),
+                    (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                    Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.015),):SizedBox(),
+                    (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                    SizedBox(width: MediaQuery
+                         .of(context)
+                        .size
+                        .width * 0.02,):SizedBox(),
+                    (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                    InkWell(
+                      child: Text("삭제", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.015),
+                      ),
+                      onTap: (){
+                        show_deletecmmt(temp_data.wr_id);
+                      },
+                    ):SizedBox(),
+                    SizedBox(height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.05,),
+                  ],
+                )
+              ],
+            ),
+            ]
           ),
         );
         items.add(temp);
@@ -301,58 +306,51 @@ class _comment_replyState extends State<comment_reply> {
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
                 child: Column(
-                children: <Widget>[
-                 Container(
-                   width: MediaQuery.of(context).size.width,
-                   height: MediaQuery.of(context).size.height*0.82,
-                   child: ListView(
-                          children: <Widget>[
-                            Column(
-                              children: items,
-                            )
-                          ],
-                      ),
-                 ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.06,
-                    child: TextFormField(
-                        controller: input_content,
-                        cursorColor: Colors.forestmk,
-                        keyboardType: TextInputType.emailAddress,
-                        maxLines: 1,
-                        decoration: InputDecoration(
-                          contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
-                          hintText: "댓글을 입력해주세요",
-                          border: null,
-                          enabledBorder:OutlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
-                            borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
-                          ),
-                          focusedBorder:OutlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
-                            borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
-                          ),
-                          suffixIcon:  InkWell(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width*0.2,
-                              height: MediaQuery.of(context).size.height*0.05,
-                              decoration: BoxDecoration(
-                                color: Color(0xfff0f0f0),
-                                borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
-                              ),
-                              child: Center(child: Text("작성")),
-                            ),
-                            onTap: (){
-                              update_reply();
-                              input_content.text ="";
-                            },
-                          )
-                        )
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                      Column(
+                        children: items,
                     ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.06,
+                      child: TextFormField(
+                          controller: input_content,
+                          cursorColor: Colors.forestmk,
+                          keyboardType: TextInputType.emailAddress,
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
+                            hintText: "댓글을 입력해주세요",
+                            border: null,
+                            enabledBorder:OutlineInputBorder(
+                              borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                              borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                            ),
+                            focusedBorder:OutlineInputBorder(
+                              borderSide: BorderSide(width: 1, color: Color(0xffefefef)),
+                              borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                            ),
+                            suffixIcon:  InkWell(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width*0.2,
+                                height: MediaQuery.of(context).size.height*0.05,
+                                decoration: BoxDecoration(
+                                  color: Colors.forestmk,
+                                  borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.01,),
+                                ),
+                                child: Center(child: Text("댓글",style: TextStyle(color:Colors.white),)),
+                              ),
+                              onTap: (){
+                                update_reply();
+                                input_content.text ="";
+                              },
+                            )
+                          )
+                      ),
+                    ),
+                  ],
                   ),
-                ],
-              ),
           ),
         ),
       ),

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutterforestmk/main.dart';
+import 'package:flutterforestmk/main_home.dart';
 import 'package:flutterforestmk/search_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +48,7 @@ class _categorypageState extends State<categorypage> {
       onTap: (){
           if(id ==0)
             Navigator.push(context,MaterialPageRoute(
-                builder:(context) => MyHomePage()
+                builder:(context) => main_home(mb_id: widget.mb_id,)
             ));
           else {
             Navigator.push(context, MaterialPageRoute(

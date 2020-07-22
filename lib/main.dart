@@ -147,6 +147,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
    double list_height;
   static double scrollbar_height=1;
   PreferredSize appbar;
+  String count_msg = "0";
   Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(fontSize:12,color: Color(0xff888888)));
   bool flg_search = false, flg_pushchat=false;
   String sort_value = "최근순", mb_id,mb_pwd,mb_2="test",mb_1="test",mb_name="test",mb_hp,mb_3,mb_4,mb_5='',mb_6='';
@@ -223,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           if(appbar != scroll_appbar)
            appbar = scroll_appbar;
 
-           if(list_height == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.15).floor()) {
+           if(list_height == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor()) {
              start_height =0;
              list_height = list_height - (MediaQuery.of(context).size.height*0.08).floor();
            }
@@ -235,7 +236,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           appbar = intro_appbar;
         }
       //실값이 반올림되어져 비교되어짐 그래서 값이 다르게 나옴
-         if(list_height  == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.15).floor()- (MediaQuery.of(context).size.height*0.08).floor()) {
+         if(list_height  == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor()- (MediaQuery.of(context).size.height*0.08).floor()) {
            start_height =0;
            list_height = list_height + (MediaQuery.of(context).size.height*0.08).floor();
          }
@@ -245,7 +246,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
   Widget float_button(){
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.3,),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.15,),
       child: InkWell(
         child: Container(
           width: MediaQuery.of(context).size.width*0.1,
@@ -294,8 +295,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           ),
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.06,
-            child: Text(text, style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.02),),
+            child: Wrap(
+                children: [
+                  Text(text),
+                ]),
           ),
           actions: <Widget>[
             new FlatButton(
@@ -455,7 +458,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                      Container(
                       width: MediaQuery.of(context).size.width*0.225,
                       height: MediaQuery.of(context).size.height*0.2,
-
+                       margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
                       decoration: BoxDecoration(
                           border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
                           borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
@@ -468,6 +471,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                       Container(
                           width: MediaQuery.of(context).size.width*0.225,
                           height: MediaQuery.of(context).size.height*0.2,
+                        margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.8)
                           ),
@@ -935,8 +939,27 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       });
   }
 
- Future<dynamic> get_data() async{
+  Future<dynamic> get_cntchat() async{
+      print("test_getdata"+mb_id);
 
+    final response = await http.post(
+        Uri.encodeFull('http://14.48.175.177/get_countmsg.php'),
+        body: {
+          "mb_id":mb_id==null?'':mb_id,
+        },
+        headers: {'Accept' : 'application/json'}
+    );
+
+    if(response.statusCode==200){
+      setState(() {
+        count_msg = response.body.toString();
+      });
+    }
+
+  }
+
+ Future<dynamic> get_data() async{
+  //  print("test_getdata"+mb_id);
    final response = await http.post(
        Uri.encodeFull('http://14.48.175.177/get_write.php'),
        body: {
@@ -955,6 +978,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
      // print(response.body);
      itemdata = jsonDecode(response.body);
      _getWidget();
+     get_cntchat();
    });
 
   }
@@ -968,6 +992,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           get_mbdata();
         }
       }
+      get_data();
   }
 
   Future<void> showNotification(title,body,link) async {
@@ -976,7 +1001,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
         'channelId', 'channelName', 'channelDescription');
     var iOS = IOSNotificationDetails();
     var platform = NotificationDetails(android, iOS);
-
     await FlutterLocalNotificationsPlugin().show(0, title, body, platform,payload: link);
 
   }
@@ -1038,6 +1062,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     if (Platform.isIOS) iOS_Permission();
 
     _firebaseMessaging.configure(
+
       onMessage: (Map<String, dynamic> message) async {
         //print("onMessage: "+message.toString());
         if(Platform.isIOS){
@@ -1058,6 +1083,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                 message['data']['flutter_go'].toString());
           }
         }
+
+        get_cntchat();
+
       },
       //onBackgroundMessage:Platform.isIOS?null:myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {
@@ -1110,13 +1138,20 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       update_settoken(token);
     });
 
-    get_data();
+  //  get_data();
     super.initState();
 
   }
 
   @override
   Widget build(BuildContext context) {
+    print("build!!");
+    if(mb_name !=null){
+      if(mb_name.length>10){
+        mb_name = mb_name.substring(0,10)+"···";
+      }
+    }
+
 
     if(mb_id !=null) {
       mb_infowidget  = Column(
@@ -1131,7 +1166,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     }
 
     if(start_height == 1){
-        list_height = MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.15).floor();
+        list_height = MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor();
         scrollbar_height = MediaQuery.of(context).size.height*0.08;
         scroll_appbar = PreferredSize(
             preferredSize: Size.fromHeight(scrollbar_height),
@@ -1333,21 +1368,47 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                         .size
                         .width * 0.03,),
                     InkWell(
-                      child: Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.09,
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.09,
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(50)),
-                            border: Border.all(color: Color(0xffeeeeee))
-                        ),
-                        child: Image.asset("images/hd_icon03.png"),
+                      child: Stack(
+                        overflow: Overflow.visible,
+                        children: [
+                          Container(
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.09,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.09,
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(50)),
+                              border: Border.all(color: Color(0xffeeeeee))
+                         ),
+                          child: Image.asset("images/hd_icon03.png"),
+                          ),
+                          int.parse(count_msg)>0?
+                          Positioned(
+                            top: -5,
+                            right: -5,
+                            child: Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 0.05,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 0.05,
+                              decoration: BoxDecoration(
+                                  color: Color(0xffed670d),
+                                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                                  border: Border.all(color: Color(0xffeeeeee))
+                              ),
+                              child: Center(child: Text(count_msg, style: TextStyle(color: Colors.white),)),
+                            ),
+                          ):SizedBox(),
+                        ],
                       ),
                       onTap: () async{
                         if(mb_id!=null) {
@@ -1355,6 +1416,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                               builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+mb_id+"&mb_password="+mb_pwd+"&flg_flutter=1")
                           ));
                           if(result == 'change'){
+                            get_cntchat();
                             get_data();
                           }
                         }
@@ -1405,6 +1467,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                             child: Icon(Icons.search),
                             onTap: (){
                               get_data();
+                              //search_text.text='';
                             },
                         ),
                         hintText: "원하시는 키워드를 입력하세요",
@@ -1577,7 +1640,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                                 decoration: BoxDecoration(
                                     color: Color(0xfff3f3f3),
                                     borderRadius: BorderRadius.all(Radius.circular(50)),
-                                    border: Border.all(color: Color(0xffcccccc)),
+//                                    border: Border.all(color: Color(0xffcccccc)),
                                     image: DecorationImage(//이미지 꾸미기
                                         fit:BoxFit.cover,
                                         //image:  AssetImage("images/wing_mb_noimg2.png"),
@@ -1744,15 +1807,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
               ],
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height*0.1,
-            decoration: BoxDecoration(
-                image: DecorationImage(//이미지 꾸미기
-                    fit:BoxFit.cover,
-                    image:AssetImage("images/ft_bn.jpg")//이미지 가져오기
-                )
-            ),
-          ),
+//          Container(
+//            height: MediaQuery.of(context).size.height*0.1,
+//            decoration: BoxDecoration(
+//                image: DecorationImage(//이미지 꾸미기
+//                    fit:BoxFit.cover,
+//                    image:AssetImage("images/ft_bn.jpg")//이미지 가져오기
+//                )
+//            ),
+//          ),
         ],
           ),
         ),

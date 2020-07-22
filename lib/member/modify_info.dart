@@ -70,6 +70,30 @@ class _modify_infoState extends State<modify_info> {
     );
   }
 
+  void show_Alert2(text,flg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context2) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:null,
+          content: Container(
+            height: MediaQuery.of(context).size.height*0.03,
+            child: Text(text),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("확인"),
+              onPressed: (){
+                Navigator.pop(context2);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showDialog() {
     showDialog(
       context: context,
@@ -244,41 +268,53 @@ class _modify_infoState extends State<modify_info> {
   }
 
   void get_location(popcontext) async{
+    bool geolocationStatus  = await Geolocator().isLocationServiceEnabled();
+    if(geolocationStatus==true) {
+      ProgressDialog pr = ProgressDialog(context);
+      //pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
+      pr.style(
+        message: '잠시만 기다려주세요...',
+        borderRadius: 5.0,
+        backgroundColor: Colors.white,
+        progressWidget: Container(padding: EdgeInsets.all(MediaQuery
+            .of(context)
+            .size
+            .width * 0.025), child: CircularProgressIndicator()),
+        elevation: 5.0,
+        insetAnimCurve: Curves.easeInOut,
+      );
+      pr.show();
 
-    ProgressDialog pr = ProgressDialog(context);
-    //pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: false);
-    pr.style(
-      message: '잠시만 기다려주세요...',
-      borderRadius: 5.0,
-      backgroundColor: Colors.white,
-      progressWidget: Container(padding:EdgeInsets.all(MediaQuery.of(context).size.width * 0.025),child: CircularProgressIndicator()),
-      elevation: 5.0,
-      insetAnimCurve: Curves.easeInOut,
-    );
-    pr.show();
+      Position position = await Geolocator().getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
 
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      final response = await http.post(
+          Uri.encodeFull('http://14.48.175.177/get_current.php'),
+          body: {
+            "x": position.longitude.toString(),
+            'y': position.latitude.toString()
+          },
+          headers: {'Accept': 'application/json'}
+      );
 
-    final response = await http.post(
-        Uri.encodeFull('http://14.48.175.177/get_current.php'),
-        body: {
-          "x": position.longitude.toString(),
-          'y':position.latitude.toString()
-        },
-        headers: {'Accept': 'application/json'}
-    );
+      if (response.statusCode == 200) {
+        // print(jsonDecode(response.body));
+        var json_address = jsonDecode(response.body);
+        String address = json_address['documents'][0]['address']['region_1depth_name'] +
+            " " +
+            json_address['documents'][0]['address']['region_2depth_name'] +
+            " " + json_address['documents'][0]['address']['region_3depth_name'];
+        modify_address.text = address;
+        Navigator.pop(popcontext);
+        Navigator.pop(context);
 
-    if(response.statusCode==200){
-      // print(jsonDecode(response.body));
-      var json_address = jsonDecode(response.body);
-      String address = json_address['documents'][0]['address']['region_1depth_name']+" "+json_address['documents'][0]['address']['region_2depth_name']+" "+json_address['documents'][0]['address']['region_3depth_name'];
-      modify_address.text = address;
-      Navigator.pop(popcontext);
-      Navigator.pop(context);
-
-      //print(address);
+        //print(address);
 
 
+      }
+    }
+    else{
+      show_Alert2("위치기능을 켜주세요", 1);
     }
 
   }

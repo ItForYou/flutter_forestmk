@@ -152,7 +152,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
 
   Widget float_button(){
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.18,),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.3,),
       child: InkWell(
         child: Container(
           width: MediaQuery.of(context).size.width*0.1,
@@ -201,8 +201,10 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
           ),
           title:null,
           content: Container(
-            height: MediaQuery.of(context).size.height*0.03,
-            child: Text(text),
+            child: Wrap(
+                children :[
+                Text(text),
+                ]),
           ),
           actions: <Widget>[
             new FlatButton(
@@ -269,14 +271,15 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ));
                     if(result == 'success'){
                       // print(result);
+                      Navigator.pop(bc);
                       show_Alert("승인을 기다려주세요!\n승인시 자동 업로드 됩니다.",1);
                       //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
                       get_data();
                     }
                     else{
+                      Navigator.pop(bc);
                       get_data();
                     }
-                    Navigator.pop(bc);
                   },
                 ),
               ],
@@ -399,7 +402,8 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                         temp_data.ca_name!='업체'? SizedBox(height: MediaQuery.of(context).size.height*0.005,): Container(),
                         Row(
                           children: <Widget>[
-                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
+                            Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
+//                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
                             SizedBox(width: MediaQuery.of(context).size.width*0.005,),
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
@@ -476,7 +480,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
 
       onTap: ()async{
         var result = await Navigator.push(context, PageRouteBuilder(
-          transitionDuration: Duration(milliseconds: 400),
+          transitionDuration: Duration(milliseconds: 800),
           pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
         ));
         if(result == 'delete'){
@@ -858,6 +862,12 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
   @override
   Widget build(BuildContext context) {
 
+    if(mb_name !=null){
+      if(mb_name.length>10){
+        mb_name = mb_name.substring(0,10)+"···";
+      }
+    }
+
     if(mb_id !=null) {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1146,6 +1156,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                       child: Icon(Icons.search),
                       onTap: (){
                         get_data();
+                        //search_text.text='';
                       },
                     ),
                     hintText: "원하시는 키워드를 입력하세요",
@@ -1314,7 +1325,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                                     decoration: BoxDecoration(
                                         color: Color(0xfff3f3f3),
                                         borderRadius: BorderRadius.all(Radius.circular(50)),
-                                        border: Border.all(color: Color(0xffcccccc)),
+//                                        border: Border.all(color: Color(0xffcccccc)),
                                         image: DecorationImage(//이미지 꾸미기
                                           fit:BoxFit.cover,
                                           //image:  AssetImage("images/wing_mb_noimg2.png"),
@@ -1413,7 +1424,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                             InkWell(
                               child: Row(
                                 children: <Widget>[
-                                  Text(sort_value),
+                                  Text(sort_value,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032),),
                                   Image.asset("images/arrow_filter.png"),
                                 ],
                               ),
