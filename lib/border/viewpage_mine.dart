@@ -8,14 +8,15 @@ import 'package:flutterforestmk/image_detail.dart';
 import 'package:flutterforestmk/member/loginpage.dart';
 import 'package:flutterforestmk/border/view_item.dart';
 import 'package:flutterforestmk/border/write_normal.dart';
+import 'package:flutterforestmk/search_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutterforestmk/border/comment_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Viewpage_mine extends StatefulWidget {
-  String wr_id,mb_id;
-  Viewpage_mine({Key key, this.wr_id, this.mb_id}) : super(key: key);
+  String wr_id,mb_id,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_name,mb_hp;
+  Viewpage_mine({Key key, this.wr_id, this.mb_id, this.mb_1,this.mb_2, this.mb_3, this.mb_4,this.mb_5, this.mb_6, this.mb_name, this.mb_hp, }) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -35,7 +36,10 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   var itemdata,itemdata_now,comment_data;
   double itmes_height=0,itmes_height2=0;
   List <Widget> list_subitem = [Container()];
+  List <Widget> list_subitem2 = [Container()];
   List <Widget> list_extraitem = [Container()];
+  List <Widget> list_extraitem2 = [Container()];
+
   List <Widget> widget_comments = [
     Container(
         height: 100,
@@ -1594,21 +1598,48 @@ class _ViewpagemineState extends State<Viewpage_mine>{
   void set_items(){
 
     if(itemdata['data'].length > 0) {
-      itmes_height = MediaQuery.of(context).size.height*0.355;
-      list_subitem.clear();
-      for (var i = 0; i < itemdata['data'].length; i++) {
-        list_subitem.add(get_content2(i,1));
+      itmes_height = 1;
+
+      if(itemdata['data'].length<=2) {
+        list_subitem.clear();
+        for (var i = 0; i <itemdata['data'].length; i++) {
+          list_subitem.add(get_content2(i, 1));
+        }
+      }
+
+      if(itemdata['data'].length<=4 && itemdata['data'].length>2) {
+        list_subitem.clear();
+        for (var i = 0; i <2; i++) {
+          list_subitem.add(get_content2(i, 1));
+        }
+        list_subitem2.clear();
+        for (var i = 2; i < itemdata['data'].length; i++) {
+          list_subitem2.add(get_content2(i, 1));
+        }
       }
     }
 
     if(itemdata['data2'].length > 0) {
-      itmes_height2 = MediaQuery.of(context).size.height*0.35;
-      list_extraitem.clear();
-      for (var i = 0; i < itemdata['data2'].length; i++) {
-        list_extraitem.add(get_content2(i,2));
+      itmes_height2 = 1;
+      //itmes_height2 = MediaQuery.of(context).size.height*0.35;
+      if(itemdata['data2'].length<=2) {
+        list_extraitem.clear();
+        for (var i = 0; i < itemdata['data2'].length; i++) {
+          list_extraitem.add(get_content2(i, 2));
+        }
+      }
+
+      if(itemdata['data2'].length<=4 && itemdata['data2'].length>2 ) {
+        list_extraitem.clear();
+        for (var i = 0; i < 2; i++) {
+          list_extraitem.add(get_content2(i, 2));
+        }
+        list_extraitem2.clear();
+        for (var i = 2; i < itemdata['data2'].length; i++) {
+          list_extraitem2.add(get_content2(i, 2));
+        }
       }
     }
-
   }
 
   void show_ban() {
@@ -1934,7 +1965,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
             ):Container(),
             Container(
               padding: EdgeInsets.only(left: 15,right: 15,top: 10, bottom: 10),
-              height: MediaQuery.of(context).size.height*0.1,
+
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -1942,7 +1973,13 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(itemdata_now==null?'테스트':itemdata_now['wr_subject'].length>10?itemdata_now['wr_subject'].substring(0,10)+"···":itemdata_now['wr_subject'],style:TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),),
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.88,
+                        child: Wrap(children: [
+                          Text(itemdata_now==null?'테스트':itemdata_now['wr_subject'],style:TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),)
+                            ]
+                        ),
+                      ),
                       SizedBox(height: 10,),
                       Row(
                           children:<Widget>[
@@ -1951,8 +1988,6 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                             Text(itemdata_now==null?'테스트':itemdata_now['ca_name'],style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.013),),
                           ]
                       )
-
-
                     ],
                   ),
                   real_mbid==mb_id?
@@ -2213,58 +2248,122 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
                 ],
               ),
-
             ):SizedBox(),
 
-
             Container(
-              height: itmes_height,
               decoration: BoxDecoration(
                   border: Border(bottom: BorderSide(width: 1,color: Color(0xffefefef)))
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height*0.1,
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                    child: Text(itemdata_now==null?"테스트":itemdata_now['mb_name'].length>10?itemdata_now['mb_name'].substring(0,10)+"···님의 판매상품":itemdata_now['mb_name']+"님의 판매상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.25,
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
-                    child:
+              child: Wrap(
+                children: [Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    itmes_height >=1?
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: list_subitem,
+                      children: <Widget>[
+                        Container(
+                          height: MediaQuery.of(context).size.height*0.1,
+                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,right: MediaQuery.of(context).size.width*0.05),
+                          child: Text(itemdata_now==null?"테스트":itemdata_now['mb_name'].length>10?itemdata_now['mb_name'].substring(0,10)+"···님의 판매상품":itemdata_now['mb_name']+"님의 판매상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                        ),
+                        InkWell(
+                          child: Container(
+                              height: MediaQuery.of(context).size.height*0.1,
+                              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.03,right: MediaQuery.of(context).size.width*0.05),
+                              child: Text("모두보기", style: TextStyle(color: Colors.forestmk, fontSize: 16, ))),
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => search_main( mb_id:real_mbid,mb_pwd:real_mbpwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,sch_mbid: itemdata_now!=null?itemdata_now['mb_id']:"test",)
+                            ));
+                          },
+                        )
+                      ],
+                    ):SizedBox(),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
+                      child:
+                      Wrap(
+                        children: [
+                          Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: list_subitem,
+                        ),
+                      ]
+                      ),
                     ),
-                  ),
-
-                ],
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
+                      child:
+                      Wrap(
+                          children: [Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: list_subitem2,
+                          ),
+                          ]
+                      ),
+                    ),
+                  ],
+                ),
+              ]
               ),
             ),
             Container(
-              height: itmes_height2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height*0.1,
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                    child: Text("관련상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.25,
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
-                    child:
+              child: Wrap(
+                children: [Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    itmes_height2 >=1?
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: list_extraitem,
+                      children: <Widget>[
+                        Container(
+                          height: MediaQuery.of(context).size.height*0.1,
+                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
+                          child: Text("관련상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                        ),
+                        InkWell(
+                          child: Container(
+                              height: MediaQuery.of(context).size.height*0.1,
+                              padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
+                              child: Text("모두보기", style: TextStyle(color:Colors.forestmk, fontSize: 16),)),
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => search_main(sch_cate: itemdata_now!=null?itemdata_now['ca_name']:"test" , mb_id:real_mbid,mb_pwd:real_mbpwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                            ));
+                          },
+                        )
+                      ],
+                    ):SizedBox(),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
+                      child:
+                      Wrap(
+                        children: [Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: list_extraitem,
+                          ),
+                        ]
+                      ),
                     ),
-                  ),
-                ],
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
+                      child:
+                      Wrap(
+                          children: [Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: list_extraitem2,
+                          ),
+                          ]
+                      ),
+                    ),
+                  ],
+                ),
+                ]
               ),
             )
           ],

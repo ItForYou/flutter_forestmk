@@ -22,9 +22,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class search_main extends StatefulWidget {
 
-  String mb_name,mb_hp,mb_id,mb_pwd,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,title,sch_text,sch_order,sch_cate,sch_flgsold,sch_flghide,sch_flgadv,sch_flgmyadv;
+  String mb_name,mb_hp,mb_id,mb_pwd,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,title,sch_text,sch_order,sch_cate,sch_flgsold,sch_flghide,sch_mbid,sch_flgadv,sch_flgmyadv;
   search_main({Key key, this.title,this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,
-               this.mb_3,this.mb_hp,this.mb_id,this.mb_pwd,this.sch_flghide,this.sch_flgsold,
+               this.mb_3,this.mb_hp,this.mb_id,this.mb_pwd,this.sch_flghide,this.sch_flgsold,this.sch_mbid,
                this.sch_flgadv,this.sch_order,this.sch_text, this.sch_flgmyadv, this.sch_cate}) : super(key: key);
 
 
@@ -259,7 +259,6 @@ class _search_mainState extends State<search_main> {
                       Navigator.pop(context);
                     },
                   ),
-
                 ],
               ),
             ),
@@ -423,7 +422,7 @@ class _search_mainState extends State<search_main> {
                             Container(
                               width: MediaQuery.of(context).size.width*0.225,
                               height: MediaQuery.of(context).size.height*0.2,
-
+                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
                               decoration: BoxDecoration(
                                   border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
                                   borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
@@ -436,6 +435,7 @@ class _search_mainState extends State<search_main> {
                             Container(
                               width: MediaQuery.of(context).size.width*0.225,
                               height: MediaQuery.of(context).size.height*0.2,
+                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
                               decoration: BoxDecoration(
                                   color: Colors.white.withOpacity(0.8)
                               ),
@@ -696,11 +696,13 @@ class _search_mainState extends State<search_main> {
           'sch_flgadv':widget.sch_flgadv!=null?widget.sch_flgadv:"",
           'sch_flgmyadv' : widget.sch_flgmyadv!=null?widget.sch_flgmyadv:"",
           'sch_cate' : widget.sch_cate!=null?widget.sch_cate:"",
+          'sch_mbid' : widget.sch_mbid!=null?widget.sch_mbid:"",
           "nowlat":widget.mb_5,
           "nowlng":widget.mb_6,
         },
         headers: {'Accept' : 'application/json'}
     );
+
     itemdata = jsonDecode(response.body);
 
     if(itemdata['data'].length<=0){
@@ -716,6 +718,7 @@ class _search_mainState extends State<search_main> {
     else {
       _getWidget();
     }
+
   }
 
   _getWidget(){
@@ -798,7 +801,7 @@ class _search_mainState extends State<search_main> {
 
   @override
   Widget build(BuildContext context) {
-    print("build!");
+    print(widget.sch_mbid);
     //load_myinfo();
 
 

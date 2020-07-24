@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutterforestmk/main_item.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,7 +25,7 @@ class writenormal_State extends State<write_normal> {
 
   TextEditingController input_subject = new TextEditingController();
   TextEditingController input_content = new TextEditingController();
-  TextEditingController input_wr_1 = new TextEditingController();
+  TextEditingController input_wr_1 = new MaskedTextController(mask:'000,000,000,000,000,000,000,000,000,000,000');
 
   String cate_value ="카테고리를 선택해주세요";
   Color color_cate = Color(0xffdddddd);
@@ -676,10 +677,8 @@ class writenormal_State extends State<write_normal> {
                                 ),
                                 child: Container(
                                       child:TextField(
+
                                         keyboardType: TextInputType.number,
-                                        inputFormatters: <TextInputFormatter>[
-                                          WhitelistingTextInputFormatter(RegExp("[0-9]")),
-                                        ],
                                         controller: input_wr_1,
                                       //  onChanged: (value)=>add_comma(value),
                                         enabled: flg_enablewr1,

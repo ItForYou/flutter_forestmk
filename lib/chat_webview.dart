@@ -41,15 +41,18 @@ class _chat_webviewState extends State<chat_webview> {
             });
           }*/
     if(widget.view ==1){
-      Navigator.pop(context);
+      Navigator.pop(context,"change");
     }
     else {
       if (current_url.contains("chatting.php")) {
-       print("excute_javascript");
-
+     //   print("pressed_back_javascript!");
+        flutterWebViewPlugin.evalJavascript("javascript:leavepage();");
       }
       else {
-       Navigator.pop(context);
+        Navigator.pop(context,"change");
+        flutterWebViewPlugin.stopLoading();
+        flutterWebViewPlugin.dispose();
+
       }
     }
   }
@@ -68,7 +71,7 @@ class _chat_webviewState extends State<chat_webview> {
       }
     });
     flutterWebViewPlugin.onUrlChanged.listen((String url){
-    //  print("test_"+url);
+      print("test_url"+url);
       if (mounted){
         if(!url.contains("chatting") && !url.contains("mb_id") ){
            // presed_bak();
@@ -86,12 +89,12 @@ class _chat_webviewState extends State<chat_webview> {
       }
     });
   }
+
   @override
   void dispose() {
     // Every listener should be canceled, the same should be done with this stream.
    // _onUrlChanged.cancel();
     flutterWebViewPlugin.dispose();
-
     super.dispose();
   }
 
@@ -100,44 +103,45 @@ class _chat_webviewState extends State<chat_webview> {
 
     return WillPopScope(
       onWillPop: (){
-        print("back3!!");
+        print("back3!");
         presed_bak();
       },
-      child:Scaffold(
-        appBar: PreferredSize( child: Container(), preferredSize: Size.fromHeight(0.1),),
-        body: WebviewScaffold(
-         /* initialChild: Container(
-            child: Text("Loadding....."),
-          ),*/
-          url: widget.url,
-          withJavascript: true,
-          withZoom: false,
-          withLocalStorage: true,
-          hidden: true,
-          javascriptChannels: Set.from([
-            JavascriptChannel(
-                name: 'goback',
-                onMessageReceived: (JavascriptMessage message) async{
-                  presed_bak();
-                }
-            ),
-          ]),
-        ),
-      )
+      child: Scaffold(
+          appBar: PreferredSize( child: Container(), preferredSize: Size.fromHeight(0.1),),
+          body: WebviewScaffold(
+           /* initialChild: Container(
+              child: Text("Loadding....."),
+            ),*/
+            url: widget.url,
+            withJavascript: true,
+            withZoom: false,
+            withLocalStorage: true,
+            hidden: true,
+            javascriptChannels: Set.from([
+              JavascriptChannel(
+                  name: 'goback',
+                  onMessageReceived: (JavascriptMessage message) async{
+                    presed_bak();
+                  }
+              ),
+            ]),
+        )
 
-      //구글 웹뷰 사용시
-      /* Scaffold(
-        appBar: null,
-        body: SafeArea(
-          child: WebView(
-            initialUrl: widget.url,
-            javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (WebViewController webViewController) {
-                _webViewController = webViewController;
-              },
+        //구글 웹뷰 사용시
+        /* Scaffold(
+          appBar: null,
+          body: SafeArea(
+            child: WebView(
+              initialUrl: widget.url,
+              javascriptMode: JavascriptMode.unrestricted,
+                onWebViewCreated: (WebViewController webViewController) {
+                  _webViewController = webViewController;
+                },
+            ),
           ),
-        ),
-      ),*/
+        ),*/
+      ),
     );
+
   }
 }

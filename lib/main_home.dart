@@ -360,7 +360,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                             Container(
                               width: MediaQuery.of(context).size.width*0.225,
                               height: MediaQuery.of(context).size.height*0.2,
-
+                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
                               decoration: BoxDecoration(
                                   border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
                                   borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
@@ -373,6 +373,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                             Container(
                               width: MediaQuery.of(context).size.width*0.225,
                               height: MediaQuery.of(context).size.height*0.2,
+                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
                               decoration: BoxDecoration(
                                   color: Colors.white.withOpacity(0.8)
                               ),

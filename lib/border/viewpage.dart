@@ -17,11 +17,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutterforestmk/search_main.dart';
 
 class Viewpage extends StatefulWidget {
-  final String tag,src;
+  final String tag,src,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_name,mb_hp,mb_id,mb_pwd;
   final main_item info;
-  Viewpage({Key key, this.title, this.tag, this.src, this.info}) : super(key: key);
+  Viewpage({Key key, this.title, this.tag, this.src, this.info, this.mb_name, this.mb_id, this.mb_pwd,this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,
+    this.mb_3,this.mb_hp,}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -42,7 +44,10 @@ class _ViewpageState extends State<Viewpage>{
   var itemdata, comment_data;
   List <dynamic> path =[];
   List <Widget> list_subitem = [Container()];
+  List <Widget> list_subitem2 = [Container()];
   List <Widget> list_extraitem = [Container()];
+  List <Widget> list_extraitem2 = [Container()];
+
   List <Widget> widget_comments = [
     Container(
       height: 100,
@@ -1378,7 +1383,12 @@ class _ViewpageState extends State<Viewpage>{
       temp_data = view_item.fromJson(itemdata['data2'][id]);
 
     if(temp_data.ca_name =='업체'){
-      temp_price=temp_data.wr_subject;
+      if(temp_data.wr_content.length > 10){
+        temp_price=temp_data.wr_content.substring(0,10)+"···";
+      }
+      else {
+        temp_price = temp_data.wr_content;
+      }
     }
     else if(temp_data.wr_1 =='무료나눔'){
       temp_price=temp_data.wr_1;
@@ -1428,7 +1438,7 @@ class _ViewpageState extends State<Viewpage>{
       onTap: ()async{
         //print(temp_data.mb_id);
         var result = await Navigator.push(context, MaterialPageRoute(
-            builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id, mb_id:temp_data.mb_id)
+            builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id, mb_id:temp_data.mb_id, mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
         ));
         if(result == 'delete'|| result=='refresh'){
           get_data();
@@ -1591,30 +1601,62 @@ class _ViewpageState extends State<Viewpage>{
         },
         headers: {'Accept' : 'application/json'}
     );
-
+//    print(response.body);
     setState(() {
       itemdata = jsonDecode(response.body);
+     // print(itemdata['data2']);
       get_likeflg();
       set_items();
     });
+
   }
 
   void set_items(){
   //print(itemdata['data'][0]);
     if(itemdata['data'].length > 0) {
-      itmes_height = MediaQuery.of(context).size.height*0.355;
-      list_subitem.clear();
-        for (var i = 0; i < itemdata['data'].length; i++) {
-          list_subitem.add(get_content2(i,1));
+      //itmes_height = MediaQuery.of(context).size.height*0.71;
+      itmes_height = 1;
+
+      if(itemdata['data'].length<=2) {
+        list_subitem.clear();
+        for (var i = 0; i <itemdata['data'].length; i++) {
+          list_subitem.add(get_content2(i, 1));
         }
+      }
+
+      if(itemdata['data'].length<=4 && itemdata['data'].length>2) {
+        list_subitem.clear();
+        for (var i = 0; i <2; i++) {
+          list_subitem.add(get_content2(i, 1));
+        }
+        list_subitem2.clear();
+        for (var i = 2; i < itemdata['data'].length; i++) {
+          list_subitem2.add(get_content2(i, 1));
+        }
+      }
+
     }
 
     if(itemdata['data2'].length > 0) {
-      itmes_height2 = MediaQuery.of(context).size.height*0.35;
-      list_extraitem.clear();
+      itmes_height2 = 1;
+      //itmes_height2 = MediaQuery.of(context).size.height*0.35;
+      if(itemdata['data2'].length<=2) {
+        list_extraitem.clear();
         for (var i = 0; i < itemdata['data2'].length; i++) {
-          list_extraitem.add(get_content2(i,2));
+          list_extraitem.add(get_content2(i, 2));
         }
+      }
+
+      if(itemdata['data2'].length<=4 && itemdata['data2'].length>2 ) {
+        list_extraitem.clear();
+        for (var i = 0; i < 2; i++) {
+          list_extraitem.add(get_content2(i, 2));
+        }
+        list_extraitem2.clear();
+        for (var i = 2; i < itemdata['data2'].length; i++) {
+          list_extraitem2.add(get_content2(i, 2));
+        }
+      }
     }
   }
 
@@ -1682,6 +1724,7 @@ class _ViewpageState extends State<Viewpage>{
 
   @override
   Widget build(BuildContext context) {
+    print("count_items : "+ list_extraitem.length.toString());
     //print("Build!");
     //print(widget.info.wr_content);
     if(widget.info.wr_12!='')
@@ -1946,7 +1989,6 @@ class _ViewpageState extends State<Viewpage>{
                 ):Container(),
                 Container(
                   padding: EdgeInsets.only(left: 15,right: 15, bottom: 10),
-                  height: MediaQuery.of(context).size.height*0.1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -1954,7 +1996,14 @@ class _ViewpageState extends State<Viewpage>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(widget.info.wr_subject==null?'test':widget.info.wr_subject.length>12?widget.info.wr_subject.substring(0,12)+"···":widget.info.wr_subject,style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),),
+
+                          Container(
+                            width: MediaQuery.of(context).size.width*0.88,
+                            child: Wrap(children: [
+                              Text(widget.info.wr_subject==null?'test':widget.info.wr_subject,style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),)
+                                ]
+                            ),
+                          ),
                           SizedBox(height: MediaQuery.of(context).size.height*0.012,),
                           Row(
                             children:<Widget>[
@@ -2237,54 +2286,124 @@ class _ViewpageState extends State<Viewpage>{
                   ):SizedBox(),
                 Container(
                     //MediaQuery.of(context).size.height*0.355,
-                  height:itmes_height,
                   decoration: BoxDecoration(
                     border: Border(bottom: BorderSide(width: 1,color: Color(0xffefefef)))
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        height: MediaQuery.of(context).size.height*0.1,
-                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                        child: Text(widget.info.mb_name==null?'test':widget.info.mb_name.length>10?widget.info.mb_name.substring(0,10)+"···님의 판매상품":widget.info.mb_name+"님의 판매상품",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height*0.25,
-                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
-                        child:
-                              Row(
+                  child: Wrap(
+                    children: [Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        itmes_height>=1?
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              height: MediaQuery.of(context).size.height*0.1,
+                              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
+                              child: Text(widget.info.mb_name==null?'test':widget.info.mb_name.length>10?widget.info.mb_name.substring(0,10)+"···님의 판매상품":widget.info.mb_name+"님의 판매상품",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),),
+                            ),
+                            InkWell(
+                              child: Container(
+                                height: MediaQuery.of(context).size.height*0.1,
+                                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
+                                child: Text("모두보기",style: TextStyle(fontSize: 16, color:Color(0xff5c8e6b)),),
+                              ),
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => search_main(mb_id:real_mbid,mb_pwd:real_mbpwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,sch_mbid: widget.info.mb_id,)
+                                ));
+                              },
+                            ),
+                          ],
+                        ):SizedBox(),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
+                          child:
+                          Wrap(
+                            children: [Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: list_subitem
-                              ),
-                      ),
-                    ],
+                            ),
+                          ]
+                          ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
+                          child:
+                          Wrap(
+                            children: [Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: list_subitem2
+                          ),
+                          ]
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]
                   ),
                 ),
 
                 Container(
                   //MediaQuery.of(context).size.height*0.35
-                  height: itmes_height2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        height: MediaQuery.of(context).size.height*0.1,
-                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                        child: Text("관련상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height*0.25,
-                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
-                        child:
+                  //height: itmes_height2,
+                  child: Wrap(
+                    children: [Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                    itmes_height2 >=1?
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: list_extraitem
+                          children: <Widget>[
+                            Container(
+                              height: MediaQuery.of(context).size.height*0.1,
+                              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
+                              child: Text("관련상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                            ),
+                            InkWell(
+                              child: Container(
+                                height: MediaQuery.of(context).size.height*0.1,
+                                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
+                                child: Text("모두보기",style: TextStyle(fontSize: 16, color:Color(0xff5c8e6b)),),
+                              ),
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => search_main(sch_cate: widget.info.ca_name , mb_id:real_mbid,mb_pwd:real_mbpwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                ));
+                              },
+                            ),
+
+                          ],
+                        ):SizedBox(),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
+                          child:
+                          Wrap(
+                            children: [Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: list_extraitem
+                            ),
+                          ]
+                          ),
                         ),
-                      ),
-                    ],
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.055,),
+                          child:
+                          Wrap(
+                            children: [Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: list_extraitem2
+                          ),
+                          ]
+                          ),
+                        ),
+                      ],
+                    ),
+                    ]
                   ),
                 ),
               ],

@@ -154,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   var itemdata;
   List <Widget> items_content=[];
   int build_cnt = 0;
-
+  int count_chatview =0;
 
   PreferredSize intro_appbar = PreferredSize(
     // Here we take the value from the MyHomePage object that was created by
@@ -186,6 +186,30 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
       }
       else {
+      if(mb_id!=null) {
+        count_chatview ++;
+        var result = await Navigator.push(context, MaterialPageRoute(
+            builder: (context) =>
+                chat_webview(
+                    url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
+                        mb_id + "&mb_password=" + mb_pwd + "&flg_flutter=1")
+        ));
+        //       print("onLaunch - "+result);
+        if (result == 'change') {
+         // print("test_back chat");
+          if(count_chatview>1) {
+            for(int i =0; i< count_chatview-1; i++) {
+              Navigator.pop(context);
+            }
+            count_chatview=0;
+          }
+
+          get_cntchat();
+          get_data();
+        }
+      }
+
+    /*
         var result = await Navigator.push(
             context, MaterialPageRoute(
             builder: (context) =>
@@ -197,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
         ));
         if (result == 'change') {
           get_data();
-        }
+        }*/
       }
  // print("noticevalue : $value");
   });
@@ -580,7 +604,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
         onTap: ()async{
           var result = await Navigator.push(context, PageRouteBuilder(
             transitionDuration: Duration(milliseconds: 800),
-            pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+            pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data, mb_id :mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,),
           ));
           if(result == 'delete'){
            // print("test"+result);
@@ -940,7 +964,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   }
 
   Future<dynamic> get_cntchat() async{
-      print("test_getdata"+mb_id);
+     // print("test_getdata"+mb_id);
 
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/get_countmsg.php'),
@@ -952,6 +976,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
     if(response.statusCode==200){
       setState(() {
+        print("launch_cntchat");
         count_msg = response.body.toString();
       });
     }
@@ -978,7 +1003,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
      // print(response.body);
      itemdata = jsonDecode(response.body);
      _getWidget();
-     get_cntchat();
+     if(mb_id!=null) {
+       get_cntchat();
+     }
    });
 
   }
@@ -1073,15 +1100,18 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
              );*/
         }
         else {
+
           if(message['data']['flutter_go'].toString()=='댓글'){
             showNotification(message['notification']['title'].toString(),
                 message['notification']['body'].toString(),'댓글');
           }
+
           else {
             showNotification(message['notification']['title'].toString(),
                 message['notification']['body'].toString(),
                 message['data']['flutter_go'].toString());
           }
+
         }
 
         get_cntchat();
@@ -1092,7 +1122,22 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           setState(() {
             flg_pushchat = true;
           });
-          var result = await Navigator.push(
+          count_chatview ++;
+          var result = await Navigator.push(context, MaterialPageRoute(
+              builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+mb_id+"&mb_password="+mb_pwd+"&flg_flutter=1")
+          ));
+   //       print("onLaunch - "+result);
+          if(result == 'change'){
+            if(count_chatview>1){
+              for(int i=0; i<count_chatview-1; i++) {
+                Navigator.pop(context);
+              }
+              count_chatview =0;
+            }
+            get_cntchat();
+            get_data();
+          }
+     /*     var result = await Navigator.push(
               context, MaterialPageRoute(
               builder: (context) =>
                   chat_webview(
@@ -1108,11 +1153,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           ));
           if (result == 'change') {
             get_data();
-          }
+          }*/
+
         //print("onLaunch: "+message.toString());
       },
       onResume: (Map<String, dynamic> message) async {
-          var result = await Navigator.push(
+        /*  var result = await Navigator.push(
               context, MaterialPageRoute(
               builder: (context) =>
                   chat_webview(
@@ -1129,7 +1175,21 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           ));
           if (result == 'change') {
             get_data();
+          }*/
+        count_chatview ++;
+        var result = await Navigator.push(context, MaterialPageRoute(
+            builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+mb_id+"&mb_password="+mb_pwd+"&flg_flutter=1")
+        ));
+        if(result == 'change'){
+          if(count_chatview>1){
+            for(int i=0; i<count_chatview-1; i++) {
+              Navigator.pop(context);
+            }
+            count_chatview =0;
           }
+          get_cntchat();
+          get_data();
+        }
        // print("onResume: "+message.toString());
       },
     );
@@ -1151,7 +1211,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
         mb_name = mb_name.substring(0,10)+"···";
       }
     }
-
 
     if(mb_id !=null) {
       mb_infowidget  = Column(
@@ -1415,7 +1474,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                           var result = await Navigator.push(context, MaterialPageRoute(
                               builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+mb_id+"&mb_password="+mb_pwd+"&flg_flutter=1")
                           ));
+                        //  print(result+"testresult");
+                   //       print(result+"testresult");
                           if(result == 'change'){
+                          //  print(result+"testresult");
                             get_cntchat();
                             get_data();
                           }
