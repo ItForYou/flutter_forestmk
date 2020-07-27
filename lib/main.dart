@@ -1,5 +1,6 @@
 
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -57,7 +58,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 }*/
 
-void main(){
+void main() {
+
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
@@ -67,11 +69,55 @@ void main(){
 class MyApp extends StatefulWidget {
 
   // This widget is the root of your application.
-
-
   @override
   _MyAppState createState() => _MyAppState();
+
 }
+
+class splash extends StatefulWidget {
+  @override
+  _splashState createState() => _splashState();
+}
+
+class _splashState extends State<splash> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+      startTime();
+  }
+
+  startTime() async {
+    var _duration = new Duration(seconds: 2);
+    return new Timer(_duration, navigationPage);
+  }
+
+  void navigationPage() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => MyHomePage()),
+            (Route<dynamic> route) => false);
+  //  Navigator.pop(context);
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          image: DecorationImage(//이미지 꾸미기
+              fit:BoxFit.fitHeight,
+              //image:  AssetImage("images/wing_mb_noimg2.png"),
+              image: AssetImage("images/splash.png")
+          )
+      ),
+    );
+  }
+}
+
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   print("test_callbackground");
@@ -110,14 +156,16 @@ class _MyAppState extends State<MyApp> {
 
         ),
 
-
-        home: MyHomePage(title: '숲마켓', ),
+        home: splash(),
+        //home: MyHomePage(title: '숲마켓', ),
 
     );
+
   }
 }
 
 class MyHomePage extends StatefulWidget {
+
   MyHomePage({Key key, this.title,}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -133,9 +181,11 @@ class MyHomePage extends StatefulWidget {
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
+
 }
 
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   bool checkbox_soldout = false;
@@ -1077,8 +1127,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   }
 
   @override
-  void initState() {
+  Future <void> initState() {
     // TODO: implement initState
+    super.initState();
+//    Future.delayed(Duration(milliseconds: -1), () {
+//      Navigator.push(context,
+//          MaterialPageRoute(builder: (context) => splash()));
+//    });
 
     initlocalnotice();
     appbar = intro_appbar;
@@ -1199,7 +1254,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     });
 
   //  get_data();
-    super.initState();
+
 
   }
 

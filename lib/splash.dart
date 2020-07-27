@@ -1,4 +1,5 @@
 
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class _splashState extends State<splash> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    startTime();
+    //  startTime();
   }
 
   startTime() async {
@@ -35,9 +36,9 @@ class _splashState extends State<splash> {
       decoration: BoxDecoration(
           color: Colors.white,
           image: DecorationImage(//이미지 꾸미기
-            fit:BoxFit.fitHeight,
-            //image:  AssetImage("images/wing_mb_noimg2.png"),
-            image: AssetImage("images/splash.png")
+              fit:BoxFit.fitHeight,
+              //image:  AssetImage("images/wing_mb_noimg2.png"),
+              image: AssetImage("images/splash.png")
           )
       ),
     );

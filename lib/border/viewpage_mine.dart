@@ -1759,6 +1759,14 @@ class _ViewpagemineState extends State<Viewpage_mine>{
       }
     }
 
+
+    int flg_lengthmb2 = 0;
+    if(itemdata_now!=null){
+      if(itemdata_now['mb_2'].length >>20) {
+        flg_lengthmb2 = 1;
+      }
+    }
+
     return WillPopScope(
       onWillPop: (){
         Navigator.pop(context,'refresh');
@@ -1846,7 +1854,13 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                           children: <Widget>[
                             Text(itemdata_now==null?"테스트":itemdata_now['mb_name'].length>10?itemdata_now['mb_name'].substring(0,10)+"···":itemdata_now['mb_name'],style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
                             SizedBox(height: 8,),
-                            Text(itemdata_now==null?"테스트":itemdata_now['ca_name']=='업체'?itemdata_now['wr_12']:itemdata_now['mb_2'],style: TextStyle(fontSize: 12)),
+                            Container(
+                              width:           (itemdata_now['mb_id']==real_mbid || real_mbid =='admin' || real_mbid=='lets080')&&(itemdata_now['ca_name']!='업체') || (itemdata_now['ca_name']=='업체') && (itemdata_now['mb_id'] == real_mbid || real_mbid =='admin' || real_mbid =='lets080')? MediaQuery.of(context).size.width*0.45:MediaQuery.of(context).size.width*0.55,
+                              child: Wrap(children: [
+                                  Text(itemdata_now==null?"테스트":itemdata_now['ca_name']=='업체'?itemdata_now['wr_12']:itemdata_now['mb_2'],style: TextStyle(fontSize: flg_lengthmb2==1? 7:12))
+                                ]
+                              ),
+                            ),
                           ],
                         ),
                       ],

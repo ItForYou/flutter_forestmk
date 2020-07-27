@@ -100,7 +100,7 @@ class _registerState extends State<register> {
 
                   // will be null if never previously saved
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => MyApp()),
+                      MaterialPageRoute(builder: (context) => MyHomePage()),
                           (Route<dynamic> route) => false);
                 }
                 else{

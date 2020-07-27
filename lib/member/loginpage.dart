@@ -87,7 +87,7 @@ class _loginpageState extends State<loginpage>{
 
           // will be null if never previously saved
         Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => MyApp()),
+                MaterialPageRoute(builder: (context) => MyHomePage()),
                 (Route<dynamic> route) => false);
         }
       else{

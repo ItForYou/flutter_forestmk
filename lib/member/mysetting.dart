@@ -110,7 +110,7 @@ class _mysettingState extends State<mysetting> {
                   sp.clear();
                   Navigator.pop(context2);
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => MyApp()),
+                      MaterialPageRoute(builder: (context) => MyHomePage()),
                           (Route<dynamic> route) => false);
                 }
               },
@@ -140,7 +140,7 @@ class _mysettingState extends State<mysetting> {
                 SharedPreferences sp = await SharedPreferences.getInstance();
                 sp.clear();
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => MyApp()),
+                    MaterialPageRoute(builder: (context) => MyHomePage()),
                         (Route<dynamic> route) => false);
               },
             ),

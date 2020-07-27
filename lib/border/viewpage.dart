@@ -252,7 +252,7 @@ class _ViewpageState extends State<Viewpage>{
   }
 
   void move_commentfocus(){
-        print("focus!!!!");
+        //print("focus!!!!");
   }
 
   void show_ban() {
@@ -1703,7 +1703,6 @@ class _ViewpageState extends State<Viewpage>{
   void initState() {
     // TODO: implement initState
 
-
     load_myinfo();
     get_data();
     get_comment();
@@ -1717,18 +1716,16 @@ class _ViewpageState extends State<Viewpage>{
         flg_soldout = 1;
       });
     }
-
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    print("count_items : "+ list_extraitem.length.toString());
+    //print("count_items : "+ list_extraitem.length.toString());
     //print("Build!");
     //print(widget.info.wr_content);
-    if(widget.info.wr_12!='')
-    print(widget.info.wr_12.length);
+//    if(widget.info.wr_12!='')
+//    print(widget.info.wr_12.length);
     set_herocontent(path);
 
     if(widget.info.ca_name =='업체'){
@@ -1781,6 +1778,11 @@ class _ViewpageState extends State<Viewpage>{
                   "-" + call_number.substring(7, call_number.length);
         }
       }
+    }
+
+    int flg_lengthmb2 = 0;
+    if(widget.info.mb_2.length>20){
+      flg_lengthmb2 = 1;
     }
 
 
@@ -1871,7 +1873,14 @@ class _ViewpageState extends State<Viewpage>{
                               children: <Widget>[
                                 Text(widget.info.mb_name==null?'test':widget.info.mb_name.length>10?widget.info.mb_name.substring(0,10)+"···":widget.info.mb_name,style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
                                 SizedBox(height: 8,),
-                                Text(widget.info==null?'test':widget.info.ca_name=='업체'?widget.info.wr_12:widget.info.mb_2,style: TextStyle(fontSize: 12)),
+                                Container(
+                                  width: (widget.info.ca_name=='업체') && (widget.info.mb_id == real_mbid || real_mbid =='admin' || real_mbid =='lets080') || (widget.info.mb_id==real_mbid || real_mbid =='admin' || real_mbid=='lets080')&&(widget.info.ca_name!='업체')?MediaQuery.of(context).size.width*0.45:MediaQuery.of(context).size.width*0.55,
+                                  child: Wrap(children: [
+                                    Text(widget.info==null?'test':widget.info.ca_name=='업체'?widget.info.wr_12:widget.info.mb_2,style: TextStyle(fontSize: flg_lengthmb2==1? 7:12)
+                                    )
+                                   ]
+                                  ),
+                                ),
                               ],
                             ),
                           ],
@@ -1998,7 +2007,7 @@ class _ViewpageState extends State<Viewpage>{
                         children: <Widget>[
 
                           Container(
-                            width: MediaQuery.of(context).size.width*0.88,
+                            width:   (real_mbid==widget.info.mb_id) || (real_mbid=='admin')? MediaQuery.of(context).size.width*0.88-75:MediaQuery.of(context).size.width*0.88,
                             child: Wrap(children: [
                               Text(widget.info.wr_subject==null?'test':widget.info.wr_subject,style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),)
                                 ]

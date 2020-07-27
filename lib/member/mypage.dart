@@ -95,7 +95,7 @@ class _mypageState extends State<mypage> {
                 SharedPreferences sp = await SharedPreferences.getInstance();
                 sp.clear();
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => MyApp()),
+                    MaterialPageRoute(builder: (context) => MyHomePage()),
                         (Route<dynamic> route) => false);
               },
             ),
