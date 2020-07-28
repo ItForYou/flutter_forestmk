@@ -1404,11 +1404,18 @@ class _ViewpageState extends State<Viewpage>{
     }
 
     //print(temp_data);
-
+  if(temp_data!=null) {
+    print(temp_data.mb_id);
     InkWell temp = InkWell(
       child: Container(
-        height: MediaQuery.of(context).size.height*0.25,
-        width: MediaQuery.of(context).size.width*0.45,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.25,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width * 0.45,
         decoration: BoxDecoration(color: Colors.white),
 
         child: InkWell(
@@ -1418,37 +1425,62 @@ class _ViewpageState extends State<Viewpage>{
               Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                     Container(
-                        width: MediaQuery.of(context).size.width*0.4,
-                        height: MediaQuery.of(context).size.height*0.15,
-                        child:temp_data.file==''?Image.asset("images/noimg.jpg"):Image.network(temp_data.file, fit: BoxFit.fitWidth,),
-                      ),
+                    Container(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.4,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.15,
+                      child: temp_data.file == '' ? Image.asset(
+                          "images/noimg.jpg") : Image.network(
+                        temp_data.file, fit: BoxFit.fitWidth,),
+                    ),
 
-                        SizedBox(height: 5,),
-                        Text(temp_data.wr_subject.length>10?temp_data.wr_subject.substring(0,10)+"···":temp_data.wr_subject, style: TextStyle(fontSize: 12),),
-                        SizedBox(height: 5,),
-                        Text(temp_price, style: TextStyle(fontSize: 15),),
-                    ]
+                    SizedBox(height: 5,),
+                    Text(temp_data.wr_subject.length > 10 ? temp_data.wr_subject
+                        .substring(0, 10) + "···" : temp_data.wr_subject,
+                      style: TextStyle(fontSize: 12),),
+                    SizedBox(height: 5,),
+                    Text(temp_price, style: TextStyle(fontSize: 15),),
+                  ]
               ),
             ],
           )
           ,
         ),
       ),
-      onTap: ()async{
+      onTap: () async {
         //print(temp_data.mb_id);
         var result = await Navigator.push(context, MaterialPageRoute(
-            builder: (context) => Viewpage_mine(wr_id:temp_data.wr_id, mb_id:temp_data.mb_id, mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+            builder: (context) =>
+                Viewpage_mine(
+                  wr_id: temp_data.wr_id,
+                  mb_id: temp_data.mb_id,
+                  mb_1: widget.mb_1,
+                  mb_2: widget.mb_2,
+                  mb_3: widget.mb_3,
+                  mb_4: widget.mb_4,
+                  mb_hp: widget.mb_hp,
+                  mb_5: widget.mb_5,
+                  mb_6: widget.mb_6,
+                  mb_name: widget.mb_name,)
         ));
-        if(result == 'delete'|| result=='refresh'){
+        if (result == 'delete' || result == 'refresh') {
           get_data();
         }
+        // print(temp_data.mb_id);
+
 //        Navigator.push(context,MaterialPageRoute(
 //            builder:(context) => Viewpage_mine(wr_id:temp_data.wr_id)
 //        ));
       },
     );
     return temp;
+  }
+
   }
 
   void load_myinfo()async{

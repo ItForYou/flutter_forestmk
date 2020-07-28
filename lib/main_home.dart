@@ -130,7 +130,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
         if(appbar != scroll_appbar)
           appbar = scroll_appbar;
 
-        if(list_height == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.15).floor()) {
+        if(list_height == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor()) {
           start_height =0;
           list_height = list_height - (MediaQuery.of(context).size.height*0.08).floor();
         }
@@ -142,7 +142,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
           appbar = intro_appbar;
         }
         //실값이 반올림되어져 비교되어짐 그래서 값이 다르게 나옴
-        if(list_height  == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.15).floor()- (MediaQuery.of(context).size.height*0.08).floor()) {
+        if(list_height  == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor()- (MediaQuery.of(context).size.height*0.08).floor()) {
           start_height =0;
           list_height = list_height + (MediaQuery.of(context).size.height*0.08).floor();
         }
@@ -152,7 +152,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
 
   Widget float_button(){
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.3,),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.15,),
       child: InkWell(
         child: Container(
           width: MediaQuery.of(context).size.width*0.1,
@@ -569,6 +569,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 sort_value = T;
                                 get_data();
                               });
@@ -580,6 +581,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ),
                     onTap: (){
                       setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         sort_value = '최근순';
                         get_data();
                       });
@@ -602,6 +604,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 sort_value = T;
                                 get_data();
                               });
@@ -613,6 +616,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ),
                     onTap: (){
                       setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         sort_value = '거리순';
                         get_data();
                       });
@@ -635,6 +639,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 sort_value = T;
                                 get_data();
                               });
@@ -646,6 +651,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ),
                     onTap: (){
                       setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         sort_value = '낮은가격순';
                         get_data();
                       });
@@ -668,6 +674,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 sort_value = T;
                                 get_data();
                               });
@@ -679,6 +686,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ),
                     onTap: (){
                       setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         sort_value = '높은가격순';
                         get_data();
                       });
@@ -699,6 +707,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 sort_value = T;
                                 get_data();
                               });
@@ -710,6 +719,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ),
                     onTap: (){
                       setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         sort_value = '조회수순';
                         get_data();
                       });
@@ -882,7 +892,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
     }
 
     if(start_height == 1){
-      list_height = MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.15).floor();
+      list_height = MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor();
       scrollbar_height = MediaQuery.of(context).size.height*0.08;
       scroll_appbar = PreferredSize(
           preferredSize: Size.fromHeight(scrollbar_height),
@@ -1156,6 +1166,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     InkWell(
                       child: Icon(Icons.search),
                       onTap: (){
+                        FocusScope.of(context).requestFocus(FocusNode());
                         get_data();
                         //search_text.text='';
                       },
@@ -1175,8 +1186,10 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                   setState(() {
                     if(flg_search==false)
                       flg_search = true;
-                    else
+                    else {
+                      search_text.text="";
                       flg_search = false;
+                    }
                   });
                 },
               ),
@@ -1494,7 +1507,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                   ],
                 ),
               ),
-              Container(
+           /*   Container(
                 height: MediaQuery.of(context).size.height*0.1,
                 decoration: BoxDecoration(
                     image: DecorationImage(//이미지 꾸미기
@@ -1502,7 +1515,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                         image:AssetImage("images/ft_bn.jpg")//이미지 가져오기
                     )
                 ),
-              ),
+              ),*/
             ],
         ),
         floatingActionButton: flg_floatbt==1?float_button():Container()

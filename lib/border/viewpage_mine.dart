@@ -1342,11 +1342,17 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
 
     if(temp_data.ca_name =='업체'){
-      if(temp_data.wr_subject!=null){
-        if(temp_data.wr_subject.length>10)
-        price=temp_data.wr_subject.toString().substring(0,10)+"···";
-        else
-         price=temp_data.wr_subject;
+//      if(temp_data.wr_subject!=null){
+//        if(temp_data.wr_subject.length>10)
+//        price=temp_data.wr_subject.toString().substring(0,10)+"···";
+//        else
+//         price=temp_data.wr_subject;
+//      }
+      if(temp_data.wr_content.length > 10){
+        price=temp_data.wr_content.substring(0,10)+"···";
+      }
+      else {
+        price = temp_data.wr_content;
       }
     }
     else if(temp_data.wr_1 =='무료나눔'){
@@ -1762,7 +1768,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
 
     int flg_lengthmb2 = 0;
     if(itemdata_now!=null){
-      if(itemdata_now['mb_2'].length >>20) {
+      if(itemdata_now['mb_2'].length >20) {
         flg_lengthmb2 = 1;
       }
     }
@@ -1840,7 +1846,8 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                             padding: EdgeInsets.all(3),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(Radius.circular(50)),
-                                border: Border.all(color: Color(0xffcccccc)),
+                               // border: Border.all(color: Color(0xffcccccc)),
+                                color: Color(0xfff3f3f3),
                                 image: DecorationImage(//이미지 꾸미기
                                     fit:BoxFit.cover,
                                   image:(itemdata_now!=null)&&(itemdata_now['mb_1']!='')?NetworkImage(itemdata_now['mb_1']):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
@@ -1855,7 +1862,7 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                             Text(itemdata_now==null?"테스트":itemdata_now['mb_name'].length>10?itemdata_now['mb_name'].substring(0,10)+"···":itemdata_now['mb_name'],style: TextStyle(fontSize: 16, fontWeight:  FontWeight.bold),),
                             SizedBox(height: 8,),
                             Container(
-                              width:           (itemdata_now['mb_id']==real_mbid || real_mbid =='admin' || real_mbid=='lets080')&&(itemdata_now['ca_name']!='업체') || (itemdata_now['ca_name']=='업체') && (itemdata_now['mb_id'] == real_mbid || real_mbid =='admin' || real_mbid =='lets080')? MediaQuery.of(context).size.width*0.45:MediaQuery.of(context).size.width*0.55,
+                              width:itemdata_now==null?MediaQuery.of(context).size.width*0.55:(itemdata_now['mb_id']==real_mbid || real_mbid =='admin' || real_mbid=='lets080')&&(itemdata_now['ca_name']!='업체') || (itemdata_now['ca_name']=='업체') && (itemdata_now['mb_id'] == real_mbid || real_mbid =='admin' || real_mbid =='lets080')? MediaQuery.of(context).size.width*0.45:MediaQuery.of(context).size.width*0.55,
                               child: Wrap(children: [
                                   Text(itemdata_now==null?"테스트":itemdata_now['ca_name']=='업체'?itemdata_now['wr_12']:itemdata_now['mb_2'],style: TextStyle(fontSize: flg_lengthmb2==1? 7:12))
                                 ]
@@ -1988,7 +1995,8 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        width: MediaQuery.of(context).size.width*0.88,
+                        width: itemdata_now!=null?(real_mbid==itemdata_now['mb_id']) || (real_mbid=='admin')? MediaQuery.of(context).size.width*0.88-75:MediaQuery.of(context).size.width*0.88:MediaQuery.of(context).size.width*0.88,
+                     //   width: MediaQuery.of(context).size.width*0.88,
                         child: Wrap(children: [
                           Text(itemdata_now==null?'테스트':itemdata_now['wr_subject'],style:TextStyle(fontSize: MediaQuery.of(context).size.height*0.023),)
                             ]

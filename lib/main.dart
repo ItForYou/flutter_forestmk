@@ -89,7 +89,7 @@ class _splashState extends State<splash> {
   }
 
   startTime() async {
-    var _duration = new Duration(seconds: 2);
+    var _duration = new Duration(seconds: 1);
     return new Timer(_duration, navigationPage);
   }
 
@@ -825,6 +825,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                           groupValue: sort_value,
                           onChanged: (T){
                             setState(() {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               sort_value = T;
                               get_data();
                             });
@@ -836,6 +837,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                   ),
                   onTap: (){
                     setState(() {
+                      FocusScope.of(context).requestFocus(FocusNode());
                       sort_value = '최근순';
                       get_data();
                     });
@@ -858,6 +860,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                           groupValue: sort_value,
                           onChanged: (T){
                             setState(() {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               sort_value = T;
                               get_data();
                             });
@@ -891,6 +894,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                           groupValue: sort_value,
                           onChanged: (T){
                             setState(() {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               sort_value = T;
                               get_data();
                             });
@@ -924,6 +928,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                           groupValue: sort_value,
                           onChanged: (T){
                             setState(() {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               sort_value = T;
                               get_data();
                             });
@@ -955,6 +960,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                           groupValue: sort_value,
                           onChanged: (T){
                             setState(() {
+                              FocusScope.of(context).requestFocus(FocusNode());
                               sort_value = T;
                               get_data();
                             });
@@ -1050,7 +1056,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
    );
 
     setState(() {
-     // print(response.body);
+      //print(response.body);
      itemdata = jsonDecode(response.body);
      _getWidget();
      if(mb_id!=null) {
@@ -1583,6 +1589,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                         InkWell(
                             child: Icon(Icons.search),
                             onTap: (){
+                             // Navigator.pop(context);
+                              FocusScope.of(context).requestFocus(FocusNode());
                               get_data();
                               //search_text.text='';
                             },
@@ -1602,8 +1610,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                       setState(() {
                         if(flg_search==false)
                           flg_search = true;
-                        else
+                        else {
+                          search_text.text= "";
                           flg_search = false;
+                        }
                       });
                     },
                 ),

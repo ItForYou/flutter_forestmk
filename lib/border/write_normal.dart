@@ -25,7 +25,7 @@ class writenormal_State extends State<write_normal> {
 
   TextEditingController input_subject = new TextEditingController();
   TextEditingController input_content = new TextEditingController();
-  TextEditingController input_wr_1 = new MaskedTextController(mask:'000,000,000,000,000,000,000,000,000,000,000');
+  TextEditingController input_wr_1 =new MoneyMaskedTextController(thousandSeparator: ',');
 
   String cate_value ="카테고리를 선택해주세요";
   Color color_cate = Color(0xffdddddd);

@@ -102,6 +102,7 @@ class _search_mainState extends State<search_main> {
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 sort_value = T;
                                 widget.sch_order = T;
                                 get_data();
@@ -114,6 +115,7 @@ class _search_mainState extends State<search_main> {
                     ),
                     onTap: (){
                       setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         sort_value = '최근순';
                         widget.sch_order = '최근순';
                         get_data();
@@ -136,6 +138,7 @@ class _search_mainState extends State<search_main> {
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 sort_value = T;
                                 widget.sch_order = T;
                                 get_data();
@@ -148,6 +151,7 @@ class _search_mainState extends State<search_main> {
                     ),
                     onTap:(){
                       setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         sort_value = '거리순';
                         widget.sch_order = '거리순';
                         get_data();
@@ -172,6 +176,7 @@ class _search_mainState extends State<search_main> {
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 sort_value = T;
                                 widget.sch_order = T;
                                 get_data();
@@ -184,6 +189,7 @@ class _search_mainState extends State<search_main> {
                     ),
                     onTap: (){
                       setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         sort_value = '낮은가격순';
                         widget.sch_order = '낮은가격순';
                         get_data();
@@ -207,6 +213,7 @@ class _search_mainState extends State<search_main> {
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 sort_value = T;
                                 widget.sch_order = T;
                                 get_data();
@@ -219,6 +226,7 @@ class _search_mainState extends State<search_main> {
                     ),
                     onTap: (){
                       setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         sort_value = '높은가격순';
                         widget.sch_order = '높은가격순';
                         get_data();
@@ -240,6 +248,7 @@ class _search_mainState extends State<search_main> {
                             groupValue: sort_value,
                             onChanged: (T){
                               setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
                                 sort_value = T;
                                 widget.sch_order = T;
                                 get_data();
@@ -252,6 +261,7 @@ class _search_mainState extends State<search_main> {
                     ),
                     onTap: (){
                       setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         sort_value = '조회수순';
                         widget.sch_order = '조회수순';
                         get_data();
@@ -983,6 +993,7 @@ class _search_mainState extends State<search_main> {
                       child: Icon(Icons.search),
                       onTap: (){
                         widget.sch_text = search_text.text;
+                        FocusScope.of(context).requestFocus(FocusNode());
                         get_data();
                       //  search_text.text = '';
                        // widget.sch_text = search_text.text;
@@ -1003,8 +1014,10 @@ class _search_mainState extends State<search_main> {
                   setState(() {
                     if(flg_search==false)
                       flg_search = true;
-                    else
+                    else {
+                      search_text.text="";
                       flg_search = false;
+                    }
                   });
                 },
               ),
