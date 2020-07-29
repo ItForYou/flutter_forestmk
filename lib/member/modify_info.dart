@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterforestmk/main.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -321,7 +322,7 @@ class _modify_infoState extends State<modify_info> {
 
   Future<String> uploadImage() async {
     try {
-    if(modify_name.text==null || modify_name.text=='') {
+    if(modify_name.text==null || modify_name.text=='' || modify_name.text.length>10 || modify_name.text.length<2) {
       show_Alert("닉네임이 올바르지 않습니다.",1);
       return '';
     }
@@ -419,7 +420,7 @@ class _modify_infoState extends State<modify_info> {
       String format_modify = modified_date.toString().substring(0,10);
       String format_addmonth = add1month.toString().substring(0,10);
 
-      if (now.compareTo(now) <=0) {
+      if (now.compareTo(add1month) <=0) {
         notify_namedate =   Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height*0.05,
@@ -592,6 +593,10 @@ class _modify_infoState extends State<modify_info> {
                   controller: modify_name,
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.emailAddress,
+                  inputFormatters: [
+                    WhitelistingTextInputFormatter(RegExp("[A-Za-z0-9]")),
+                    LengthLimitingTextInputFormatter(10),
+                  ],
                   maxLines: 1,
                   decoration: InputDecoration(
                     contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),

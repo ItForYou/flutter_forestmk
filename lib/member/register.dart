@@ -535,10 +535,10 @@ void change_search(context){
 
     void check_name(String value){
 
-      if(value.length < 2){
+      if(value.length < 2 || value.length>10){
         setState(() {
           flg_noticename =1;
-          notice_name ="2글자 이상 입력해주세요.";
+          notice_name ="2글자 이상 10글자 이하로 입력해주세요.";
         });
         return;
       }
@@ -836,6 +836,10 @@ void change_search(context){
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.emailAddress,
                   maxLines: 1,
+                  inputFormatters:[
+                    LengthLimitingTextInputFormatter(10),
+                    WhitelistingTextInputFormatter(RegExp("[A-Za-z0-9]")),
+                  ],
                   decoration: InputDecoration(
                     contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),
                     hintText: "닉네임",

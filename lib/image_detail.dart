@@ -38,7 +38,7 @@ class _image_detailState extends State<image_detail> {
         itemBuilder: (BuildContext context, int index){
           return PhotoView(
               imageProvider : NetworkImage(widget.flg_view ==1?widget.info[index+1]:widget.info[index]),
-              minScale: PhotoViewComputedScale.contained * 0.8,
+              minScale: PhotoViewComputedScale.contained * 1,
               maxScale: 2.0,
           );
         },

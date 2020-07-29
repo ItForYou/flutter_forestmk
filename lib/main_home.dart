@@ -251,6 +251,9 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                       Navigator.pop(bc);
                       get_data();
                     }
+                    else{
+                      Navigator.pop(bc);
+                    }
                   },
                 ),
                 InkWell(
@@ -482,7 +485,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
       onTap: ()async{
         var result = await Navigator.push(context, PageRouteBuilder(
           transitionDuration: Duration(milliseconds: 800),
-          pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+          pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,mb_id :mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,),
         ));
         if(result == 'delete'){
           get_data();

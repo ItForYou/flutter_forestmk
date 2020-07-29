@@ -337,7 +337,8 @@ class _my_itemsState extends State<my_items> {
                           onTap: ()async{
                             var result = await Navigator.push(context, PageRouteBuilder(
                               transitionDuration: Duration(milliseconds: 800),
-                              pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+                              pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,mb_id :widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,
+                                mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,),
                             ));
                             if(result == 'delete'){
                               get_data();
@@ -409,7 +410,8 @@ class _my_itemsState extends State<my_items> {
                           onTap: ()async{
                             var result = await Navigator.push(context, PageRouteBuilder(
                               transitionDuration: Duration(milliseconds: 800),
-                              pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+                              pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,mb_id :widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,
+                                  mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name),
                             ));
                             if(result == 'delete'){
                               get_data();
@@ -443,7 +445,8 @@ class _my_itemsState extends State<my_items> {
           onTap: ()async{
             var result = await Navigator.push(context, PageRouteBuilder(
               transitionDuration: Duration(milliseconds: 800),
-              pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+              pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,mb_id :widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,
+                  mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name),
             ));
             if(result == 'delete'){
               get_data();
@@ -524,9 +527,9 @@ class _my_itemsState extends State<my_items> {
                       get_data();
                     }
                     else{
+                      Navigator.pop(bc);
                       get_data();
                     }
-
                   },
                 ),
                 InkWell(
@@ -550,6 +553,10 @@ class _my_itemsState extends State<my_items> {
                       Navigator.pop(bc);
                       show_Alert("승인을 기다려주세요!\n승인시 자동 업로드 됩니다.",1);
                       //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
+                      get_data();
+                    }
+                    else{
+                      Navigator.pop(bc);
                       get_data();
                     }
                   },
@@ -673,7 +680,7 @@ class _my_itemsState extends State<my_items> {
         children: <Widget>[
           SizedBox(height: MediaQuery.of(context).size.height*0.015,),
           Text(widget.mb_name.length>10?widget.mb_name.substring(0,10)+"···":widget.mb_name,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032,fontWeight: FontWeight.bold),),
-          Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.032)),
+          Text(widget.mb_2,style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03, color: Color(0xff666666))),
         ],
       );
     }

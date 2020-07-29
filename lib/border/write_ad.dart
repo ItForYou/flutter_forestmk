@@ -711,7 +711,7 @@ class writead_State extends State<write_ad> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.05,
+                      height: MediaQuery.of(context).size.height*0.058,
                       padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
                       color: Colors.white,
                       child: Row(
@@ -720,7 +720,7 @@ class writead_State extends State<write_ad> {
                           Text("업체이름",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                           Container(
                               width: MediaQuery.of(context).size.width*0.7,
-                              height: MediaQuery.of(context).size.height*0.05,
+                              height: MediaQuery.of(context).size.height*0.058,
                               decoration: BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
@@ -730,10 +730,14 @@ class writead_State extends State<write_ad> {
                                   )
                               ),
                               child: Container(
+                                height: MediaQuery.of(context).size.height*0.058,
                                 margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.15,),
                                 child:TextField(
                                   controller: input_subject,
                                   cursorColor: Colors.black,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(60),
+                                  ],
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "업체이름을 입력해주세요",

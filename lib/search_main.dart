@@ -553,7 +553,8 @@ class _search_mainState extends State<search_main> {
       onTap: () async{
         var result = await Navigator.push(context, PageRouteBuilder(
           transitionDuration: Duration(milliseconds: 800),
-          pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,),
+          pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,mb_id :widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,
+                                                  mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,),
 
         ));
         if(result == 'delete'){
@@ -635,6 +636,9 @@ class _search_mainState extends State<search_main> {
                       Navigator.pop(bc);
                       get_data();
                     }
+                    else{
+                      Navigator.pop(bc);
+                    }
                   },
                 ),
                 InkWell(
@@ -712,7 +716,7 @@ class _search_mainState extends State<search_main> {
         },
         headers: {'Accept' : 'application/json'}
     );
-
+    //print(response.body);
     itemdata = jsonDecode(response.body);
 
     if(itemdata['data'].length<=0){
@@ -811,7 +815,7 @@ class _search_mainState extends State<search_main> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.sch_mbid);
+    //print(widget.sch_mbid);
     //load_myinfo();
 
 

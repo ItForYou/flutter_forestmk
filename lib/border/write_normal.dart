@@ -25,7 +25,7 @@ class writenormal_State extends State<write_normal> {
 
   TextEditingController input_subject = new TextEditingController();
   TextEditingController input_content = new TextEditingController();
-  TextEditingController input_wr_1 =new MoneyMaskedTextController(thousandSeparator: ',');
+  TextEditingController input_wr_1 =new TextEditingController();
 
   String cate_value ="카테고리를 선택해주세요";
   Color color_cate = Color(0xffdddddd);
@@ -492,8 +492,6 @@ class writenormal_State extends State<write_normal> {
     super.initState();
     load_myinfo();
 
-
-
     if(widget.info!=null){
       input_content.text = widget.info.wr_content;
       input_subject.text = widget.info.wr_subject;
@@ -504,7 +502,6 @@ class writenormal_State extends State<write_normal> {
     else if(widget.info==null && widget.wr_id!=null){
       get_data_now();
     }
-
 
   }
 
@@ -677,7 +674,9 @@ class writenormal_State extends State<write_normal> {
                                 ),
                                 child: Container(
                                       child:TextField(
-
+                                        inputFormatters: [
+                                          WhitelistingTextInputFormatter(RegExp('(^[+-]?\d+)(\d{3})')),
+                                        ],
                                         keyboardType: TextInputType.number,
                                         controller: input_wr_1,
                                       //  onChanged: (value)=>add_comma(value),
@@ -751,7 +750,7 @@ class writenormal_State extends State<write_normal> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.05,
+                      height: MediaQuery.of(context).size.height*0.058,
                       padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
                       color: Colors.white,
                       child: Row(
@@ -760,7 +759,7 @@ class writenormal_State extends State<write_normal> {
                           Text("제목",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
                           Container(
                               width: MediaQuery.of(context).size.width*0.7,
-                              height: MediaQuery.of(context).size.height*0.05,
+                              height: MediaQuery.of(context).size.height*0.058,
                               decoration: BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
@@ -770,15 +769,20 @@ class writenormal_State extends State<write_normal> {
                                   )
                               ),
                               child: Container(
+                                height: MediaQuery.of(context).size.height*0.058,
                                 margin: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.15,),
                                 child:TextField(
                                   controller: input_subject,
                                   cursorColor: Colors.black,
+                                //  maxLength: 60,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(60),
+                                  ],
+                                  maxLengthEnforced: true,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                       hintText: "제목을 입력해주세요",
                                       hintStyle: TextStyle(color: Color(0xffdddddd)),
-
                                   ),
                                 ),
                               )
@@ -788,7 +792,7 @@ class writenormal_State extends State<write_normal> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.05,
+                      height: MediaQuery.of(context).size.height*0.041,
                       padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
                       decoration: BoxDecoration(
                         color: Colors.white,

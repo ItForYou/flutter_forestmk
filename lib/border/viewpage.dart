@@ -1623,7 +1623,9 @@ class _ViewpageState extends State<Viewpage>{
   }
 
   Future<dynamic> get_data() async{
+    print(widget.info..mb_id);
 //print(widget.info.ca_name);
+
     final response = await http.post(
         Uri.encodeFull('http://14.48.175.177/get_view.php'),
         body: {
@@ -2350,9 +2352,25 @@ class _ViewpageState extends State<Viewpage>{
                                 child: Text("모두보기",style: TextStyle(fontSize: 16, color:Color(0xff5c8e6b)),),
                               ),
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) => search_main(mb_id:real_mbid,mb_pwd:real_mbpwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,sch_mbid: widget.info.mb_id,)
-                                ));
+                                if(widget.info!=null) {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) =>
+                                          search_main(mb_id: real_mbid,
+                                            mb_pwd: real_mbpwd,
+                                            mb_1: widget.mb_1,
+                                            mb_2: widget.mb_2,
+                                            mb_3: widget.mb_3,
+                                            mb_4: widget.mb_4,
+                                            mb_hp: widget.mb_hp,
+                                            mb_5: widget.mb_5,
+                                            mb_6: widget.mb_6,
+                                            mb_name: widget.mb_name,
+                                            sch_mbid: widget.info.mb_id,)
+                                  ));
+                                }
+                                else{
+
+                                }
                               },
                             ),
                           ],
