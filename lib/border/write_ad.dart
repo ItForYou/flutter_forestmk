@@ -463,7 +463,8 @@ class writead_State extends State<write_ad> {
               onPressed: (){
                 if(widget.info!=null)
                   Navigator.of(context).pop(true);
-                Navigator.of(context).pop(true);
+
+                Navigator.pop(context,"success");
                 Navigator.of(context2).pop(true);
               },
             ),
@@ -553,7 +554,7 @@ class writead_State extends State<write_ad> {
 
     return WillPopScope(
       onWillPop: (){
-        show_exit();
+       show_exit();
       },
       child: Scaffold(
         backgroundColor: Colors.white,

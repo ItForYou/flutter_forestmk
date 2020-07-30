@@ -65,9 +65,9 @@ class _ViewpageState extends State<Viewpage>{
   TextEditingController delare_comm_content = TextEditingController();
   TextEditingController input_comment = TextEditingController();
   ScrollController change_scroll = ScrollController(initialScrollOffset: 0);
+  ScrollController declare_scroll = ScrollController(initialScrollOffset: 0);
+
   int flg_likenow=0,flg_uploadcomm_bt=0;
-
-
 
   void add_widget_comments(){
 
@@ -194,7 +194,7 @@ class _ViewpageState extends State<Viewpage>{
                     child: Text("신고하기", style: TextStyle(color: Colors.red,fontSize:MediaQuery.of(context).size.height * 0.015),),
                     onTap: (){
                       setState(() {
-                        if(real_mbid!=null && real_mbid !='') {
+                        if(real_mbid!=null && real_mbid !='' && widget.info.wr_9!='거래완료') {
                           seleted_comm_wrid = temp_data.wr_id;
                           show_declarecomm();
                         }
@@ -908,6 +908,7 @@ class _ViewpageState extends State<Viewpage>{
               .size
               .height * 0.55,
           child: SingleChildScrollView(
+            controller: declare_scroll,
             child: Column(
               children: <Widget>[
                 Container(
@@ -1503,8 +1504,8 @@ class _ViewpageState extends State<Viewpage>{
   }
 
   void set_herocontent(List <dynamic> path){
-    if(path.length-1 > 0){
-
+    if(path.length-1 > 0 ){
+        if(widget.info.wr_9 !='거래완료'){
         hero_content = Container(
           height: MediaQuery
               .of(context)
@@ -1552,6 +1553,43 @@ class _ViewpageState extends State<Viewpage>{
           pagination: SwiperPagination(),
         ),
       );*/
+    }
+        else{
+
+          hero_content =
+              GestureDetector(
+                    child: Container(
+                height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.35,
+                width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                decoration: BoxDecoration(
+                      image: DecorationImage(//이미지 꾸미기
+                        fit:BoxFit.cover,
+                        colorFilter: new ColorFilter.mode(Colors.white.withOpacity(0.2), BlendMode.dstATop),
+                        image:path[0]!=''?NetworkImage(path[0]):AssetImage("images/wing_mb_noimg2.png"),//이미지 가져오기
+                      )
+                ),
+                      child: Center(
+                        child: Container(
+                          width:MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          color: Colors.white,
+                          child: Center(
+                            child: Text("판매완료", style: TextStyle(color: Color(0xff000000),fontSize: MediaQuery.of(context).size.width*0.06, decoration: TextDecoration.none, fontWeight: FontWeight.normal)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    onTap: (){
+                      move_imgdetail(1);
+                    },
+                  );
+        }
     }
   }
 
@@ -1843,7 +1881,7 @@ class _ViewpageState extends State<Viewpage>{
                 RaisedButton(
                   color: Color(0xfffae100),
                   onPressed: () async{
-                    if (widget.info.mb_id != null && real_mbid !=null && real_mbid!='' && real_mbid!=widget.info.mb_id) {
+                    if (widget.info.mb_id != null && real_mbid !=null && real_mbid!='' && real_mbid!=widget.info.mb_id && widget.info.wr_9 !='거래완료') {
                       var result = await Navigator.push(
                           context, MaterialPageRoute(
                           builder: (context) =>
@@ -1857,6 +1895,9 @@ class _ViewpageState extends State<Viewpage>{
                       if (result == 'change') {
                         get_data();
                       }
+                    }
+                    else if(widget.info.wr_9=='거래완료'){
+                        show_Alert("거래가 완료된 상품입니다.", 1);
                     }
                     else if(real_mbid == widget.info.mb_id){
                         show_ban();
@@ -1995,8 +2036,12 @@ class _ViewpageState extends State<Viewpage>{
                               ),
                             ),
                             onTap: (){
-                              if(real_mbid!='')
-                              show_declare();
+                              if(real_mbid!='' && widget.info.wr_9!='거래완료') {
+                                show_declare();
+                              }
+                              else if(widget.info.wr_9=='거래완료'){
+                                show_Alert("거래가 완료된 상품입니다.", 1);
+                              }
                               else {
                                 request_logindialog();
                               }
@@ -2166,7 +2211,7 @@ class _ViewpageState extends State<Viewpage>{
                             ],
                           ),
                           onTap: (){
-                            if(real_mbid!='') {
+                            if(real_mbid!='' && widget.info.wr_9 !='거래완료') {
                               setState(() {
                                 if (flg_opencomments == 0) {
                                   setState(() {
@@ -2179,6 +2224,9 @@ class _ViewpageState extends State<Viewpage>{
                                   });
                                 }
                               });
+                            }
+                            else if(widget.info.wr_9 =='거래완료'){
+                              show_Alert("거래가 완료된 상품입니다.", 1);
                             }
                             else{
                               request_logindialog();

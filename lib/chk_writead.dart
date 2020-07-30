@@ -551,9 +551,14 @@ class _chk_writeadState extends State<chk_writead> {
                     var result = await  Navigator.push(context, MaterialPageRoute(
                         builder: (context) => write_ad()
                     ));
+
                     if(result == 'success'){
                       Navigator.pop(context,"success");
                     }
+                    else{
+                      Navigator.pop(context);
+                    }
+
                 }
                 else{
                   _showDialog();

@@ -387,7 +387,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                                   decoration: BoxDecoration(
                                       color: Colors.white
                                   ),
-                                  child: Center(child: Text("판매완료", style: TextStyle(color: Color(0xff000000),fontSize: MediaQuery.of(context).size.width*0.035))),
+                                  child: Center(child: Text("판매완료", style: TextStyle(color: Color(0xff000000),fontSize: MediaQuery.of(context).size.width*0.035, decoration: TextDecoration.none, fontWeight: FontWeight.normal))),
                                 ),
                               ),
                             )
@@ -404,6 +404,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                         SizedBox(height: temp_data.ca_name=='업체'?MediaQuery.of(context).size.height*0.005:MediaQuery.of(context).size.height*0.003,),
                         Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name=='업체'?MediaQuery.of(context).size.width*0.028:MediaQuery.of(context).size.width*0.035, fontWeight:temp_data.ca_name=='업체'?null:FontWeight.bold)),
                         temp_data.ca_name!='업체'? SizedBox(height: MediaQuery.of(context).size.height*0.005,): Container(),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.005,),
                         Row(
                           children: <Widget>[
                             Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),

@@ -327,7 +327,7 @@ class _my_itemsState extends State<my_items> {
                                         decoration: BoxDecoration(
                                             color: Colors.white
                                         ),
-                                        child: Center(child: Text("판매완료")),
+                                        child: Center(child: Text("판매완료", style: TextStyle(color: Color(0xff000000),fontSize: MediaQuery.of(context).size.width*0.035, decoration: TextDecoration.none, fontWeight: FontWeight.normal))),
                                       ),
                                     ),
                                   )

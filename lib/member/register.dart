@@ -399,7 +399,7 @@ void change_search(context){
 
   @override
   Widget build(BuildContext context){
-
+    print('\u00b7');
     Widget service_content = Container(
       width: MediaQuery.of(context).size.width*0.8,
       height: MediaQuery.of(context).size.height*0.2,
@@ -689,7 +689,7 @@ void change_search(context){
         leading: InkWell(
           child:Padding(
               padding: EdgeInsets.all(13),
-              child:Image.network("http://14.48.175.177/theme/basic_app/img/app/hd_back.png")
+              child:Image.asset("images/hd_back.png")
           ),
           onTap: (){
             Navigator.of(context).pop(true);
@@ -838,7 +838,7 @@ void change_search(context){
                   maxLines: 1,
                   inputFormatters:[
                     LengthLimitingTextInputFormatter(10),
-                    WhitelistingTextInputFormatter(RegExp("[A-Za-z0-9]")),
+                    WhitelistingTextInputFormatter(RegExp("[A-Za-z가-힣ㄱ-ㅎㅏ-ㅣ0-9 \u318D\u119E\u11A2\u2022\u2025\u00B7\uFE55]", unicode: true, dotAll: true)),
                   ],
                   decoration: InputDecoration(
                     contentPadding: new EdgeInsets.only(left: MediaQuery.of(context).size.width*0.03,),

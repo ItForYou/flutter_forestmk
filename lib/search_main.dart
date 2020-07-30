@@ -456,7 +456,7 @@ class _search_mainState extends State<search_main> {
                                   decoration: BoxDecoration(
                                       color: Colors.white
                                   ),
-                                  child: Center(child: Text("판매완료")),
+                                  child: Center(child: Text("판매완료", style: TextStyle(color: Color(0xff000000),fontSize: MediaQuery.of(context).size.width*0.035, decoration: TextDecoration.none, fontWeight: FontWeight.normal))),
                                 ),
                               ),
                             )
@@ -517,7 +517,7 @@ class _search_mainState extends State<search_main> {
                               ),
                             ),
                             Image.asset("images/fa-comment.png",height: MediaQuery.of(context).size.height*0.018,),
-                            Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
+                            Text(temp_data.comments, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
                           ],
                         ),
                       ],
