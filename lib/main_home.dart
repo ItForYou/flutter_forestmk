@@ -50,6 +50,7 @@ class main_home extends StatefulWidget {
 
 class _main_homestate extends State<main_home> with WidgetsBindingObserver{
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   bool checkbox_soldout = false;
   bool checkbox_adv = false;
@@ -130,9 +131,9 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
         if(appbar != scroll_appbar)
           appbar = scroll_appbar;
 
-        if(list_height == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor()) {
+        if(list_height == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.049)) {
           start_height =0;
-          list_height = list_height - (MediaQuery.of(context).size.height*0.08).floor();
+          list_height = list_height - (MediaQuery.of(context).size.height*0.08);
         }
       });
     }
@@ -140,12 +141,13 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
       setState(() {
         if(appbar == scroll_appbar) {
           appbar = intro_appbar;
+          start_height =0;
+          list_height = list_height + (MediaQuery.of(context).size.height*0.08);
         }
         //실값이 반올림되어져 비교되어짐 그래서 값이 다르게 나옴
-        if(list_height  == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor()- (MediaQuery.of(context).size.height*0.08).floor()) {
-          start_height =0;
-          list_height = list_height + (MediaQuery.of(context).size.height*0.08).floor();
-        }
+//        if(list_height  == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor()- (MediaQuery.of(context).size.height*0.08)) {
+//
+//        }
       });
     }
   }
@@ -248,8 +250,11 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                         builder: (context) =>  write_normal()
                     ));
                     if(result == 'success'){
+
                       Navigator.pop(bc);
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
                       get_data();
+
                     }
                     else{
                       Navigator.pop(bc);
@@ -346,7 +351,8 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                   children: <Widget>[
                     Hero(
                       tag: "hero"+id.toString(),
-                      child: temp_data.wr_9!='거래완료'?Container(
+                      child: temp_data.wr_9!='거래완료'?
+                      Container(
                         width: MediaQuery.of(context).size.width*0.225,
                         height: MediaQuery.of(context).size.width*0.2,
                         margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
@@ -396,15 +402,15 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ),
                     SizedBox(width: 10,),
                     Column(
-                      mainAxisAlignment: temp_data.ca_name!='업체'? MainAxisAlignment.start: MainAxisAlignment.center,
+                      mainAxisAlignment: temp_data.ca_name!='업체'? MainAxisAlignment.center: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(height: MediaQuery.of(context).size.height*0.003,),
                         Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, fontWeight: temp_data.ca_name=='업체'?FontWeight.bold:null),),
-                        SizedBox(height: temp_data.ca_name=='업체'?MediaQuery.of(context).size.height*0.005:MediaQuery.of(context).size.height*0.003,),
+                        SizedBox(height: temp_data.ca_name=='업체'?MediaQuery.of(context).size.height*0.003:MediaQuery.of(context).size.height*0.003,),
                         Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name=='업체'?MediaQuery.of(context).size.width*0.028:MediaQuery.of(context).size.width*0.035, fontWeight:temp_data.ca_name=='업체'?null:FontWeight.bold)),
-                        temp_data.ca_name!='업체'? SizedBox(height: MediaQuery.of(context).size.height*0.005,): Container(),
-                        SizedBox(height: MediaQuery.of(context).size.height*0.005,),
+//                        temp_data.ca_name!='업체'? SizedBox(height: MediaQuery.of(context).size.height*0.005,): Container(),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
                         Row(
                           children: <Widget>[
                             Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
@@ -429,7 +435,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                           children: <Widget>[
                             Text( temp_data.ca_name!='업체'? temp_data.ca_name:'광고업체', style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                             Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
-                            temp_data.ca_name!='업체'?Container(
+                           Container(
                               width: MediaQuery.of(context).size.width*0.01,
                               height: MediaQuery.of(context).size.width*0.01,
                               margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
@@ -437,7 +443,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                                   borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
                                   color: Colors.forestmk
                               ),
-                            ):Container(),
+                            ),
                             Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
                             Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
                             Container(
@@ -896,7 +902,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
     }
 
     if(start_height == 1){
-      list_height = MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor();
+      list_height = MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.049);
       scrollbar_height = MediaQuery.of(context).size.height*0.08;
       scroll_appbar = PreferredSize(
           preferredSize: Size.fromHeight(scrollbar_height),
@@ -1003,6 +1009,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
           )
       );
     }
+    //상단 검색 창 표시 부분
     if(flg_search == false) {
       head_first = Container(
           height: MediaQuery
@@ -1193,6 +1200,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     else {
                       search_text.text="";
                       flg_search = false;
+                      get_data();
                     }
                   });
                 },
@@ -1209,6 +1217,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
     // than having to individually change instances of widgets.
     return Scaffold(
         resizeToAvoidBottomPadding: false,
+        backgroundColor: Colors.white,
         appBar: appbar,
 //      decoration: BoxDecoration(
 //          borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -1216,12 +1225,13 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
 //      ),
 
         body:
-          Column(
-            children: <Widget>[
-              Container(
-                height: list_height,
-                decoration: BoxDecoration(color: Colors.white),
-                child: ListView(
+//          Column(
+//            children: <Widget>[
+//              Container(
+//                height: list_height,
+//                decoration: BoxDecoration(color: Colors.white),
+//                child:
+                  ListView(
                   controller: change_appbar,
                   children: <Widget>[
                     SizedBox(height: 5,),
@@ -1507,10 +1517,12 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     ),
                     Column(
                         children: items_content
-                    )
-                  ],
-                ),
+                            //광고 붙일시 살려야함
+//                    )
+//                  ],
+//                ),
               ),
+
            /*   Container(
                 height: MediaQuery.of(context).size.height*0.1,
                 decoration: BoxDecoration(
@@ -1520,6 +1532,7 @@ class _main_homestate extends State<main_home> with WidgetsBindingObserver{
                     )
                 ),
               ),*/
+
             ],
         ),
         floatingActionButton: flg_floatbt==1?float_button():Container()

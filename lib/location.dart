@@ -251,13 +251,14 @@ class location_State extends State<location> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
+                      width: MediaQuery.of(context).size.width*0.16,
                       margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
                       child: Text("설정 위치 :")
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width*0.78,
+                    width: MediaQuery.of(context).size.width*0.7,
                     height: MediaQuery.of(context).size.height*0.07,
-                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.01, right: MediaQuery.of(context).size.width*0.05),
+                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.003, right: MediaQuery.of(context).size.width*0.05),
                     child: TextFormField(
                         readOnly: true,
                         controller: now_mylocation,

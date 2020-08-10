@@ -338,7 +338,7 @@ class writead_State extends State<write_ad> {
                   if(flg==3){
                     Navigator.pop(context2);
                     Navigator.pop(context);
-                    Navigator.pop(context);
+
                   }
                   else {
                     if (flg == 2)

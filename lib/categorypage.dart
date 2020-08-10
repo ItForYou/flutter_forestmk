@@ -123,55 +123,57 @@ class _categorypageState extends State<categorypage> {
 
           ),
       ),
-      body: Column(
-        children: <Widget>[
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+              Container(
+                width:  MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height*0.05,
+                padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.01, bottom: MediaQuery.of(context).size.height*0.01, left: MediaQuery.of(context).size.width*0.06,),
+                decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1, color: Color(0xffdddddd))),color: Colors.white),
+                child: Text("카테고리", style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.025, ),),
+              ),
             Container(
-              width:  MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height*0.05,
-              padding: EdgeInsets.only(top:MediaQuery.of(context).size.height*0.01, bottom: MediaQuery.of(context).size.height*0.01, left: MediaQuery.of(context).size.width*0.06,),
-              decoration: BoxDecoration(border: Border(bottom: BorderSide(width: 1, color: Color(0xffdddddd))),color: Colors.white),
-              child: Text("카테고리", style: TextStyle(fontSize: MediaQuery.of(context).size.height*0.025, ),),
-            ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height*0.825,
-            color: Colors.white,
-            child: Row(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    getitems(0),
-                    getitems(2),
-                    getitems(4),
-                    getitems(6),
-                    getitems(8),
-                    getitems(10),
-                    getitems(12),
-                    getitems(14),
-                    getitems(16),
-                    getitems(18),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height*0.825,
+              color: Colors.white,
+              child: Row(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      getitems(0),
+                      getitems(2),
+                      getitems(4),
+                      getitems(6),
+                      getitems(8),
+                      getitems(10),
+                      getitems(12),
+                      getitems(14),
+                      getitems(16),
+                      getitems(18),
 
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    getitems(1),
-                    getitems(3),
-                    getitems(5),
-                    getitems(7),
-                    getitems(9),
-                    getitems(11),
-                    getitems(13),
-                    getitems(15),
-                    getitems(17),
-                  ],
-                )
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      getitems(1),
+                      getitems(3),
+                      getitems(5),
+                      getitems(7),
+                      getitems(9),
+                      getitems(11),
+                      getitems(13),
+                      getitems(15),
+                      getitems(17),
+                    ],
+                  )
 
-              ],
-            ),
+                ],
+              ),
 
-          )
-        ],
+            )
+          ],
+        ),
       ),
 
     );

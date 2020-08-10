@@ -638,7 +638,7 @@ class writenormal_State extends State<write_normal> {
                                child: Center(
                                  child: Container(
                                      width: MediaQuery.of(context).size.width*0.7,
-                                     child:Text(cate_value,style: TextStyle(color: color_cate,fontSize: MediaQuery.of(context).size.width*0.035,),textAlign: TextAlign.start,)
+                                     child:Text(cate_value,style: TextStyle(color: color_cate,fontSize: MediaQuery.of(context).size.width*0.04,),textAlign: TextAlign.start,)
                               ),
                                )
                             ),
@@ -656,95 +656,100 @@ class writenormal_State extends State<write_normal> {
                       padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05, right: MediaQuery.of(context).size.width*0.05,),
                       color: Colors.white,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text("금액",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,)),
-                          SizedBox(width:MediaQuery.of(context).size.width*0.13),
-                          Container(
 
-                                width: MediaQuery.of(context).size.width*0.5,
-                                height: MediaQuery.of(context).size.height*0.05,
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                            width: 1.5,
-                                            color: Color(0xfff7f7f7)
+                          Row(
+                            children: <Widget>[
+                              Container(
+                                    width: MediaQuery.of(context).size.width*0.5,
+                                    height: MediaQuery.of(context).size.height*0.05,
+
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                width: 1.5,
+                                                color: Color(0xfff7f7f7)
+                                            )
                                         )
-                                    )
-                                ),
-                                child: Container(
-                                      child:TextField(
-                                        inputFormatters: [
-                                          WhitelistingTextInputFormatter(RegExp('(^[+-]?\d+)(\d{3})')),
-                                        ],
-                                        keyboardType: TextInputType.number,
-                                        controller: input_wr_1,
-                                      //  onChanged: (value)=>add_comma(value),
-                                        enabled: flg_enablewr1,
-                                        cursorColor: Colors.black,
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: "금액을 입력해주세요",
-                                          hintStyle: TextStyle(color:Color(0xffdddddd)),
-                                        ),
-                                        ),
-                                      )
-                                  ),
-                          Container(
-                            width: MediaQuery.of(context).size.width*0.2,
-                            height: MediaQuery.of(context).size.height*0.05,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width*0.08,
-                                  height: MediaQuery.of(context).size.height*0.05,
-                                  decoration: BoxDecoration(
-                                    border:Border(
-                                        bottom: BorderSide(
-                                            width: 1.5,
-                                            color: Color(0xfff7f7f7)
-                                        )
-                                    )
-                                  ),
-                                  child: Checkbox(
-                                    value: click_free,
-                                    onChanged: (bool value){
-                                      setState(() {
-                                        //print("Check"+click_free.toString());
-                                        if(value==true) {
-                                          input_wr_1.text =
-                                          "무료나눔";
-                                        }
-                                        else {
-                                          input_wr_1.text = "";
-                                        }
-                                        click_free=value;
-                                         flg_enablewr1 = !value;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width*0.12,
-                                  height: MediaQuery.of(context).size.height*0.05,
-                                  padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.03),
-                                  decoration: BoxDecoration(
-                                      border:Border(
-                                          bottom: BorderSide(
-                                              width: 1.5,
-                                              color: Color(0xfff7f7f7)
-                                          )
-                                      )
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                        "무료"
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
+                                    child: Container(
+                                          child:TextField(
+                                            inputFormatters: [
+                                              WhitelistingTextInputFormatter(RegExp('(^[+-]?\d+)(\d{3})')),
+                                            ],
+                                            keyboardType: TextInputType.number,
+                                            controller: input_wr_1,
+                                          //  onChanged: (value)=>add_comma(value),
+                                            enabled: flg_enablewr1,
+                                            cursorColor: Colors.black,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: "금액을 입력해주세요",
+                                              hintStyle: TextStyle(color:Color(0xffdddddd), fontSize: MediaQuery.of(context).size.width*0.04),
+                                            ),
+                                            ),
+                                          )
+                                      ),
+                              Container(
+                                width: MediaQuery.of(context).size.width*0.2,
+                                height: MediaQuery.of(context).size.height*0.05,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width*0.08,
+                                      height: MediaQuery.of(context).size.height*0.05,
+                                      decoration: BoxDecoration(
+                                          border:Border(
+                                              bottom: BorderSide(
+                                                  width: 1.5,
+                                                  color: Color(0xfff7f7f7)
+                                              )
+                                          )
+                                      ),
+                                      child: Checkbox(
+                                        value: click_free,
+                                        onChanged: (bool value){
+                                          setState(() {
+                                            //print("Check"+click_free.toString());
+                                            if(value==true) {
+                                              input_wr_1.text =
+                                              "무료나눔";
+                                            }
+                                            else {
+                                              input_wr_1.text = "";
+                                            }
+                                            click_free=value;
+                                            flg_enablewr1 = !value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width*0.12,
+                                      height: MediaQuery.of(context).size.height*0.05,
+                                      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.03),
+                                      decoration: BoxDecoration(
+                                          border:Border(
+                                              bottom: BorderSide(
+                                                  width: 1.5,
+                                                  color: Color(0xfff7f7f7)
+                                              )
+                                          )
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                            "무료"
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+
                         ],
                       ),
                     ),
@@ -782,7 +787,7 @@ class writenormal_State extends State<write_normal> {
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                       hintText: "제목을 입력해주세요",
-                                      hintStyle: TextStyle(color: Color(0xffdddddd)),
+                                      hintStyle: TextStyle(color: Color(0xffdddddd),fontSize: MediaQuery.of(context).size.width*0.04),
                                   ),
                                 ),
                               )

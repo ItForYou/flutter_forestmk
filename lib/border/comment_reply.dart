@@ -180,18 +180,22 @@ class _comment_replyState extends State<comment_reply> {
                     .of(context)
                     .size
                     .height * 0.005,),
-                Row(
-                  children: <Widget>[
-                    Text(temp_data.wr_datetime==''?'':temp_data.wr_datetime, style: TextStyle(
-                        color: Color(0xffdddddd), fontSize: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.03),),
-                    (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
-                    SizedBox(width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.02,):SizedBox(),
+               Container(
+                 height:MediaQuery
+                     .of(context)
+                     .size
+                     .height * 0.05 ,
+                 child: Row(
+
+
+                      children: <Widget>[
+                        Text(temp_data.wr_datetime==''?'':temp_data.wr_datetime, style: TextStyle(
+                            color: Color(0xffdddddd), fontSize: MediaQuery.of(context).size.width * 0.03),),
+                        (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                        SizedBox(width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.02,):SizedBox(),
 //                    (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
 //                    Text("수정", style: TextStyle(color: Color(0xffdddddd),fontSize:MediaQuery.of(context).size.height * 0.015),):SizedBox(),
 //                    (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
@@ -199,20 +203,20 @@ class _comment_replyState extends State<comment_reply> {
 //                         .of(context)
 //                        .size
 //                        .width * 0.02,):SizedBox(),
-                    (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
-                    InkWell(
-                      child: Text("삭제", style: TextStyle(color: Colors.red,fontSize:MediaQuery.of(context).size.height * 0.015),
-                      ),
-                      onTap: (){
-                        show_deletecmmt(temp_data.wr_id);
-                      },
-                    ):SizedBox(),
-                    SizedBox(height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.05,),
-                  ],
-                )
+                        (temp_data.mb_id==real_mbid) || (real_mbid=='admin')?
+                        Padding(
+                          padding:  EdgeInsets.only(bottom:MediaQuery.of(context).size.height*0.0026),
+                          child: InkWell(
+                            child: Text("삭제", style: TextStyle(color: Colors.red,fontSize:MediaQuery.of(context).size.width * 0.025),
+                            ),
+                            onTap: (){
+                              show_deletecmmt(temp_data.wr_id);
+                            },
+                          ),
+                        ):SizedBox(),
+                      ],
+                    ),
+               ),
               ],
             ),
             ]

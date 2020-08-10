@@ -47,7 +47,7 @@ class _search_mainState extends State<search_main> {
   List <Widget> items_content=[];
   String sort_value = "최근순";
   String ad_textcontent="";
-  Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black));
+  Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Color(0xff888888),fontSize: 12));
   var itemdata;
   ScrollController change_appbar = ScrollController();
   TextEditingController search_text = new TextEditingController();
@@ -80,195 +80,199 @@ class _search_mainState extends State<search_main> {
             ),
             content: Container(
               width: MediaQuery.of(context).size.width,
-              height: widget.title!='광고'?MediaQuery.of(context).size.height*0.35:MediaQuery.of(context).size.height*0.2,
               color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  InkWell(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.05,
-                      decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+              child: Wrap(
+                children: [Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    InkWell(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height*0.05,
+                        decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("최근순"),
+                            Radio(
+                              value: "최근순",
+                              groupValue: sort_value,
+                              onChanged: (T){
+                                setState(() {
+                                  FocusScope.of(context).requestFocus(FocusNode());
+                                  sort_value = T;
+                                  widget.sch_order = T;
+                                  get_data();
+                                });
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("최근순"),
-                          Radio(
-                            value: "최근순",
-                            groupValue: sort_value,
-                            onChanged: (T){
-                              setState(() {
-                                FocusScope.of(context).requestFocus(FocusNode());
-                                sort_value = T;
-                                widget.sch_order = T;
-                                get_data();
-                              });
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      ),
+                      onTap: (){
+                        setState(() {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          sort_value = '최근순';
+                          widget.sch_order = '최근순';
+                          get_data();
+                        });
+                        Navigator.pop(context);
+                      },
                     ),
-                    onTap: (){
-                      setState(() {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        sort_value = '최근순';
-                        widget.sch_order = '최근순';
-                        get_data();
-                      });
-                      Navigator.pop(context);
-                    },
-                  ),  InkWell(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.07,
-                      decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                    widget.mb_id!='' && widget.mb_id !=null?
+                    InkWell(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height*0.07,
+                        decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("거리순"),
+                            Radio(
+                              value: "거리순",
+                              groupValue: sort_value,
+                              onChanged: (T){
+                                setState(() {
+                                  FocusScope.of(context).requestFocus(FocusNode());
+                                  sort_value = T;
+                                  widget.sch_order = T;
+                                  get_data();
+                                });
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("거리순"),
-                          Radio(
-                            value: "거리순",
-                            groupValue: sort_value,
-                            onChanged: (T){
-                              setState(() {
-                                FocusScope.of(context).requestFocus(FocusNode());
-                                sort_value = T;
-                                widget.sch_order = T;
-                                get_data();
-                              });
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    onTap:(){
-                      setState(() {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        sort_value = '거리순';
-                        widget.sch_order = '거리순';
-                        get_data();
-                      });
-                      Navigator.pop(context);
-                    },
-                  ),
+                      onTap:(){
+                        setState(() {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          sort_value = '거리순';
+                          widget.sch_order = '거리순';
+                          get_data();
+                        });
+                        Navigator.pop(context);
+                      },
+                    ):Container(),
 
-                  widget.title!='광고'?InkWell(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.07,
-                      decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                    widget.title!='광고' && widget.sch_cate!='업체'?InkWell(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height*0.07,
+                        decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("낮은가격순"),
+                            Radio(
+                              value: "낮은가격순",
+                              groupValue: sort_value,
+                              onChanged: (T){
+                                setState(() {
+                                  FocusScope.of(context).requestFocus(FocusNode());
+                                  sort_value = T;
+                                  widget.sch_order = T;
+                                  get_data();
+                                });
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("낮은가격순"),
-                          Radio(
-                            value: "낮은가격순",
-                            groupValue: sort_value,
-                            onChanged: (T){
-                              setState(() {
-                                FocusScope.of(context).requestFocus(FocusNode());
-                                sort_value = T;
-                                widget.sch_order = T;
-                                get_data();
-                              });
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
+                      onTap: (){
+                        setState(() {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          sort_value = '낮은가격순';
+                          widget.sch_order = '낮은가격순';
+                          get_data();
+                        });
+                        Navigator.pop(context);
+                      },
+                    ):SizedBox(),
+                    widget.title!='광고' && widget.sch_cate!='업체'?InkWell(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height*0.07,
+                        decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("높은가격순"),
+                            Radio(
+                              value: "높은가격순",
+                              groupValue: sort_value,
+                              onChanged: (T){
+                                setState(() {
+                                  FocusScope.of(context).requestFocus(FocusNode());
+                                  sort_value = T;
+                                  widget.sch_order = T;
+                                  get_data();
+                                });
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    onTap: (){
-                      setState(() {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        sort_value = '낮은가격순';
-                        widget.sch_order = '낮은가격순';
-                        get_data();
-                      });
-                      Navigator.pop(context);
-                    },
-                  ):SizedBox(),
-                  widget.title!='광고'?InkWell(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.07,
-                      decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("높은가격순"),
-                          Radio(
-                            value: "높은가격순",
-                            groupValue: sort_value,
-                            onChanged: (T){
-                              setState(() {
-                                FocusScope.of(context).requestFocus(FocusNode());
-                                sort_value = T;
-                                widget.sch_order = T;
-                                get_data();
-                              });
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    onTap: (){
-                      setState(() {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        sort_value = '높은가격순';
-                        widget.sch_order = '높은가격순';
-                        get_data();
-                      });
-                      Navigator.pop(context);
-                    },
-                  ):SizedBox(),
-                  InkWell(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.07,
+                      onTap: (){
+                        setState(() {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          sort_value = '높은가격순';
+                          widget.sch_order = '높은가격순';
+                          get_data();
+                        });
+                        Navigator.pop(context);
+                      },
+                    ):SizedBox(),
+                    InkWell(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height*0.07,
 
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("조회수순"),
-                          Radio(
-                            value: "조회수순",
-                            groupValue: sort_value,
-                            onChanged: (T){
-                              setState(() {
-                                FocusScope.of(context).requestFocus(FocusNode());
-                                sort_value = T;
-                                widget.sch_order = T;
-                                get_data();
-                              });
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("조회수순"),
+                            Radio(
+                              value: "조회수순",
+                              groupValue: sort_value,
+                              onChanged: (T){
+                                setState(() {
+                                  FocusScope.of(context).requestFocus(FocusNode());
+                                  sort_value = T;
+                                  widget.sch_order = T;
+                                  get_data();
+                                });
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
+                      onTap: (){
+                        setState(() {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          sort_value = '조회수순';
+                          widget.sch_order = '조회수순';
+                          get_data();
+                        });
+                        Navigator.pop(context);
+                      },
                     ),
-                    onTap: (){
-                      setState(() {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        sort_value = '조회수순';
-                        widget.sch_order = '조회수순';
-                        get_data();
-                      });
-                      Navigator.pop(context);
-                    },
-                  ),
+                  ],
+                )
                 ],
               ),
             ),
@@ -417,7 +421,7 @@ class _search_mainState extends State<search_main> {
                       temp_data.wr_9!='거래완료'?
                       Container(
                         width: MediaQuery.of(context).size.width*0.225,
-                        height: MediaQuery.of(context).size.height*0.2,
+                        height: MediaQuery.of(context).size.width*0.2,
                         margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
                         decoration: BoxDecoration(
                             border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
@@ -465,14 +469,14 @@ class _search_mainState extends State<search_main> {
                     ),
                     SizedBox(width: 10,),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: temp_data.ca_name!='업체'? MainAxisAlignment.center: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(height: MediaQuery.of(context).size.height*0.003,),
                         Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035,fontWeight: temp_data.ca_name=='업체'?FontWeight.bold:null),),
                         SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                        Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name!='업체'?MediaQuery.of(context).size.width*0.035:MediaQuery.of(context).size.width*0.03,fontWeight: temp_data.ca_name!='업체'?FontWeight.bold:null),),
-                        SizedBox(height: MediaQuery.of(context).size.height*0.005,),
+                        Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name!='업체'?MediaQuery.of(context).size.width*0.035:MediaQuery.of(context).size.width*0.028,fontWeight: temp_data.ca_name!='업체'?FontWeight.bold:null),),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
                         Row(
                           children: <Widget>[
                             Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
@@ -496,6 +500,7 @@ class _search_mainState extends State<search_main> {
                           children: <Widget>[
                             Text(temp_data.ca_name=='업체'? "광고업체":temp_data.ca_name, style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
                             Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
+
                             Container(
                               width: MediaQuery.of(context).size.width*0.01,
                               height: MediaQuery.of(context).size.width*0.01,
@@ -668,7 +673,6 @@ class _search_mainState extends State<search_main> {
                       Navigator.pop(bc);
                       get_data();
                     }
-
                   },
                 ),
               ],
@@ -679,6 +683,7 @@ class _search_mainState extends State<search_main> {
   }
 
   Widget float_button(){
+
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.15,),
       child: InkWell(
@@ -695,15 +700,28 @@ class _search_mainState extends State<search_main> {
         },
       ),
     );
+
   }
 
   Future<dynamic> get_data() async{
 
+    String real_sch_text='';
+    print("print_shctext1 - "+real_sch_text);
+    if((search_text.text=='' || search_text.text==null) && widget.sch_text!=null){
+      real_sch_text = widget.sch_text;
+    }
+
+    else{
+      real_sch_text = search_text.text;
+    }
+
+    print("print_shctext2 - "+real_sch_text);
     final response = await http.post(
         Uri.encodeFull("http://14.48.175.177/get_searchwr.php"),
         body: {
+
           'mb_id':widget.mb_id!=null?widget.mb_id:"",
-          'sch_text':widget.sch_text!=null?widget.sch_text:"",
+          'sch_text':real_sch_text!=null?real_sch_text:"",
           'sch_order':widget.sch_order!=null?widget.sch_order:"",
           'sch_flgsold':widget.sch_flgsold!=null?widget.sch_flgsold:"",
           'sch_flghide':widget.sch_flghide!=null?widget.sch_flghide:"",
@@ -713,6 +731,7 @@ class _search_mainState extends State<search_main> {
           'sch_mbid' : widget.sch_mbid!=null?widget.sch_mbid:"",
           "nowlat":widget.mb_5,
           "nowlng":widget.mb_6,
+
         },
         headers: {'Accept' : 'application/json'}
     );
@@ -815,11 +834,11 @@ class _search_mainState extends State<search_main> {
 
   @override
   Widget build(BuildContext context) {
-    //print(widget.sch_mbid);
+    print("build!");
     //load_myinfo();
 
 
-    if(widget.mb_id!=null) {
+    if(widget.mb_id!=null && widget.mb_id !='') {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -905,7 +924,7 @@ class _search_mainState extends State<search_main> {
                         child: Image.asset("images/hd_icon02.png"),
                       ),
                       onTap: () async {
-                        if(widget.mb_id!=null) {
+                        if(widget.mb_id!=null && widget.mb_id !='') {
 
                           var result = await Navigator.push(context, MaterialPageRoute(
                               builder: (context) => location(mb_2:widget.mb_2, mb_id:widget.mb_id)
@@ -942,7 +961,7 @@ class _search_mainState extends State<search_main> {
                         child: Image.asset("images/hd_icon03.png"),
                       ),
                       onTap: () async{
-                        if(widget.mb_id!=null) {
+                        if(widget.mb_id!=null && widget.mb_id !='') {
                           var result = await Navigator.push(context, MaterialPageRoute(
                               builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+widget.mb_id+"&mb_password="+widget.mb_pwd+"&flg_flutter=1")
                           ));
@@ -1015,11 +1034,12 @@ class _search_mainState extends State<search_main> {
                   color: Colors.forestmk,
                   size: MediaQuery.of(context).size.width*0.08,),
                 onTap: (){
+                  search_text.text="";
+                  get_data();
                   setState(() {
                     if(flg_search==false)
                       flg_search = true;
                     else {
-                      search_text.text="";
                       flg_search = false;
                     }
                   });
@@ -1047,6 +1067,7 @@ class _search_mainState extends State<search_main> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+
                     InkWell(
                       child: Container(
                         width: 40,
@@ -1099,7 +1120,7 @@ class _search_mainState extends State<search_main> {
                         child: Image.asset("images/hd_cate04.png"),
                       ),
                       onTap: (){
-                        if(widget.mb_id!=null) {
+                        if(widget.mb_id!=null && widget.mb_id!='') {
                           Navigator.push(context,MaterialPageRoute(
                               builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                           ));
@@ -1118,7 +1139,7 @@ class _search_mainState extends State<search_main> {
                         child: Image.asset("images/hd_cate05.png"),
                       ),
                       onTap: ()async{
-                        if(widget.mb_id!=null) {
+                        if(widget.mb_id!=null && widget.mb_id!='') {
                           var result = await   Navigator.push(context,MaterialPageRoute(
                               builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                           ));
@@ -1149,6 +1170,7 @@ class _search_mainState extends State<search_main> {
     return Scaffold(
         key: _scaffoldKey,
         resizeToAvoidBottomPadding: false,
+        backgroundColor: Colors.white,
         appBar: appbar,
 //      decoration: BoxDecoration(
 //          borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -1159,12 +1181,14 @@ class _search_mainState extends State<search_main> {
           header: MaterialClassicHeader(),
           controller: _refreshController,
           onRefresh: _onRefresh,
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: list_height,
-                decoration: BoxDecoration(color: Colors.white),
-                child: ListView(
+          child:
+//          Column(
+//            children: <Widget>[
+//              Container(
+//                height: list_height,
+//                decoration: BoxDecoration(color: Colors.white),
+//                child:
+                ListView(
                   controller: change_appbar,
                   children: <Widget>[
                     SizedBox(height: 5,),
@@ -1229,7 +1253,7 @@ class _search_mainState extends State<search_main> {
                                 child: Image.asset("images/hd_cate04.png"),
                               ),
                               onTap: (){
-                                if(widget.mb_id!=null) {
+                                if(widget.mb_id!=null && widget.mb_id !='') {
                                   Navigator.push(context,MaterialPageRoute(
                                       builder:(context) => my_items(title:"최근 본 글", mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                                   ));
@@ -1249,7 +1273,7 @@ class _search_mainState extends State<search_main> {
                               ),
                               onTap: ()async{
 
-                                if(widget.mb_id!=null) {
+                                if(widget.mb_id!=null && widget.mb_id!='') {
                                   var result = await   Navigator.push(context,MaterialPageRoute(
                                       builder:(context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
                                   ));
@@ -1328,7 +1352,7 @@ class _search_mainState extends State<search_main> {
                                 InkWell(
                                   child: Container(
                                       height: MediaQuery.of(context).size.height*0.08,
-                                      child: mb_infowidget
+                                      child: Center(child: mb_infowidget)
                                   ),
                                   onTap: ()async{
                                     if(widget.mb_id==null) {
@@ -1379,7 +1403,7 @@ class _search_mainState extends State<search_main> {
                                 ),
                               ),
                               onTap: (){
-                                if(widget.mb_id!=null) {
+                                if(widget.mb_id!=null && widget.mb_id !='') {
                                   _showcontent();
                                 }
                                 else{
@@ -1486,9 +1510,10 @@ class _search_mainState extends State<search_main> {
                     )
                   ],
                 ),
-              ),
-            ],
-          ),
+//광고 살릴시 살릴필요
+//              ),
+//            ],
+//          ),
         ),
         floatingActionButton: flg_floatbt==1?float_button():Container(),
         // This trailing comma makes auto-formatting nicer for build methods.

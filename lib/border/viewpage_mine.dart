@@ -8,6 +8,7 @@ import 'package:flutterforestmk/image_detail.dart';
 import 'package:flutterforestmk/member/loginpage.dart';
 import 'package:flutterforestmk/border/view_item.dart';
 import 'package:flutterforestmk/border/write_normal.dart';
+import 'package:flutterforestmk/member/my_items.dart';
 import 'package:flutterforestmk/search_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -1384,13 +1385,13 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     Container(
                       width: MediaQuery.of(context).size.width*0.4,
                       height:  MediaQuery.of(context).size.height*0.15,
-                      child:temp_data.file==''?Image.asset("images/noimg.jpg"):Image.network(temp_data.file, fit: BoxFit.fitWidth,),
+                      child:temp_data.file==''?Image.asset("images/noimg.jpg",fit: BoxFit.cover,):Image.network(temp_data.file, fit: BoxFit.cover,),
                     ),
 
                     SizedBox(height: 5,),
-                    Text(temp_data.wr_subject==null?"Temp":temp_data.wr_subject.length>10?temp_data.wr_subject.toString().substring(0,10)+"···":temp_data.wr_subject, style: TextStyle(fontSize: 12),),
+                    Text(temp_data.wr_subject==null?"Temp":temp_data.wr_subject.length>10?temp_data.wr_subject.toString().substring(0,10)+"···":temp_data.wr_subject, style: TextStyle(fontSize: 15),),
                     SizedBox(height: 5,),
-                    Text(price, style: TextStyle(fontSize: 15),),
+                    Text(price, style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                   ]
               ),
             ],
@@ -2283,21 +2284,44 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                     itmes_height >=1?
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
                           height: MediaQuery.of(context).size.height*0.1,
-                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,right: MediaQuery.of(context).size.width*0.05),
-                          child: Text(itemdata_now==null?"테스트":itemdata_now['mb_name'].length>10?itemdata_now['mb_name'].substring(0,10)+"···님의 판매상품":itemdata_now['mb_name']+"님의 판매상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,),
+                          child: Center(child: Text(itemdata_now==null?"테스트":itemdata_now['mb_name'].length>10?itemdata_now['mb_name'].substring(0,10)+"···님의 판매상품":itemdata_now['mb_name']+"님의 판매상품",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045, fontWeight: FontWeight.bold),)),
                         ),
                         InkWell(
                           child: Container(
                               height: MediaQuery.of(context).size.height*0.1,
-                              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.03,right: MediaQuery.of(context).size.width*0.05),
-                              child: Text("모두보기", style: TextStyle(color: Colors.forestmk, fontSize: 16, ))),
+                              padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.05),
+                              child: Center(child: Text("모두보기", style: TextStyle(color: Color(0xff5c8e6b), fontSize: MediaQuery.of(context).size.width*0.045, )))),
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => search_main( mb_id:real_mbid,mb_pwd:real_mbpwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,sch_mbid: itemdata_now!=null?itemdata_now['mb_id']:"test",)
-                            ));
+
+                            if(itemdata_now!=null) {
+                              Navigator.push(context, MaterialPageRoute(
+
+                                  builder: (context) =>
+                                      my_items(mb_id: real_mbid,
+                                        sch_mbid: itemdata_now['mb_id'],
+                                        mb_pwd: real_mbpwd,
+                                        mb_1: widget.mb_1,
+                                        mb_2: widget.mb_2,
+                                        mb_3: widget.mb_3,
+                                        mb_4: widget.mb_4,
+                                        mb_hp: widget.mb_hp,
+                                        mb_5: widget.mb_5,
+                                        mb_6: widget.mb_6,
+                                        mb_name: widget.mb_name,
+                                        title: itemdata_now['mb_name'].length >
+                                            20
+                                            ? itemdata_now['mb_name'].substring(
+                                            0, 20) + "···님의 판매상품"
+                                            : itemdata_now['mb_name'] +
+                                            "님의 판매상품",)
+                              ));
+                            }
+
                           },
                         )
                       ],
@@ -2344,16 +2368,29 @@ class _ViewpagemineState extends State<Viewpage_mine>{
                         Container(
                           height: MediaQuery.of(context).size.height*0.1,
                           padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                          child: Text("관련상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                          child: Text("관련상품",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045, fontWeight: FontWeight.bold),),
                         ),
                         InkWell(
                           child: Container(
                               height: MediaQuery.of(context).size.height*0.1,
                               padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                              child: Text("모두보기", style: TextStyle(color:Colors.forestmk, fontSize: 16),)),
-                          onTap: (){
+                              child: Text("모두보기", style: TextStyle(color:Color(0xff5c8e6b), fontSize: MediaQuery.of(context).size.width*0.045),)),
+                          onTap: () {
                             Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => search_main(sch_cate: itemdata_now!=null?itemdata_now['ca_name']:"test" , mb_id:real_mbid,mb_pwd:real_mbpwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                builder: (context) =>
+                                    search_main(sch_cate: itemdata_now != null
+                                        ? itemdata_now['ca_name']
+                                        : "test",
+                                      mb_id: real_mbid,
+                                      mb_pwd: real_mbpwd,
+                                      mb_1: widget.mb_1,
+                                      mb_2: widget.mb_2,
+                                      mb_3: widget.mb_3,
+                                      mb_4: widget.mb_4,
+                                      mb_hp: widget.mb_hp,
+                                      mb_5: widget.mb_5,
+                                      mb_6: widget.mb_6,
+                                      mb_name: widget.mb_name,)
                             ));
                           },
                         )

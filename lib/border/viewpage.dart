@@ -13,6 +13,7 @@ import 'package:flutterforestmk/border/view_item.dart';
 import 'package:flutterforestmk/border/viewpage_mine.dart';
 import 'package:flutterforestmk/border/write_ad.dart';
 import 'package:flutterforestmk/border/write_normal.dart';
+import 'package:flutterforestmk/member/my_items.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -1406,7 +1407,7 @@ class _ViewpageState extends State<Viewpage>{
 
     //print(temp_data);
   if(temp_data!=null) {
-    print(temp_data.mb_id);
+   // print(temp_data.mb_id);
     InkWell temp = InkWell(
       child: Container(
         height: MediaQuery
@@ -1436,21 +1437,20 @@ class _ViewpageState extends State<Viewpage>{
                           .size
                           .height * 0.15,
                       child: temp_data.file == '' ? Image.asset(
-                          "images/noimg.jpg") : Image.network(
-                        temp_data.file, fit: BoxFit.fitWidth,),
+                          "images/noimg.jpg", fit: BoxFit.cover,) : Image.network(
+                        temp_data.file, fit: BoxFit.cover,),
                     ),
 
                     SizedBox(height: 5,),
                     Text(temp_data.wr_subject.length > 10 ? temp_data.wr_subject
                         .substring(0, 10) + "···" : temp_data.wr_subject,
-                      style: TextStyle(fontSize: 12),),
+                      style: TextStyle(fontSize: 15, ),),
                     SizedBox(height: 5,),
-                    Text(temp_price, style: TextStyle(fontSize: 15),),
+                    Text(temp_price, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
                   ]
               ),
             ],
-          )
-          ,
+          ),
         ),
       ),
       onTap: () async {
@@ -1481,7 +1481,6 @@ class _ViewpageState extends State<Viewpage>{
     );
     return temp;
   }
-
   }
 
   void load_myinfo()async{
@@ -1889,7 +1888,6 @@ class _ViewpageState extends State<Viewpage>{
                                   url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
                                       real_mbid + "&mb_password=" +
                                       real_mbpwd+ "&flg_view=1&view_id="+widget.info.wr_id+"-"+real_mbid,view: 1,
-
                               )
                       ));
                       if (result == 'change') {
@@ -2387,23 +2385,26 @@ class _ViewpageState extends State<Viewpage>{
                         itmes_height>=1?
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Container(
                               height: MediaQuery.of(context).size.height*0.1,
-                              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                              child: Text(widget.info.mb_name==null?'test':widget.info.mb_name.length>10?widget.info.mb_name.substring(0,10)+"···님의 판매상품":widget.info.mb_name+"님의 판매상품",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),),
+                              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
+                              child: Center(child: Text(widget.info.mb_name==null?'test':widget.info.mb_name.length>10?widget.info.mb_name.substring(0,10)+"···님의 판매상품":widget.info.mb_name+"님의 판매상품",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045),)),
                             ),
                             InkWell(
                               child: Container(
                                 height: MediaQuery.of(context).size.height*0.1,
-                                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                                child: Text("모두보기",style: TextStyle(fontSize: 16, color:Color(0xff5c8e6b)),),
+                                padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.05),
+                                child: Center(child: Text("모두보기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045, color:Color(0xff5c8e6b)),)),
                               ),
                               onTap: (){
                                 if(widget.info!=null) {
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) =>
-                                          search_main(mb_id: real_mbid,
+                                          my_items(
+                                            sch_mbid : widget.info.mb_id,
+                                            mb_id: real_mbid,
                                             mb_pwd: real_mbpwd,
                                             mb_1: widget.mb_1,
                                             mb_2: widget.mb_2,
@@ -2413,7 +2414,7 @@ class _ViewpageState extends State<Viewpage>{
                                             mb_5: widget.mb_5,
                                             mb_6: widget.mb_6,
                                             mb_name: widget.mb_name,
-                                            sch_mbid: widget.info.mb_id,)
+                                            title: widget.info.mb_name.length>20?widget.info.mb_name.substring(0,20)+"···님의 판매상품":widget.info.mb_name+"님의 판매상품",)
                                   ));
                                 }
                                 else{
@@ -2467,21 +2468,32 @@ class _ViewpageState extends State<Viewpage>{
                             Container(
                               height: MediaQuery.of(context).size.height*0.1,
                               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                              child: Text("관련상품",style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                              child: Text("관련상품",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045, fontWeight: FontWeight.bold),),
                             ),
                             InkWell(
                               child: Container(
                                 height: MediaQuery.of(context).size.height*0.1,
                                 padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.05,top: MediaQuery.of(context).size.height*0.03,),
-                                child: Text("모두보기",style: TextStyle(fontSize: 16, color:Color(0xff5c8e6b)),),
+                                child: Text("모두보기",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045, color:Color(0xff5c8e6b)),),
                               ),
-                              onTap: (){
+                              onTap: () {
                                 Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) => search_main(sch_cate: widget.info.ca_name , mb_id:real_mbid,mb_pwd:real_mbpwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+                                    builder: (context) =>
+                                        search_main(
+                                          sch_cate: widget.info.ca_name,
+                                          mb_id: real_mbid,
+                                          mb_pwd: real_mbpwd,
+                                          mb_1: widget.mb_1,
+                                          mb_2: widget.mb_2,
+                                          mb_3: widget.mb_3,
+                                          mb_4: widget.mb_4,
+                                          mb_hp: widget.mb_hp,
+                                          mb_5: widget.mb_5,
+                                          mb_6: widget.mb_6,
+                                          mb_name: widget.mb_name,)
                                 ));
                               },
                             ),
-
                           ],
                         ):SizedBox(),
                         Container(

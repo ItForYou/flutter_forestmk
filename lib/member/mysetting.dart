@@ -133,6 +133,13 @@ class _mysettingState extends State<mysetting> {
             child: Text("로그아웃 하시겠습니까?"),
           ),
           actions: <Widget>[
+
+            new FlatButton(
+              child: new Text("취소", style: TextStyle(color:Colors.red),),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             new FlatButton(
               child: new Text("확인"),
               onPressed: ()async {
@@ -142,12 +149,6 @@ class _mysettingState extends State<mysetting> {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => MyHomePage()),
                         (Route<dynamic> route) => false);
-              },
-            ),
-            new FlatButton(
-              child: new Text("취소"),
-              onPressed: () {
-                Navigator.pop(context);
               },
             ),
           ],

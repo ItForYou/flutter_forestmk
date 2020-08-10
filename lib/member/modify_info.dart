@@ -594,8 +594,8 @@ class _modify_infoState extends State<modify_info> {
                   cursorColor: Colors.forestmk,
                   keyboardType: TextInputType.emailAddress,
                   inputFormatters: [
-                    WhitelistingTextInputFormatter(RegExp("[A-Za-z가-힣0-9]")),
                     LengthLimitingTextInputFormatter(10),
+                    WhitelistingTextInputFormatter(RegExp("[A-Za-z가-힣ㄱ-ㅎㅏ-ㅣ0-9 \u318D\u119E\u11A2\u2022\u2025\u00B7\uFE55]", unicode: true, dotAll: true)),
                   ],
                   maxLines: 1,
                   decoration: InputDecoration(

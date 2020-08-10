@@ -264,7 +264,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                 chat_webview(
                   url: "http://14.48.175.177/bbs/login_check.php?mb_id=" +
                       mb_id + "&mb_password=" +
-                      mb_pwd + "&flg_view=1&view_id=" + value, view: 1,
+                      mb_pwd + "&flg_view=1&view_id=" + value, view: 1,mb_id: mb_id,room_id: value,
                 )
         ));
         if (result == 'change') {
@@ -305,9 +305,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           if(appbar != scroll_appbar)
            appbar = scroll_appbar;
 
-           if(list_height == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor()) {
+           if(list_height == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.049)) {
              start_height =0;
-             list_height = list_height - (MediaQuery.of(context).size.height*0.08).floor();
+             list_height = list_height - (MediaQuery.of(context).size.height*0.08);
            }
       });
     }
@@ -315,14 +315,45 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
       setState(() {
         if(appbar == scroll_appbar) {
           appbar = intro_appbar;
+          start_height =0;
+          list_height = list_height + MediaQuery.of(context).size.height*0.08;
         }
       //실값이 반올림되어져 비교되어짐 그래서 값이 다르게 나옴
-         if(list_height  == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor()- (MediaQuery.of(context).size.height*0.08).floor()) {
-           start_height =0;
-           list_height = list_height + (MediaQuery.of(context).size.height*0.08).floor();
-         }
+//         if(list_height  == MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor()- (MediaQuery.of(context).size.height*0.08).floor()) {
+//           start_height =0;
+//           list_height = list_height + (MediaQuery.of(context).size.height*0.08).floor();
+//         }
       });
     }
+
+    /*if (scrollposition > 100) {
+
+      setState(() {
+
+        if(appbar != scroll_appbar)
+          appbar = scroll_appbar;
+        if(list_height == MediaQuery.of(context).size.height-MediaQuery.of(context).size.height*0.049) {
+          start_height =0;
+          list_height = list_height - MediaQuery.of(context).size.height*0.08;
+        }
+
+      });
+
+    }
+    else {
+
+      setState(() {
+
+        if(appbar == scroll_appbar) {
+          appbar = intro_appbar;
+          start_height =0;
+          list_height = list_height + MediaQuery.of(context).size.height*0.08;
+        }
+
+      });
+
+    }*/
+
   }
 
   Widget float_button(){
@@ -503,178 +534,176 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     }
 
     InkWell temp = InkWell(
-        child: Container(
-          height: 100,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
                 bottom: BorderSide(color: Color(0xffdddddd), width: 1)
-              )
-          ),
-          padding: EdgeInsets.only(left: 10,right: 20,top:10,bottom: 10),
-          child: InkWell(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
+            )
+        ),
+        padding: EdgeInsets.only(left: 10,right: 20,top:10,bottom: 10),
+        child: InkWell(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
                   children: <Widget>[
-                Hero(
-                  tag: "hero"+id.toString(),
-                  child: temp_data.wr_9!='거래완료'?
+                    Hero(
+                      tag: "hero"+id.toString(),
+                      child: temp_data.wr_9!='거래완료'?
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.225,
+                        height: MediaQuery.of(context).size.width*0.2,
+                        margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
+                        decoration: BoxDecoration(
+                            border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
+                            borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.015)),
+                            image: DecorationImage(//이미지 꾸미기
+                                fit:BoxFit.cover,
+                                image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                            )
+                        ),
+                      ):Stack(
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.225,
+                              height: MediaQuery.of(context).size.height*0.2,
+                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
+                              decoration: BoxDecoration(
+                                  border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
+                                  borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
+                                  image: DecorationImage(//이미지 꾸미기
+                                      fit:BoxFit.cover,
+                                      image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                                  )
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.225,
+                              height: MediaQuery.of(context).size.height*0.2,
+                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.8)
+                              ),
+                              child: Center(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*0.225,
+                                  height: MediaQuery.of(context).size.height*0.04,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white
+                                  ),
+                                  child: Center(child: Text("판매완료", style: TextStyle(color: Color(0xff000000),fontSize: MediaQuery.of(context).size.width*0.035, decoration: TextDecoration.none, fontWeight: FontWeight.normal))),
+                                ),
+                              ),
+                            )
+                          ]
+                      ),
+                    ),
+                    SizedBox(width: 10,),
+                    Column(
+                      mainAxisAlignment: temp_data.ca_name!='업체'? MainAxisAlignment.center: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
+                        Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, fontWeight: temp_data.ca_name=='업체'?FontWeight.bold:null),),
+                        SizedBox(height: temp_data.ca_name=='업체'?MediaQuery.of(context).size.height*0.003:MediaQuery.of(context).size.height*0.003,),
+                        Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name=='업체'?MediaQuery.of(context).size.width*0.028:MediaQuery.of(context).size.width*0.035, fontWeight:temp_data.ca_name=='업체'?null:FontWeight.bold)),
+//                        temp_data.ca_name!='업체'? SizedBox(height: MediaQuery.of(context).size.height*0.005,): Container(),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.003,),
+                        Row(
+                          children: <Widget>[
+                            Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
+//                            Text(temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
+                            SizedBox(width: MediaQuery.of(context).size.width*0.005,),
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.01,
+                              height: MediaQuery.of(context).size.width*0.01,
+                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                                  color: Colors.forestmk
+                              ),
+                            ),
+                            Text(temp_data.timegap,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+
+                          ],
+
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
+                        Row(
+                          children: <Widget>[
+                            Text( temp_data.ca_name!='업체'? temp_data.ca_name:'광고업체', style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
+                            Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.01,
+                              height: MediaQuery.of(context).size.width*0.01,
+                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                                  color: Colors.forestmk
+                              ),
+                            ),
+                            Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
+                            Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
+                            Container(
+                              width: MediaQuery.of(context).size.width*0.01,
+                              height: MediaQuery.of(context).size.width*0.01,
+                              margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
+                                  color: Colors.forestmk
+                              ),
+                            ),
+                            Image.asset("images/fa-comment.png",height: MediaQuery.of(context).size.height*0.018,),
+                            Text(temp_data.comments, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
+                          ],
+                        ),
+                      ],
+                    ),]
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
                   Container(
-                    width: MediaQuery.of(context).size.width*0.225,
-                    height: MediaQuery.of(context).size.width*0.2,
-                    margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
+                    width: 40,
+                    height: 40,
+                    padding: EdgeInsets.all(3),
                     decoration: BoxDecoration(
-                      border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
-                      borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.015)),
-                      image: DecorationImage(//이미지 꾸미기
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        //border: Border.all(color: Color(0xffcccccc)),
+                        color: Color(0xfff3f3f3),
+                        image: DecorationImage(//이미지 꾸미기
                             fit:BoxFit.cover,
-                            image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
+                            image:temp_data.profile_img!=''? NetworkImage(temp_data.profile_img): AssetImage("images/wing_mb_noimg2.png")//이미지 가져오기
                         )
                     ),
-                  ):Stack(
-                    children: <Widget>[
-                     Container(
-                      width: MediaQuery.of(context).size.width*0.225,
-                      height: MediaQuery.of(context).size.height*0.2,
-                       margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
-                      decoration: BoxDecoration(
-                          border:  temp_data.ca_name=='업체'? Border.all(width: 2,color: Colors.forestmk):null,
-                          borderRadius: BorderRadius.all(Radius.circular( MediaQuery.of(context).size.width*0.02)),
-                          image: DecorationImage(//이미지 꾸미기
-                              fit:BoxFit.cover,
-                              image:temp_data.file[0]=='nullimage'? AssetImage("images/noimg.jpg"): NetworkImage(temp_data.file[0])//이미지 가져오기
-                          )
-                      ),
-                    ),
-                      Container(
-                          width: MediaQuery.of(context).size.width*0.225,
-                          height: MediaQuery.of(context).size.height*0.2,
-                        margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.8)
-                          ),
-                        child: Center(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width*0.225,
-                            height: MediaQuery.of(context).size.height*0.04,
-                            decoration: BoxDecoration(
-                              color: Colors.white
-                            ),
-                            child: Center(child: Text("판매완료", style: TextStyle(color: Color(0xff000000),fontSize: MediaQuery.of(context).size.width*0.035, decoration: TextDecoration.none, fontWeight: FontWeight.normal))),
-                          ),
-                        ),
-                      )
-                      ]
                   ),
-                ),
-                SizedBox(width: 10,),
-                Column(
-
-                  mainAxisAlignment: temp_data.ca_name!='업체'? MainAxisAlignment.start: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                    Text(temp_data.wr_subject.length<15?temp_data.wr_subject:temp_data.wr_subject.substring(0,12)+"···", style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.035, fontWeight: temp_data.ca_name=='업체'?FontWeight.bold:null),),
-                    SizedBox(height: temp_data.ca_name=='업체'?MediaQuery.of(context).size.height*0.003:MediaQuery.of(context).size.height*0.003,),
-                    Text(temp_data.ca_name=='업체'?temp_wrcontent:temp_price, style: TextStyle(fontSize: temp_data.ca_name=='업체'?MediaQuery.of(context).size.width*0.028:MediaQuery.of(context).size.width*0.035, fontWeight:temp_data.ca_name=='업체'?null:FontWeight.bold)),
-                    temp_data.ca_name!='업체'? SizedBox(height: MediaQuery.of(context).size.height*0.005,): Container(),
-                    SizedBox(height: MediaQuery.of(context).size.height*0.003,),
-                    Row(
-                      children: <Widget>[
-                        Text(temp_data.ca_name=='업체'?temp_data.wr_11:temp_data.mb_2,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025, color:Color(0xff444444))),
-                        SizedBox(width: MediaQuery.of(context).size.width*0.005,),
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.01,
-                          height: MediaQuery.of(context).size.width*0.01,
-                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
-                            color: Colors.forestmk
-                          ),
-                        ),
-
-                        Text(temp_data.timegap,style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
-
-                      ],
-
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height*0.0075,),
-                    Row(
-                      children: <Widget>[
-                       Text( temp_data.ca_name!='업체'? temp_data.ca_name:'광고업체', style: TextStyle(fontSize:  MediaQuery.of(context).size.width*0.025)),
-                        Image.asset("images/fa-angle-right.png", height: MediaQuery.of(context).size.height*0.018,),
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.01,
-                          height: MediaQuery.of(context).size.width*0.01,
-                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
-                              color: Colors.forestmk
-                          ),
-                        ),
-                        Image.asset("images/fa-heart.png",height: MediaQuery.of(context).size.height*0.018,),
-                        Text(temp_data.like, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026,)),
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.01,
-                          height: MediaQuery.of(context).size.width*0.01,
-                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.005,right: MediaQuery.of(context).size.width*0.005,),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.width*0.05,)),
-                              color: Colors.forestmk
-                          ),
-                        ),
-                        Image.asset("images/fa-comment.png",height: MediaQuery.of(context).size.height*0.018,),
-                        Text(temp_data.comments, style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.026)),
-                      ],
-                    ),
-                  ],
-                ),]
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: 40,
-                      height: 40,
-                      padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                          //border: Border.all(color: Color(0xffcccccc)),
-                          color: Color(0xfff3f3f3),
-                          image: DecorationImage(//이미지 꾸미기
-                              fit:BoxFit.cover,
-                              image:temp_data.profile_img!=''? NetworkImage(temp_data.profile_img): AssetImage("images/wing_mb_noimg2.png")//이미지 가져오기
-                          )
-                      ),
-                    ),
-                    SizedBox(height: 6,),
-                    Text(temp_data.mb_name.length<5?temp_data.mb_name:temp_data.mb_name.substring(0,3)+"···",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),)
-                  ],
-                ),
-              ],
-            )
-            ,
-          ),
+                  SizedBox(height: 6,),
+                  Text(temp_data.mb_name.length<5?temp_data.mb_name:temp_data.mb_name.substring(0,3)+"···",style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.03),)
+                ],
+              ),
+            ],
+          )
+          ,
         ),
+      ),
 
-        onTap: ()async{
-          var result = await Navigator.push(context, PageRouteBuilder(
-            transitionDuration: Duration(milliseconds: 800),
-            pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data, mb_id :mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,),
-          ));
-          if(result == 'delete'){
-           // print("test"+result);
-            get_data();
-          }
-       /*   Navigator.push(context,MaterialPageRoute(
+      onTap: ()async{
+        var result = await Navigator.push(context, PageRouteBuilder(
+          transitionDuration: Duration(milliseconds: 800),
+          pageBuilder: (_, __, ___) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,mb_id :mb_id,mb_pwd:mb_pwd,mb_1: mb_1,mb_2: mb_2,mb_3: mb_3, mb_4: mb_4, mb_hp: mb_hp, mb_5: mb_5, mb_6: mb_6,mb_name: mb_name,),
+        ));
+        if(result == 'delete'){
+          get_data();
+        }
+        /*   Navigator.push(context,MaterialPageRoute(
 
               builder:(context) => Viewpage(tag:"hero"+id.toString(), src:temp_data.file[0],info: temp_data,)
           ));*/
-        },
-      );
-      return temp;
+      },
+    );
+    return temp;
   }
 
   void show_quit(){
@@ -811,183 +840,186 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
           ),
           content: Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height*0.35,
             color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                InkWell(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.05,
-                    decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("최근순"),
-                        Radio(
-                          value: "최근순",
-                          groupValue: sort_value,
-                          onChanged: (T){
-                            setState(() {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              sort_value = T;
-                              get_data();
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: (){
-                    setState(() {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      sort_value = '최근순';
-                      get_data();
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                InkWell(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.07,
-                    decoration: BoxDecoration(
+            child: Wrap(
+              children: [Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.05,
+                      decoration: BoxDecoration(
                         border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("최근순"),
+                          Radio(
+                            value: "최근순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                sort_value = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("거리순"),
-                        Radio(
-                          value: "거리순",
-                          groupValue: sort_value,
-                          onChanged: (T){
-                            setState(() {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              sort_value = T;
-                              get_data();
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
+                    onTap: (){
+                      setState(() {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        sort_value = '최근순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
                   ),
-                  onTap: (){
-                    setState(() {
-                      sort_value = '거리순';
-                      get_data();
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                InkWell(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.07,
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                  mb_id !=null && mb_id !=''?
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.07,
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("거리순"),
+                          Radio(
+                            value: "거리순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                sort_value = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("낮은가격순"),
-                        Radio(
-                          value: "낮은가격순",
-                          groupValue: sort_value,
-                          onChanged: (T){
-                            setState(() {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              sort_value = T;
-                              get_data();
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
+                    onTap: (){
+                      setState(() {
+                        sort_value = '거리순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
+                  ):Container(),
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.07,
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("낮은가격순"),
+                          Radio(
+                            value: "낮은가격순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                sort_value = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
+                    onTap: (){
+                      setState(() {
+                        sort_value = '낮은가격순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
                   ),
-                  onTap: (){
-                    setState(() {
-                      sort_value = '낮은가격순';
-                      get_data();
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                InkWell(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.07,
-                    decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.07,
+                      decoration: BoxDecoration(
+                          border: Border(bottom: BorderSide(width: 1, color: Color(0xffefefef)))
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("높은가격순"),
+                          Radio(
+                            value: "높은가격순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                sort_value = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("높은가격순"),
-                        Radio(
-                          value: "높은가격순",
-                          groupValue: sort_value,
-                          onChanged: (T){
-                            setState(() {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              sort_value = T;
-                              get_data();
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
+                    onTap: (){
+                      setState(() {
+                        sort_value = '높은가격순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
                   ),
-                  onTap: (){
-                    setState(() {
-                      sort_value = '높은가격순';
-                      get_data();
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
-                InkWell(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height*0.07,
+                  InkWell(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.07,
 
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("조회수순"),
-                        Radio(
-                          value: "조회수순",
-                          groupValue: sort_value,
-                          onChanged: (T){
-                            setState(() {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              sort_value = T;
-                              get_data();
-                            });
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("조회수순"),
+                          Radio(
+                            value: "조회수순",
+                            groupValue: sort_value,
+                            onChanged: (T){
+                              setState(() {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                sort_value = T;
+                                get_data();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
+                    onTap: (){
+                      setState(() {
+                        sort_value = '조회수순';
+                        get_data();
+                      });
+                      Navigator.pop(context);
+                    },
                   ),
-                  onTap: (){
-                    setState(() {
-                      sort_value = '조회수순';
-                      get_data();
-                    });
-                    Navigator.pop(context);
-                  },
-                ),
 
-              ],
+                ],
+              ),
+            ]
             ),
           ),
           actions: null
@@ -1215,7 +1247,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                     "http://14.48.175.177/bbs/login_check.php?mb_id=" +
                         mb_id + "&mb_password=" +
                         mb_pwd+ "&flg_view=1&view_id="+message['data']['flutter_go'],
-                    view: 1,
+                    view: 1,mb_id: mb_id,room_id: message['data']['flutter_go']
                   )
           ));
           if (result == 'change') {
@@ -1228,7 +1260,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
             get_cntchat();
             get_data();
           }
-
         //print("onLaunch: "+message.toString());
       },
       onResume: (Map<String, dynamic> message) async {
@@ -1246,7 +1277,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                   "http://14.48.175.177/bbs/login_check.php?mb_id=" +
                       mb_id + "&mb_password=" +
                       mb_pwd+ "&flg_view=1&view_id="+message['data']['flutter_go']
-                  ,view: 1,
+                  ,view: 1,mb_id: mb_id,room_id: Platform.isIOS?message['flutter_go']:message['data']['flutter_go']
                 )
         ));
         if (result == 'change') {
@@ -1284,6 +1315,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   @override
   Widget build(BuildContext context) {
     print("build!!");
+    print(count_chatview);
     if(mb_name !=null){
       if(mb_name.length>10){
         mb_name = mb_name.substring(0,10)+"···";
@@ -1303,7 +1335,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     }
 
     if(start_height == 1){
-        list_height = MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.05).floor();
+        list_height = MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height*0.049);
         scrollbar_height = MediaQuery.of(context).size.height*0.08;
         scroll_appbar = PreferredSize(
             preferredSize: Size.fromHeight(scrollbar_height),
@@ -1550,7 +1582,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                       onTap: () async{
                         if(mb_id!=null) {
                           var result = await Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+mb_id+"&mb_password="+mb_pwd+"&flg_flutter=1")
+                              builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+mb_id+"&mb_password="+mb_pwd+"&flg_flutter=1", mb_id: mb_id,)
                           ));
                         //  print(result+"testresult");
                    //       print(result+"testresult");
@@ -1648,6 +1680,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
     return Scaffold(
       key:_scaffoldKey,
       resizeToAvoidBottomPadding: false,
+      backgroundColor: Colors.white,
       appBar: appbar,
 //      decoration: BoxDecoration(
 //          borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -1658,12 +1691,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
             show_quit();
          },
         child:
-        Column(
-        children: <Widget>[
-          Container(
-            height: list_height,
-            decoration: BoxDecoration(color: Colors.white),
-            child: ListView(
+//        Column(
+//        children: <Widget>[
+//          Container(
+//            height: list_height,
+//            decoration: BoxDecoration(color: Colors.white),
+//            child:
+              ListView(
               controller: change_appbar,
               children: <Widget>[
                 SizedBox(height: 5,),
@@ -1961,9 +1995,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 //                )
 //            ),
 //          ),
-        ],
-          ),
-        ),
+// 리스트뷰만으로 변경하면서 주석 처리된부분 광고 살릴시 아래부분 살려야함
+//        ],
+//          ),
+//        ),
     floatingActionButton: flg_floatbt==1?float_button():Container()
  // This trailing comma makes auto-formatting nicer for build methods.
     );

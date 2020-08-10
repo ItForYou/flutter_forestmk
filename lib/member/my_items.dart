@@ -21,8 +21,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class my_items extends StatefulWidget {
 
-  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id,mb_pwd,title;
-  my_items({Key key, this.title,this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id,this.mb_pwd}) : super(key: key);
+  String mb_name,mb_1,mb_2,mb_3,mb_4,mb_5,mb_6,mb_hp,mb_id,mb_pwd,title,sch_mbid;
+  my_items({Key key, this.title,this.mb_name, this.mb_1, this.mb_2,this.mb_6,this.mb_5,this.mb_4,this.mb_3,this.mb_hp,this.mb_id,this.mb_pwd, this.sch_mbid}) : super(key: key);
 
   @override
   _my_itemsState createState() => _my_itemsState();
@@ -38,7 +38,7 @@ class _my_itemsState extends State<my_items> {
   bool flg_allcheck = false;
   bool flg_search = false;
   List <Widget> items_content=[];
-  Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Colors.black));
+  Widget head_first, mb_infowidget=Text("로그인 후, 이용해주세요",style: TextStyle(color: Color(0xff888888),fontSize: 12));
   var itemdata;
   ScrollController change_appbar = ScrollController();
   TextEditingController search_text = new TextEditingController();
@@ -242,6 +242,7 @@ class _my_itemsState extends State<my_items> {
               children: <Widget>[
                   Row(
                       children: <Widget>[
+                        widget.title.toString().contains("님의 판매상품")==false?
                         InkWell(
                           child: Container(
                             width: MediaQuery.of(context).size.width*0.055,
@@ -282,7 +283,7 @@ class _my_itemsState extends State<my_items> {
                               _getWidget();
                             });
                           },
-                        ),
+                        ):Container(),
                         InkWell(
                           child: Hero(
                             tag: "hero"+id.toString(),
@@ -351,7 +352,7 @@ class _my_itemsState extends State<my_items> {
                         SizedBox(width: 10,),
                         InkWell(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               SizedBox(height: MediaQuery.of(context).size.height*0.003,),
@@ -522,7 +523,8 @@ class _my_itemsState extends State<my_items> {
                     if(result == 'success'){
                       // print(result);
                       Navigator.pop(bc);
-                      show_Alert("승인을 기다려주세요!\n승인시 자동 업로드 됩니다.",1);
+                      //show_Alert("승인을 기다려주세요!\n승인시 자동 업로드 됩니다.",1);
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("글 등록이 완료 되었습니다."),));
                       //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("승인을 기다려주세요!"),));
                       get_data();
                     }
@@ -613,6 +615,7 @@ class _my_itemsState extends State<my_items> {
 
   Future<dynamic> get_data() async{
 
+
     String url ="";
 
     if(widget.title=="최근 본 글"){
@@ -628,7 +631,8 @@ class _my_itemsState extends State<my_items> {
     final response = await http.post(
         Uri.encodeFull(url),
         body: {
-          'mb_id':widget.mb_id
+          'mb_id':widget.title.toString().contains("님의 판매상품")==false?widget.mb_id:widget.sch_mbid,
+          'sch_text':search_text.text!=''?search_text.text:'',
         },
         headers: {'Accept' : 'application/json'}
     );
@@ -671,10 +675,9 @@ class _my_itemsState extends State<my_items> {
   @override
   Widget build(BuildContext context) {
     //load_myinfo();
+    print(widget.mb_id);
 
-
-
-    if(widget.mb_id !=null) {
+    if(widget.mb_id !=null && widget.mb_id!='') {
       mb_infowidget  = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -684,7 +687,7 @@ class _my_itemsState extends State<my_items> {
         ],
       );
     }
-
+  //상단 검색바 표시 부분
     if(flg_search == false) {
       head_first = Container(
           height: MediaQuery
@@ -759,7 +762,7 @@ class _my_itemsState extends State<my_items> {
                         child: Image.asset("images/hd_icon02.png"),
                       ),
                       onTap: () async {
-                        if(widget.mb_id!=null) {
+                        if(widget.mb_id!=null && widget.mb_id !='') {
 
                           var result = await Navigator.push(context, MaterialPageRoute(
                               builder: (context) => location(mb_2:widget.mb_2, mb_id:widget.mb_id)
@@ -796,7 +799,7 @@ class _my_itemsState extends State<my_items> {
                         child: Image.asset("images/hd_icon03.png"),
                       ),
                       onTap: () async{
-                        if(widget.mb_id!=null) {
+                        if(widget.mb_id!=null && widget.mb_id!='') {
                           var result = await Navigator.push(context, MaterialPageRoute(
                               builder: (context) => chat_webview(url:"http://14.48.175.177/bbs/login_check.php?mb_id="+widget.mb_id+"&mb_password="+widget.mb_pwd+"&flg_flutter=1")
                           ));
@@ -820,6 +823,7 @@ class _my_itemsState extends State<my_items> {
       );
     }
     else{
+
       head_first = Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.075,
@@ -850,9 +854,10 @@ class _my_itemsState extends State<my_items> {
                     InkWell(
                       child: Icon(Icons.search),
                       onTap: (){
-                        Navigator.push(context,MaterialPageRoute(
-                            builder:(context) => search_main(sch_text: search_text.text, mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                        ));
+                        get_data();
+//                        Navigator.push(context,MaterialPageRoute(
+//                            builder:(context) => search_main(sch_text: search_text.text, mb_id:widget.mb_id,mb_pwd:widget.mb_pwd,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
+//                        ));
                       },
                     ),
                     hintText: "원하시는 키워드를 입력하세요",
@@ -951,6 +956,9 @@ class _my_itemsState extends State<my_items> {
                       onTap: (){
                         if(widget.title=='최근 본 글')
                           get_data();
+                        else if(widget.mb_id ==null || widget.mb_id ==''){
+                          request_logindialog();
+                        }
                         else {
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) =>
@@ -978,12 +986,29 @@ class _my_itemsState extends State<my_items> {
                         child: Image.asset("images/hd_cate05.png"),
                       ),
                       onTap: ()async{
-                        var result = await Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                        ));
-                        if(result == 'back'){
-                          get_mbdata();
-                          get_data();
+
+                        if(widget.mb_id ==null || widget.mb_id ==''){
+                        request_logindialog();
+                        }
+
+                        else {
+                          var result = await Navigator.push(
+                              context, MaterialPageRoute(
+                              builder: (context) =>
+                                  mypage(mb_id: widget.mb_id,
+                                    mb_1: widget.mb_1,
+                                    mb_2: widget.mb_2,
+                                    mb_3: widget.mb_3,
+                                    mb_4: widget.mb_4,
+                                    mb_hp: widget.mb_hp,
+                                    mb_5: widget.mb_5,
+                                    mb_6: widget.mb_6,
+                                    mb_name: widget.mb_name,)
+                          ));
+                          if (result == 'back') {
+                            get_mbdata();
+                            get_data();
+                          }
                         }
                       },
                     ),
@@ -1003,17 +1028,20 @@ class _my_itemsState extends State<my_items> {
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
+      backgroundColor: Colors.white,
       appBar: appbar,
 //      decoration: BoxDecoration(
 //          borderRadius: BorderRadius.all(Radius.circular(50)),
 //          border: Border.all(color: Color(0xffcccccc))
 //      ),
-      body:Column(
+      body:
+/*      Column(
         children: <Widget>[
           Container(
             height: list_height,
             decoration: BoxDecoration(color: Colors.white),
-            child: ListView(
+            child:*/
+            ListView(
               controller: change_appbar,
               children: <Widget>[
                 SizedBox(height: 5,),
@@ -1081,6 +1109,9 @@ class _my_itemsState extends State<my_items> {
                           onTap: (){
                             if(widget.title=='최근 본 글')
                               get_data();
+                            else if(widget.mb_id ==null || widget.mb_id ==''){
+                              request_logindialog();
+                            }
                             else {
                               Navigator.push(context, MaterialPageRoute(
                                   builder: (context) =>
@@ -1109,12 +1140,28 @@ class _my_itemsState extends State<my_items> {
                             child: Image.asset("images/hd_cate05.png"),
                           ),
                           onTap: ()async{
-                            var result = await Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => mypage(mb_id:widget.mb_id,mb_1: widget.mb_1,mb_2: widget.mb_2,mb_3: widget.mb_3, mb_4: widget.mb_4, mb_hp: widget.mb_hp, mb_5: widget.mb_5, mb_6: widget.mb_6,mb_name: widget.mb_name,)
-                            ));
-                            if(result == 'back'){
-                              get_mbdata();
-                              get_data();
+
+                            if(widget.mb_id ==null || widget.mb_id ==''){
+                              request_logindialog();
+                            }
+                            else {
+                              var result = await Navigator.push(
+                                  context, MaterialPageRoute(
+                                  builder: (context) =>
+                                      mypage(mb_id: widget.mb_id,
+                                        mb_1: widget.mb_1,
+                                        mb_2: widget.mb_2,
+                                        mb_3: widget.mb_3,
+                                        mb_4: widget.mb_4,
+                                        mb_hp: widget.mb_hp,
+                                        mb_5: widget.mb_5,
+                                        mb_6: widget.mb_6,
+                                        mb_name: widget.mb_name,)
+                              ));
+                              if (result == 'back') {
+                                get_mbdata();
+                                get_data();
+                              }
                             }
                           },
                         ),
@@ -1152,9 +1199,9 @@ class _my_itemsState extends State<my_items> {
                             ),
                             SizedBox(width: 10,),
                             InkWell(
-                              child: mb_infowidget,
+                              child: Center(child: mb_infowidget),
                               onTap: ()async{
-                                if(widget.mb_id==null) {
+                                if(widget.mb_id==null || widget.mb_id=='') {
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => loginpage()
                                   ));
@@ -1202,7 +1249,7 @@ class _my_itemsState extends State<my_items> {
                             ),
                           ),
                           onTap: (){
-                            if(widget.mb_id!=null) {
+                            if(widget.mb_id!=null && widget.mb_id !='') {
                               _showcontent();
                             }
                             else{
@@ -1224,10 +1271,13 @@ class _my_itemsState extends State<my_items> {
                         )
 
                     ),
-                    child: Row(
+
+                    child:
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                             Text(widget.title ,style: TextStyle(fontSize:MediaQuery.of(context).size.width*0.04)),
+                        widget.title.toString().contains("님의 판매상품")==false?
                         Row(
                           children: <Widget>[
                             InkWell(
@@ -1243,7 +1293,6 @@ class _my_itemsState extends State<my_items> {
                                       flg_allcheck=false;
                                       all_value = false;
                                     }
-
                                       for (int i = 0; i < checkbox_values.length; i++) {
                                         checkbox_values[i] = all_value;
                                     }
@@ -1260,9 +1309,9 @@ class _my_itemsState extends State<my_items> {
                                 },
                             ),
                           ],
-                        ),
+                        ):Container(),
                       ],
-                    )
+                    ),
 
                 ),
                 Column(
@@ -1270,9 +1319,11 @@ class _my_itemsState extends State<my_items> {
                 )
               ],
             ),
-          ),
-        ],
-      ),
+
+// 광고 살릴시 필요
+//          ),
+//        ],
+//      ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
